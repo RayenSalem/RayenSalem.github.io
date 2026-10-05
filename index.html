@@ -56,6 +56,9 @@
   --name-glow:rgba(31,107,255,.30);
   --map-dot:rgba(130,160,205,.32);
   --map-dot-hi:rgba(160,200,255,.95);
+  --term-bg:rgba(5,7,11,.84);
+  --logo-a:#DCE8FF;
+  --logo-b:#2F6BFF;
   --font-display:"Hubot Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   --font-body:"Atkinson Hyperlegible Next", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   --font-data:"Atkinson Hyperlegible Mono", ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
@@ -97,6 +100,9 @@
   --name-glow:rgba(31,95,224,0);
   --map-dot:rgba(40,70,120,.30);
   --map-dot-hi:rgba(26,79,191,.95);
+  --term-bg:rgba(255,255,255,.9);
+  --logo-a:#7AA5F0;
+  --logo-b:#1A4FBF;
   color-scheme:light;
 }
 
@@ -147,26 +153,107 @@ button{font-family:inherit}
 .dash-list li{position:relative;padding-left:17px}
 .dash-list li::before{content:"";position:absolute;left:0;top:.72em;width:8px;height:1.5px;background:var(--fg-faint)}
 
-/* ---------- hero ---------- */
-.hero{max-width:var(--maxw);margin-inline:auto;padding-block:clamp(26px,4.4vw,50px) clamp(44px,6.5vw,80px)}
-.tlp-line{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;margin:0;color:var(--fg-muted);font-size:14.5px}
-.name{margin:clamp(14px,2vw,22px) 0 0;font-family:var(--font-display);font-weight:860;font-stretch:125%;font-size:clamp(40px,9.9vw,128px);line-height:.84;letter-spacing:-.015em;text-transform:uppercase;white-space:nowrap}
-.name span{display:inline-block}
-@media (max-width:640px){.name{white-space:normal;font-size:min(18vw,92px)}.name span{display:block}}
-.hero-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(28px,4vw,56px);margin-top:clamp(26px,3.6vw,46px);align-items:start}
-@media (max-width:980px){.hero-grid{grid-template-columns:minmax(0,1fr)}}
-.role{margin:0 0 14px;font-family:var(--font-display);font-weight:700;font-stretch:104%;font-size:clamp(21px,2.1vw,26px);line-height:1.2;text-wrap:balance}
-.intro{margin:0;color:var(--fg-muted);max-width:54ch}
-.facts{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:9px 20px;margin:26px 0 0;padding-top:18px;border-top:1px solid var(--line);font-size:15.5px}
-.facts dt{color:var(--fg-faint)}
-.facts dd{margin:0;min-width:0}
-.ctas{display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;margin-top:28px}
+/* ---------- hero console ---------- */
+.hero{max-width:var(--maxw);margin-inline:auto;padding-block:clamp(18px,3vw,36px) clamp(36px,5vw,60px)}
+.term-win{--pb:var(--term-bg);position:relative;border:1px solid transparent;border-radius:14px;overflow:hidden;background:linear-gradient(var(--pb),var(--pb)) padding-box,linear-gradient(140deg,var(--edge-hi),var(--edge-lo) 34%,var(--edge-lo) 66%,var(--edge-hi)) border-box;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 60px 120px -60px var(--glow-1),var(--shadow)}
+.tw-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:44px;padding:6px 10px 6px 8px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--bg-raise) 70%,transparent)}
+.tw-tab{display:inline-flex;align-items:center;gap:8px;min-width:0;height:30px;padding:0 12px;border:1px solid var(--line-strong);border-radius:7px;background:var(--bg-sunk);font:500 13px/1 var(--font-data);color:var(--fg);white-space:nowrap}
+.tw-tab svg{flex:none;color:var(--accent-ink)}
+.tw-actions{display:flex;gap:6px}
+.tw-btn{appearance:none;min-height:30px;padding:0 11px;border:1px solid var(--line-strong);border-radius:6px;background:transparent;color:var(--fg-muted);font:600 12.5px/1 var(--font-data);cursor:pointer}
+.tw-btn:hover{color:var(--fg);border-color:var(--fg-muted)}
+.tw-panes{display:grid;grid-template-columns:minmax(0,1fr) 300px}
+.tw-main{min-width:0;border-right:1px solid color-mix(in srgb,var(--accent-line) 55%,transparent)}
+.tw-side{min-width:0;display:grid;align-content:start;gap:14px;padding:16px 16px 18px;background:color-mix(in srgb,var(--bg-sunk) 45%,transparent)}
+.tw-status{display:flex;justify-content:space-between;align-items:center;gap:14px;min-height:28px;padding:0 12px;background:var(--accent);color:var(--on-accent);font:600 12px/1 var(--font-data);white-space:nowrap;overflow:hidden}
+.tw-status b{padding:3px 6px;border-radius:3px;background:color-mix(in srgb,var(--on-accent) 22%,transparent);font-weight:700}
+@media (max-width:900px){.tw-panes{grid-template-columns:minmax(0,1fr)}.tw-side{display:none}.tw-main{border-right:0}.st-date,.st-menu{display:none}}
+
+.shell{display:flex;flex-direction:column;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:16px 20px 14px;font:14px/1.6 var(--font-data);color:var(--fg);scrollbar-width:thin;scrollbar-color:var(--line-strong) transparent}
+@media (min-width:901px){.tw-main .shell{height:clamp(540px,70vh,650px)}}
+@media (max-width:700px){.shell{padding:14px 14px 12px;font-size:13.5px}}
+.shell-log{display:grid;align-content:start;gap:1px;min-width:0}
+.ln{min-width:0;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.ln.li{padding-left:2ch;text-indent:-2ch}
+.ln.pl{margin-top:10px}
+.shell-log > .ln.pl:first-child,.boot + .ln.pl{margin-top:8px}
+.dim{color:var(--fg-faint)}
+.mut{color:var(--fg-muted)}
+.acc{color:var(--accent-ink)}
+.ok,.good{color:var(--green)}
+.err{color:var(--red)}
+.ps{color:var(--accent-ink);font-weight:600;white-space:nowrap}
+.say{margin-top:8px}
+.say::before{content:"› ";color:var(--accent-ink);font-weight:700}
+.shell a{color:var(--accent-ink);text-underline-offset:3px}
+.tbl{display:table;justify-self:start;max-width:100%;margin:2px 0;border-collapse:collapse}
+.tr{display:table-row}
+.tr > span{display:table-cell;padding:0 18px 1px 0;vertical-align:top;overflow-wrap:anywhere}
+.tr > span:not(:last-child){white-space:nowrap}
+.tr > span:last-child{padding-right:0}
+.tr > .k{color:var(--accent-ink)}
+@media (max-width:560px){.tr > .opt{display:none}.tr > span:not(:last-child):not(.k){white-space:normal;overflow-wrap:normal}}
+.tk-pre{margin:6px 0 2px;padding:12px 14px;border:1px dashed var(--line-strong);border-radius:8px;background:var(--bg-sunk);font:inherit;font-size:13px;color:var(--fg-muted);white-space:pre-wrap;overflow-wrap:anywhere}
+
+.js:not(.booted) [data-boot]:not(.shown){visibility:hidden}
+.nf{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(18px,3vw,40px);align-items:center;margin:12px 0 4px}
+.nf-logo{margin:0;font:700 13px/1.18 var(--font-data);white-space:pre;background:linear-gradient(180deg,var(--logo-a),var(--logo-b) 85%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;user-select:none}
+.nf-info{min-width:0;display:grid;justify-items:start;gap:1px}
+.nf-host{color:var(--accent-ink);font-weight:600}
+.nf-name{margin:2px 0 1px;font:700 clamp(30px,3.5vw,44px)/1.05 var(--font-data);letter-spacing:-.03em;background:linear-gradient(180deg,var(--name-a),var(--name-b) 70%,var(--name-c) 140%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 24px var(--name-glow))}
+.nf-role{color:var(--fg-muted)}
+.nf-rule{width:100%;max-width:34ch;height:1px;margin:9px 0 8px;background:repeating-linear-gradient(90deg,var(--line-strong) 0 6px,transparent 6px 10px)}
+.nf-kv{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:1px 18px;margin:0}
+.nf-kv dt{color:var(--accent-ink);font-weight:600}
+.nf-kv dd{margin:0;min-width:0}
+.nf-sw{display:flex;margin-top:12px;border-radius:3px;overflow:hidden}
+.nf-sw i{width:22px;height:14px}
+.nf-sw i:nth-child(1){background:var(--bg-raise)}.nf-sw i:nth-child(2){background:var(--red)}.nf-sw i:nth-child(3){background:var(--green)}.nf-sw i:nth-child(4){background:var(--accent)}
+.nf-sw i:nth-child(5){background:var(--accent-line)}.nf-sw i:nth-child(6){background:var(--accent-ink)}.nf-sw i:nth-child(7){background:var(--fg-muted)}.nf-sw i:nth-child(8){background:var(--fg)}
+@media (prefers-reduced-motion:no-preference){.booting .nf.shown .nf-kv > *{animation:kvIn .32s var(--d,0ms) both}}
+@keyframes kvIn{from{opacity:0;transform:translateX(-6px)}}
+@media (max-width:700px){.nf{grid-template-columns:minmax(0,1fr)}.nf-logo{display:none}.nf-name{font-size:30px}.nf-kv{gap:1px 12px}}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 2px}
+.chips:empty{display:none}
+.chip-btn{appearance:none;display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:0 12px;border:1px solid var(--line-strong);border-radius:999px;background:var(--bg-sunk);color:var(--fg);font:500 13px/1 var(--font-data);text-decoration:none;cursor:pointer;transition:border-color .15s,background-color .15s}
+.chip-btn::before{content:"›";color:var(--accent-ink);font-weight:700}
+.chip-btn:hover{border-color:var(--accent-line);background:var(--accent-wash)}
+.shell a.chip-btn{color:var(--fg);text-decoration:none}
+.chip-btn.act{border-color:color-mix(in srgb,var(--accent-line) 55%,transparent);background:var(--accent-wash)}
+.chip-btn.act::before{content:none}
+.chip-btn.go::before{content:"↗";color:var(--accent-ink)}
+.shell-in{display:flex;align-items:center;gap:10px;margin-top:10px;padding-bottom:2px;box-shadow:inset 0 -1px 0 transparent;transition:box-shadow .15s}
+.shell-in:focus-within{box-shadow:inset 0 -1px 0 var(--accent-line)}
+.shell-in input{flex:1;min-width:0;padding:4px 0;border:0;background:transparent;color:var(--fg);font:inherit;caret-color:var(--accent-line)}
+.shell-in input:focus{outline:none}
+.shell-in input::placeholder{color:var(--fg-faint);opacity:1}
+.caret{flex:none;width:.62em;height:1.15em;margin-right:-4px;background:var(--accent-line)}
+.shell-in:focus-within .caret,.shell-in.typed .caret{display:none}
+@media (prefers-reduced-motion:no-preference){.caret{animation:caret 1.05s steps(1) infinite}}
+@keyframes caret{50%{opacity:0}}
+@media (max-width:900px){.shell-in input{font-size:16px}}
+@media (max-width:700px){.shell-in .ps-host{display:none}}
+
+.docked-note{display:grid;place-content:center;justify-items:center;gap:14px;min-height:260px;padding:24px;text-align:center;color:var(--fg-muted);font:14px/1.5 var(--font-data)}
+@media (min-width:901px){.docked-note{height:clamp(540px,70vh,650px)}}
+.ws-head{margin:0;font:500 12px/1.4 var(--font-data);color:var(--fg-faint)}
+.menu{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.menu button{appearance:none;width:100%;display:grid;grid-template-columns:66px minmax(0,1fr);gap:10px;align-items:baseline;padding:7px 10px;border:0;border-radius:6px;background:transparent;color:var(--fg-muted);font:13px/1.35 var(--font-data);text-align:left;cursor:pointer}
+.menu button b{color:var(--accent-ink);font-weight:600}
+.menu button:hover,.menu button:focus-visible{background:var(--accent-wash);color:var(--fg)}
+.ws-stats{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:4px 14px;margin:0;padding-top:12px;border-top:1px dashed var(--line-strong);font:12.5px/1.45 var(--font-data)}
+.ws-stats dt{color:var(--fg-faint)}
+.ws-stats dd{margin:0;color:var(--fg);font-variant-numeric:tabular-nums}
+.hero-alt{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;margin:16px 4px 0;font-size:14.5px;color:var(--fg-muted)}
+.hero-alt a{color:var(--fg);font-weight:600;text-underline-offset:4px;text-decoration-color:var(--line-strong)}
+.hero-alt a:hover{text-decoration-color:var(--accent-line)}
 
 /* ---------- containment drill ---------- */
 .drill{min-width:0;border:1px solid var(--line-strong);border-radius:8px;background:var(--bg-sunk);box-shadow:var(--shadow);overflow:hidden}
 .drill-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 16px;padding:14px 16px 13px;border-bottom:1px solid var(--line)}
 .drill-head > div{min-width:0;flex:1 1 220px}
-.drill-title{margin:0;font:720 16.5px/1.2 var(--font-display);font-stretch:110%}
+.drill-title{margin:0;font:600 15px/1.2 var(--font-data);color:var(--fg)}
 .drill-sub{margin:3px 0 0;color:var(--fg-muted);font-size:14px;line-height:1.4}
 .drill-stage{position:relative}
 .drill-stage svg{display:block;width:100%;height:auto;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
@@ -424,17 +511,25 @@ button.tl-sum:hover{background:var(--bg-raise)}
 .foot a{color:var(--fg-muted);text-underline-offset:3px}
 @media (hover:none){.kbd-hint{display:none}}
 
-/* terminal */
-.term{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;flex-direction:column;max-height:min(64vh,540px);padding-bottom:env(safe-area-inset-bottom,0px);background:var(--bg-sunk);border-top:1px solid var(--line-strong);box-shadow:0 -24px 60px -24px rgba(0,0,0,.6);font:13.5px/1.6 var(--font-data);color:var(--fg)}
-.term-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px var(--gutter);border-bottom:1px solid var(--line);color:var(--fg-muted);font-size:12.5px}
-.term-x{appearance:none;padding:5px 9px;border:1px solid var(--line-strong);border-radius:4px;background:transparent;color:var(--fg-muted);font:600 12px/1 var(--font-data);cursor:pointer}
-.term-out{flex:1;min-height:120px;overflow:auto;padding:12px var(--gutter) 4px;white-space:pre-wrap;overflow-wrap:anywhere}
-.term-out a{color:var(--accent-ink)}
-.term-in{display:flex;align-items:center;gap:10px;padding:8px var(--gutter) 14px}
-.term-in input{flex:1;min-width:0;border:0;background:transparent;color:var(--fg);font:inherit;font-size:16px;caret-color:var(--accent)}
-.term-in input:focus{outline:none}
-.prompt{color:var(--accent-ink);white-space:nowrap}
-.t-ok{color:var(--green)}.t-err{color:var(--red)}.t-dim{color:var(--fg-muted)}.t-acc{color:var(--accent-ink)}
+/* drill section */
+.drill-layout{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,4vw,56px);align-items:start}
+.drill-layout .sec-head{margin-bottom:0}
+.drill-rules{margin-top:22px;font-size:15.5px;line-height:1.5;color:var(--fg-muted);max-width:52ch}
+@media (max-width:980px){.drill-layout{grid-template-columns:minmax(0,1fr)}}
+
+/* floating console: launcher and dock */
+.launcher{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:65;display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 18px 0 7px;border:1px solid transparent;border-radius:999px;--pb:var(--bg-raise);background:linear-gradient(var(--pb),var(--pb)) padding-box,linear-gradient(140deg,var(--edge-hi),var(--edge-lo) 50%,var(--edge-hi)) border-box;box-shadow:0 18px 44px -18px var(--glow-1),var(--shadow);color:var(--fg);font:600 14px/1 var(--font-body);cursor:pointer}
+.launcher:hover{transform:translateY(-1px)}
+.lc-ic{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--accent);color:var(--on-accent);font:700 13px/1 var(--font-data)}
+@media (prefers-reduced-motion:no-preference){.lc-ic{animation:ring 2.6s ease-out infinite}}
+@keyframes ring{0%{box-shadow:0 0 0 0 var(--accent-wash)}70%{box-shadow:0 0 0 12px rgba(0,0,0,0)}100%{box-shadow:0 0 0 0 rgba(0,0,0,0)}}
+.dock{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:70;display:flex;flex-direction:column;width:min(440px,calc(100vw - 40px));height:min(600px,calc(100vh - 110px));border:1px solid transparent;border-radius:14px;overflow:hidden;--pb:var(--term-bg);background:linear-gradient(var(--pb),var(--pb)) padding-box,linear-gradient(140deg,var(--edge-hi),var(--edge-lo) 40%,var(--edge-hi)) border-box;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:0 40px 90px -30px var(--glow-1),var(--shadow)}
+.dock-body{flex:1;min-height:0;display:flex;flex-direction:column}
+.dock .shell{flex:1;height:auto}
+@media (max-width:600px){
+  .dock{left:0;right:0;bottom:0;width:auto;height:min(84vh,700px);border-radius:16px 16px 0 0;padding-bottom:env(safe-area-inset-bottom,0px)}
+  .launcher{right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+}
 
 /* atmosphere: grid, glow and grain behind everything */
 .bg-fx{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
@@ -443,13 +538,6 @@ button.tl-sum:hover{background:var(--bg-raise)}
 @media (prefers-reduced-motion:no-preference){.bg-fx::after{animation:drift 28s ease-in-out infinite alternate}}
 @keyframes drift{to{transform:translate3d(-3%,2.5%,0)}}
 .grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:var(--grain-o);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-
-/* hero name: gradient type with a soft glow, caret after the role */
-.name{filter:drop-shadow(0 0 36px var(--name-glow))}
-.name span{background:linear-gradient(180deg,var(--name-a) 0%,var(--name-b) 58%,var(--name-c) 128%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
-.role::after{content:"";display:inline-block;width:.42em;height:.9em;margin-left:.2em;vertical-align:-.1em;background:var(--accent)}
-@media (prefers-reduced-motion:no-preference){.role::after{animation:caret 1.1s steps(1) infinite}}
-@keyframes caret{50%{opacity:0}}
 
 /* terminal-style section prompts */
 .prompt-line{margin:0;font:500 13.5px/1.4 var(--font-data);color:var(--accent-ink)}
@@ -525,6 +613,8 @@ button.tl-sum:hover{background:var(--bg-raise)}
 </style>
 </head>
 <body>
+<script>document.documentElement.classList.add('js');setTimeout(function(){document.documentElement.classList.add('booted');},5000);</script>
+
 <a class="skip" href="#main" data-i18n="skip">Skip to content</a>
 <div class="bg-fx" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
@@ -534,6 +624,7 @@ button.tl-sum:hover{background:var(--bg-raise)}
     <a class="brand" href="#top" aria-label="Rayen Salem"><span class="brand-mark" aria-hidden="true">RS</span><span class="brand-name">Rayen Salem</span></a>
     <nav class="nav-links" aria-label="Sections">
       <a href="#method" data-i18n="nav.method">Method</a>
+      <a href="#drill-sec" data-i18n="nav.drill">Drill</a>
       <a href="#timeline" data-i18n="nav.timeline">Timeline</a>
       <a href="#projects" data-i18n="nav.cases">Projects</a>
       <a href="#apt" data-i18n="nav.apt">APT</a>
@@ -549,31 +640,131 @@ button.tl-sum:hover{background:var(--bg-raise)}
         <button type="button" data-theme-set="dark" aria-pressed="true" data-i18n="nav.console">Console</button>
         <button type="button" data-theme-set="light" aria-pressed="false" data-i18n="nav.report">Report</button>
       </div>
-      <button type="button" class="icon-btn" id="term-btn" data-i18n-aria="nav.term" aria-label="Open terminal">&gt;_</button>
+      <button type="button" class="icon-btn" id="term-btn" data-i18n-aria="nav.term" aria-label="Open the console">&gt;_</button>
     </div>
   </div>
 </header>
 
 <main id="main">
-  <section class="hero" id="top">
-    <p class="tlp-line"><span class="tlp">TLP:CLEAR</span><span data-i18n="hero.tlp">Public profile. Share freely.</span></p>
-    <h1 class="name" aria-label="Rayen Salem"><span>Rayen</span> <span>Salem</span></h1>
-    <div class="hero-grid">
-      <div>
-        <p class="role" data-i18n="hero.role">SOC analyst and incident responder</p>
-        <p class="intro" data-i18n="hero.intro">I work in the managed SOC at Global IT Vision in Tunisia.</p>
-        <dl class="facts" id="facts"></dl>
-        <div class="ctas">
-          <a class="btn btn-primary" href="#contact" data-i18n="hero.cta1">Open a ticket</a>
-          <a class="btn btn-quiet" href="#projects" data-i18n="hero.cta2">Browse projects</a>
-          <a class="link" id="cv-link" href="Rayen_Salem_CV.pdf" target="_blank" rel="noopener" data-i18n="hero.cv">CV in PDF (French)</a>
+  <section class="hero" id="top" aria-labelledby="nf-name">
+    <div class="term-win" id="term-win">
+      <div class="tw-bar">
+        <div class="tw-tab"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 3.5l3.5 3.5L2 10.5M7.5 11H12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>rayen@soc: ~</span></div>
+        <div class="tw-actions">
+          <button type="button" class="tw-btn" id="tw-clear" data-i18n="con.clear">clear</button>
+          <button type="button" class="tw-btn" id="tw-pop" data-i18n="con.pop">Pop out</button>
         </div>
       </div>
-      <div class="drill" id="drill">
+      <div class="tw-panes">
+        <div class="tw-main" id="console-home">
+          <div class="shell" id="shell">
+            <div class="shell-log" id="shell-log" role="log" aria-live="off">
+              <div class="boot" data-boot aria-hidden="true">
+                <div class="ln bl"><span class="ok">[ ok ]</span> mounting /evidence read-only</div>
+                <div class="ln bl"><span class="ok">[ ok ]</span> loading ATT&amp;CK techniques</div>
+                <div class="ln bl"><span class="ok">[ ok ]</span> console ready, TLP:CLEAR</div>
+              </div>
+              <div class="ln pl" data-boot><span class="ps">rayen@soc:~$</span> <span id="boot-cmd">whoami</span></div>
+              <div class="nf" id="nf" data-boot>
+                <pre class="nf-logo" aria-hidden="true">#########################
+##:::::::::::::::::::::##
+##:::::::::::::::::::::##
+##::::::::#####::::::::##
+##::::::##     ##::::::##
+##::::::##     ##::::::##
+##:::::::##   ##:::::::##
+.#:::::::##   ##:::::::#.
+ *#::::::#+   +#::::::#*
+  .#:::::##+++##:::::#.
+    ##:::::::::::::##
+     .##:::::::::##.
+        *##:::##*
+          .###.</pre>
+                <div class="nf-info">
+                  <span class="nf-host">rayen@soc</span>
+                  <h1 class="nf-name" id="nf-name" aria-label="Rayen Salem">Rayen Salem</h1>
+                  <span class="nf-role" data-i18n="nf.role">SOC analyst and incident responder</span>
+                  <span class="nf-rule" aria-hidden="true"></span>
+                  <dl class="nf-kv">
+                    <dt data-i18n="nf.k.org">org</dt><dd data-i18n="nf.v.org">Global IT Vision, managed SOC (MSSP)</dd>
+                    <dt data-i18n="nf.k.base">base</dt><dd data-nf="base">Tunisia (UTC+1)</dd>
+                    <dt data-i18n="nf.k.uptime">uptime</dt><dd data-nf="uptime">SOC analyst since June 2025</dd>
+                    <dt data-i18n="nf.k.focus">focus</dt><dd data-i18n="nf.v.focus">DFIR, threat hunting, detection</dd>
+                    <dt data-i18n="nf.k.stack">stack</dt><dd>CrowdStrike, Darktrace, LogRhythm, Wazuh, Splunk</dd>
+                    <dt data-i18n="nf.k.certs">certs</dt><dd data-nf="certs">11 earned, ISO 27001 LI in progress</dd>
+                    <dt data-i18n="nf.k.speaks">speaks</dt><dd data-i18n="nf.v.speaks">Arabic, French, English</dd>
+                  </dl>
+                  <span class="nf-sw" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                </div>
+              </div>
+              <p class="ln say" id="greet" data-boot data-i18n="con.greet">Hi, welcome to Rayen’s console. Ask about his work in plain words, or pick a command.</p>
+            </div>
+            <div class="chips" id="shell-chips"></div>
+            <form class="shell-in" id="shell-form" autocomplete="off">
+              <label class="ps" for="shell-input" id="shell-ps"><span class="ps-host">rayen@soc:~</span>$</label>
+              <span class="caret" aria-hidden="true"></span>
+              <input id="shell-input" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" enterkeyhint="send" data-i18n-ph="con.ph" placeholder="Ask a question or type help">
+            </form>
+          </div>
+          <div class="docked-note" id="docked-note" hidden>
+            <span data-i18n="con.docked">The console is docked at the bottom right.</span>
+            <button type="button" class="btn btn-quiet btn-small" id="undock" data-i18n="con.undock">Bring it back here</button>
+          </div>
+        </div>
+        <aside class="tw-side" data-i18n-aria="con.menuAria" aria-label="Quick commands">
+          <p class="ws-head">Every 1.0s: rayen --menu</p>
+          <ul class="menu" id="menu"></ul>
+          <dl class="ws-stats">
+            <dt data-i18n="ws.time">tunisia</dt><dd id="ws-clock">--:--:--</dd>
+            <dt>tlp</dt><dd>CLEAR</dd>
+            <dt data-i18n="ws.next">next cert</dt><dd>ISO 27001 LI</dd>
+          </dl>
+        </aside>
+      </div>
+      <div class="tw-status" aria-hidden="true">
+        <span>[soc] <b>0:shell*</b><span class="st-menu"> 1:menu</span></span>
+        <span>"rayen@soc" <span id="st-clock">--:--</span><span class="st-date"> <span id="st-date"></span></span></span>
+      </div>
+    </div>
+    <p class="hero-alt"><span data-i18n="hero.alt">Not a terminal person?</span><a href="#projects" data-i18n="hero.altProjects">Projects</a><a href="#apt" data-i18n="hero.altApt">APT watchlist</a><a href="#contact" data-i18n="hero.altTicket">Open a ticket</a></p>
+  </section>
+
+  <div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
+
+  <section class="sec" id="method" aria-labelledby="method-h">
+    <div class="sec-head">
+      <p class="prompt-line"><span>$</span>cat ~/method.md</p>
+      <h2 class="h2" id="method-h" data-i18n="method.title">How I work an incident</h2>
+      <p class="dek" data-i18n="method.dek">Every case runs through the same four phases.</p>
+    </div>
+    <div class="rail" id="rail" role="group" data-i18n-aria="method.tools" aria-label="Tools"></div>
+    <ol class="phases spot" id="phases"></ol>
+    <p class="loop">
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M16 10a6 6 0 1 1-2.2-4.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M14.6 2.6l-.6 3.4-3.4-.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span data-i18n="method.loop">Lessons learned feed back into preparation.</span>
+    </p>
+  </section>
+
+  <section class="sec" id="drill-sec" aria-labelledby="drill-h">
+    <div class="drill-layout">
+      <div>
+        <div class="sec-head">
+          <p class="prompt-line"><span>$</span>./containment_drill.sh --hosts 13</p>
+          <h2 class="h2" id="drill-h" data-i18n="drill.title">Containment drill</h2>
+          <p class="dek" data-i18n="drill.dek">Try containment yourself.</p>
+        </div>
+        <ul class="dash-list drill-rules">
+          <li data-i18n="drill.r1"></li>
+          <li data-i18n="drill.r2"></li>
+          <li data-i18n="drill.r3"></li>
+          <li data-i18n="drill.r4"></li>
+        </ul>
+      </div>
+      <div class="drill spot" id="drill">
         <div class="drill-head">
           <div>
-            <h2 class="drill-title" data-i18n="drill.title">Containment drill</h2>
-            <p class="drill-sub" data-i18n="drill.sub">Stop the intrusion before it reaches the domain controller.</p>
+            <h3 class="drill-title">corp.local</h3>
+            <p class="drill-sub" data-i18n="drill.sub">13 hosts in 2 zones</p>
           </div>
           <button type="button" class="btn btn-primary btn-small" id="drill-start" data-i18n="drill.start">Start the drill</button>
         </div>
@@ -606,22 +797,6 @@ button.tl-sum:hover{background:var(--bg-raise)}
         </div>
       </div>
     </div>
-  </section>
-
-  <div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
-
-  <section class="sec" id="method" aria-labelledby="method-h">
-    <div class="sec-head">
-      <p class="prompt-line"><span>$</span>cat ~/method.md</p>
-      <h2 class="h2" id="method-h" data-i18n="method.title">How I work an incident</h2>
-      <p class="dek" data-i18n="method.dek">Every case runs through the same four phases.</p>
-    </div>
-    <div class="rail" id="rail" role="group" data-i18n-aria="method.tools" aria-label="Tools"></div>
-    <ol class="phases spot" id="phases"></ol>
-    <p class="loop">
-      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M16 10a6 6 0 1 1-2.2-4.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M14.6 2.6l-.6 3.4-3.4-.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span data-i18n="method.loop">Lessons learned feed back into preparation.</span>
-    </p>
   </section>
 
   <section class="sec" id="timeline" aria-labelledby="timeline-h">
@@ -721,10 +896,13 @@ button.tl-sum:hover{background:var(--bg-raise)}
   <div class="foot-l"><span class="kbd-hint" id="kbd-hint"></span><a href="#top" data-i18n="foot.top">Back to top</a></div>
 </footer>
 
-<div class="term" id="term" hidden role="dialog" aria-label="Terminal">
-  <div class="term-bar"><span>rayen@soc: ~</span><button type="button" class="term-x" id="term-x" aria-label="Close terminal">esc</button></div>
-  <div class="term-out" id="term-out" role="log" aria-live="polite"></div>
-  <form class="term-in" id="term-form" autocomplete="off"><label class="prompt" for="term-input">rayen@soc:~$</label><input id="term-input" spellcheck="false" autocapitalize="off" autocomplete="off" enterkeyhint="send"></form>
+<button type="button" class="launcher" id="launcher" hidden><span class="lc-ic" aria-hidden="true">&gt;_</span><span data-i18n="con.launch">Ask the console</span></button>
+<div class="dock" id="dock" hidden role="dialog" aria-labelledby="dock-title">
+  <div class="tw-bar">
+    <div class="tw-tab"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 3.5l3.5 3.5L2 10.5M7.5 11H12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="dock-title">rayen@soc: ~</span></div>
+    <div class="tw-actions"><button type="button" class="tw-btn" id="dock-close" data-i18n="con.close">Close</button></div>
+  </div>
+  <div class="dock-body" id="dock-body"></div>
 </div>
 
 <noscript><p style="max-width:60ch;margin:24px auto">This portfolio uses JavaScript for its content. You can reach Rayen Salem on LinkedIn at linkedin.com/in/rayensalem.</p></noscript>
@@ -752,17 +930,69 @@ const I18N = {
   en: {
     'skip': 'Skip to content',
     'nav.method': 'Method', 'nav.timeline': 'Timeline', 'nav.cases': 'Projects', 'nav.apt': 'APT', 'nav.certs': 'Certs', 'nav.contact': 'Contact',
-    'nav.view': 'View', 'nav.console': 'Console', 'nav.report': 'Report', 'nav.term': 'Open terminal',
-    'hero.tlp': 'Public profile. Share freely.',
-    'hero.role': 'SOC analyst and incident responder',
-    'hero.intro': 'I work in the managed SOC at Global IT Vision in Tunisia. I triage alerts across EDR, NDR and SIEM, investigate incidents end to end, and write the reports clients act on. Digital forensics and threat hunting are where I’m going deeper.',
-    'fact.now': 'Now', 'fact.nowV': 'SOC Analyst, Global IT Vision',
-    'fact.focus': 'Focus', 'fact.focusV': 'DFIR, threat hunting, detection',
-    'fact.base': 'Based in', 'fact.baseV': 'Tunisia (UTC+1). It’s {time} here.',
-    'fact.lang': 'Speaks', 'fact.langV': 'Arabic, French, English',
-    'hero.cta1': 'Open a ticket', 'hero.cta2': 'Browse projects', 'hero.cv': 'CV in PDF (French)',
+    'nav.view': 'View', 'nav.console': 'Console', 'nav.report': 'Report', 'nav.term': 'Open the console',
     'drill.title': 'Containment drill',
-    'drill.sub': 'Stop the intrusion before it reaches the domain controller.',
+    'drill.sub': '13 hosts in 2 zones',
+    'nav.drill': 'Drill',
+    'con.clear': 'clear', 'con.pop': 'Pop out', 'con.close': 'Close', 'con.launch': 'Ask the console',
+    'con.ph': 'Ask a question or type help',
+    'con.greet': 'Hi, welcome to Rayen’s console. Ask about his work in plain words, like “which tools does he use?”, or pick a command.',
+    'con.docked': 'The console is docked at the bottom right.', 'con.undock': 'Bring it back here', 'con.menuAria': 'Quick commands',
+    'ws.time': 'tunisia', 'ws.next': 'next cert',
+    'hero.alt': 'Not a terminal person?', 'hero.altProjects': 'Projects', 'hero.altApt': 'APT watchlist', 'hero.altTicket': 'Open a ticket',
+    'nf.role': 'SOC analyst and incident responder',
+    'nf.k.org': 'org', 'nf.k.base': 'base', 'nf.k.uptime': 'uptime', 'nf.k.focus': 'focus', 'nf.k.stack': 'stack', 'nf.k.certs': 'certs', 'nf.k.speaks': 'speaks',
+    'nf.v.org': 'Global IT Vision, managed SOC (MSSP)', 'nf.v.base': 'Tunisia, {time} local (UTC+1)', 'nf.v.uptime': '{d} as a SOC analyst',
+    'nf.v.focus': 'DFIR, threat hunting, detection', 'nf.v.certs': '{n} earned, ISO 27001 LI in progress', 'nf.v.speaks': 'Arabic, French, English',
+    'm.whoami': 'profile card', 'm.xp': 'experience', 'm.skills': 'tools by domain', 'm.projects': '{np} labs and builds', 'm.apt': '{na} threat groups',
+    'm.certs': '{nc} + 1 in progress', 'm.drill': 'play the drill', 'm.hire': 'open a P1 ticket',
+    'h.open': 'read project n', 'h.apt': 'APT watchlist, or one group', 'h.edu': 'degrees', 'h.contact': 'email and links', 'h.cv': 'the CV',
+    'h.view': 'switch view', 'h.lang': 'switch language', 'h.clear': 'clear the screen',
+    'b.helpHead': 'This console runs in your browser and answers from what’s on this page. Commands:',
+    'b.helpFoot': 'Or just ask, in English or French.',
+    'b.search': 'searching ~/rayen',
+    'b.xpHead': 'Experience, newest first. Type xp <n> for details.', 'b.chipCurrent': 'current role', 'b.tools': 'tools', 'b.next': 'next',
+    'b.showProject': 'see the project',
+    'g.detect': 'detection', 'g.respond': 'response', 'g.intel': 'intel', 'g.telemetry': 'telemetry', 'g.offense': 'offense', 'g.infra': 'infra', 'g.code': 'code',
+    'b.skillsFoot': 'Ask about any tool, like “splunk”, to see where Rayen used it.',
+    'b.projHead': 'Projects. Type open <n> for details.', 'b.stack': 'stack', 'b.repo': 'repo', 'b.noRepo': 'code not public', 'b.showDiagram': 'show diagram',
+    'b.aptHead': 'APT watchlist. Type apt <name> for a dossier.', 'b.showMap': 'show on map', 'b.aka': 'aka', 'b.since': 'active since {y}', 'b.targets': 'targets',
+    'b.playbook': 'playbook', 'b.catch': 'first detection',
+    'b.certsHead': 'Certifications, newest first.', 'b.showCerts': 'see the tags',
+    'b.isoNote': 'At Global IT Vision he also contributed to the company’s ISO 27001 certification.',
+    'b.eduHead': 'Education.', 'b.eduFoot': 'Plus {n} certifications. Type certs.',
+    'b.contactHead': 'Email reaches Rayen fastest.', 'b.copyEmail': 'copy email', 'b.copied': 'Copied {e}.', 'b.copyFail': 'Copy is blocked here, so here it is: {e}',
+    'b.phone': 'The phone number isn’t public. Email or LinkedIn reach Rayen fastest.',
+    'b.hireAns': 'For roles and opportunities, open a P1 ticket. It takes three questions here, then goes out from your own inbox. Want to start?',
+    'b.cvYes': 'CV in PDF (French):', 'b.cvNo': 'The CV is shared on request. Ask for it with a ticket.',
+    'b.where': 'Based in Tunisia, UTC+1. It’s {time} there right now.',
+    'b.whereMore': 'For anything about where a role is based, open a ticket and Rayen will answer directly.',
+    'b.langs': 'Arabic, French and English. This site speaks English and French: type lang fr or lang en.',
+    'b.dfir': 'DFIR is where Rayen is going deeper. He investigates incidents across EDR, NDR and SIEM every day, and holds eCDFP for digital forensics, eCIRv3 for incident response and eCTHPv2 for threat hunting.',
+    'b.methodHead': 'Every case runs through four phases:', 'b.seeMethod': 'see the method',
+    'b.drill': 'Starting the containment drill. Isolate infected hosts before DC01 falls.',
+    'b.greet': 'Hi! Ask about Rayen’s work, or pick a command.', 'b.greetTn': 'Aslema! Ask about Rayen’s work, or pick a command.',
+    'b.thanks': 'Anytime. Anything else?',
+    'b.hack': 'Ethical hackers ask for scope first. In scope: this page. Start with ls -a.',
+    'b.flag': 'There’s a flag hidden on this page. Start with ls -a, then submit it here.',
+    'b.fallback': 'No match for “{q}”. Try one of these, or ask Rayen directly with a ticket.',
+    'b.noMatch': 'Nothing on this page mentions {q}.', 'b.match1': '1 match.', 'b.matches': '{n} matches.',
+    'k.xp': 'work', 'k.project': 'project', 'k.method': 'method', 'k.cert': 'cert',
+    'b.exitHero': 'Nice try. Scroll down for the rest of the site.',
+    'b.yes': 'yes, start', 'b.techUsed': 'On the watchlist, used by {g}.', 'b.techNone': 'None of the six watchlist groups lists it in its playbook here.',
+    'tk.pri': 'Pick a priority:', 'tk.start': 'Opening a {p} ticket: {label}. Three quick questions, type cancel to stop.',
+    'tk.name': 'Your name?', 'tk.org': 'Company or team? Press Enter to skip.',
+    'tk.msg.P1': 'What’s the role, and where is it based?', 'tk.msg.P2': 'What are you building, and where would Rayen fit in?',
+    'tk.msg.P3': 'Which event or challenge, and when?', 'tk.msg.P4': 'Go ahead, say hello.',
+    'tk.ready': 'Ticket {id} is ready. Send it from your own inbox:', 'tk.cancel': 'Ticket cancelled.',
+    'tk.copy': 'copy ticket', 'tk.mail': 'open in email app', 'tk.form': 'edit in form', 'tk.skip': 'skip', 'tk.cancelBtn': 'cancel',
+    'tk.copied': 'Ticket copied. Paste it into a new email to {e}.', 'tk.copyFail': 'Copy is blocked here. The ticket text is selected, so copy it with your keyboard.',
+    'tk.ph.pri': 'P1, P2, P3 or P4', 'tk.ph.name': 'your name', 'tk.ph.org': 'company or team, or Enter to skip', 'tk.ph.msg': 'your message',
+    'drill.dek': 'Try containment yourself. Stop the intrusion before it reaches the domain controller.',
+    'drill.r1': 'A phishing payload lands on a random workstation, far from the servers.',
+    'drill.r2': 'Blue is a fresh alert. Leave it and it turns red, then starts moving.',
+    'drill.r3': 'Click a host to isolate it. Isolating DC01 isn’t an option.',
+    'drill.r4': 'You win when no active attacker is left.',
     'drill.start': 'Start the drill', 'drill.restart': 'Restart', 'drill.again': 'Run it again',
     'drill.idle': 'All {n} hosts reporting. No open alerts.',
     'drill.hint': 'Click a host to isolate it. Blue is a fresh alert, red is an attacker who can move.',
@@ -828,22 +1058,74 @@ const I18N = {
     'ticket.to': 'To', 'ticket.subject': 'Subject',
     'ticket.hi': 'Hi Rayen,', 'ticket.msgEmpty': '(your message)',
     'ticket.foot': 'Ticket {id}, priority {p}, opened from your portfolio.',
-    'foot.top': 'Back to top', 'foot.kbd': 'Press {k} for the terminal',
+    'foot.top': 'Back to top', 'foot.kbd': 'Press {k} to open the console',
   },
   fr: {
     'skip': 'Aller au contenu',
     'nav.method': 'Méthode', 'nav.timeline': 'Parcours', 'nav.cases': 'Projets', 'nav.apt': 'APT', 'nav.certs': 'Certifs', 'nav.contact': 'Contact',
-    'nav.view': 'Affichage', 'nav.console': 'Console', 'nav.report': 'Rapport', 'nav.term': 'Ouvrir le terminal',
-    'hero.tlp': 'Profil public. Diffusion libre.',
-    'hero.role': 'Analyste SOC, réponse à incident',
-    'hero.intro': 'Je travaille au SOC managé de Global IT Vision, en Tunisie. Je trie les alertes remontées par l’EDR, le NDR et le SIEM, je mène les investigations de bout en bout et je rédige les rapports sur lesquels les clients s’appuient. Je me spécialise en investigation numérique et en threat hunting.',
-    'fact.now': 'Poste', 'fact.nowV': 'Analyste SOC, Global IT Vision',
-    'fact.focus': 'Spécialités', 'fact.focusV': 'DFIR, threat hunting, détection',
-    'fact.base': 'Basé en', 'fact.baseV': 'Tunisie (UTC+1). Il est {time} ici.',
-    'fact.lang': 'Langues', 'fact.langV': 'Arabe, français, anglais',
-    'hero.cta1': 'Ouvrir un ticket', 'hero.cta2': 'Voir les projets', 'hero.cv': 'CV en PDF',
+    'nav.view': 'Affichage', 'nav.console': 'Console', 'nav.report': 'Rapport', 'nav.term': 'Ouvrir la console',
     'drill.title': 'Exercice de confinement',
-    'drill.sub': 'Stoppez l’intrusion avant qu’elle n’atteigne le contrôleur de domaine.',
+    'drill.sub': '13 hôtes dans 2 zones',
+    'nav.drill': 'Exercice',
+    'con.clear': 'effacer', 'con.pop': 'Détacher', 'con.close': 'Fermer', 'con.launch': 'Interroger la console',
+    'con.ph': 'Posez une question ou tapez help',
+    'con.greet': 'Bonjour, bienvenue sur la console de Rayen. Posez vos questions sur son travail, par exemple « quels outils utilise-t-il ? », ou choisissez une commande.',
+    'con.docked': 'La console est détachée en bas à droite.', 'con.undock': 'La remettre ici', 'con.menuAria': 'Commandes rapides',
+    'ws.time': 'tunisie', 'ws.next': 'prochaine certif',
+    'hero.alt': 'Pas fan du terminal ?', 'hero.altProjects': 'Projets', 'hero.altApt': 'APT sous surveillance', 'hero.altTicket': 'Ouvrir un ticket',
+    'nf.role': 'Analyste SOC, réponse à incident',
+    'nf.k.org': 'org', 'nf.k.base': 'base', 'nf.k.uptime': 'uptime', 'nf.k.focus': 'focus', 'nf.k.stack': 'stack', 'nf.k.certs': 'certifs', 'nf.k.speaks': 'langues',
+    'nf.v.org': 'Global IT Vision, SOC managé (MSSP)', 'nf.v.base': 'Tunisie, {time} heure locale (UTC+1)', 'nf.v.uptime': '{d} comme analyste SOC',
+    'nf.v.focus': 'DFIR, threat hunting, détection', 'nf.v.certs': '{n} obtenues, ISO 27001 LI en cours', 'nf.v.speaks': 'Arabe, français, anglais',
+    'm.whoami': 'fiche profil', 'm.xp': 'expérience', 'm.skills': 'outils par domaine', 'm.projects': '{np} labs et projets', 'm.apt': '{na} groupes APT',
+    'm.certs': '{nc} + 1 en cours', 'm.drill': 'lancer l’exercice', 'm.hire': 'ouvrir un ticket P1',
+    'h.open': 'lire le projet n', 'h.apt': 'APT sous surveillance, ou un groupe', 'h.edu': 'diplômes', 'h.contact': 'e-mail et liens', 'h.cv': 'le CV',
+    'h.view': 'changer d’affichage', 'h.lang': 'changer de langue', 'h.clear': 'effacer l’écran',
+    'b.helpHead': 'Cette console tourne dans votre navigateur et répond à partir du contenu de cette page. Commandes :',
+    'b.helpFoot': 'Ou posez simplement votre question, en français ou en anglais.',
+    'b.search': 'recherche dans ~/rayen',
+    'b.xpHead': 'Expérience, de la plus récente à la plus ancienne. Tapez xp <n> pour le détail.', 'b.chipCurrent': 'poste actuel', 'b.tools': 'outils', 'b.next': 'suivant',
+    'b.showProject': 'voir le projet',
+    'g.detect': 'détection', 'g.respond': 'réponse', 'g.intel': 'renseignement', 'g.telemetry': 'télémétrie', 'g.offense': 'offensif', 'g.infra': 'infra', 'g.code': 'code',
+    'b.skillsFoot': 'Demandez un outil, par exemple « splunk », pour voir où Rayen l’a utilisé.',
+    'b.projHead': 'Projets. Tapez open <n> pour le détail.', 'b.stack': 'stack', 'b.repo': 'dépôt', 'b.noRepo': 'code non publié', 'b.showDiagram': 'voir le schéma',
+    'b.aptHead': 'APT sous surveillance. Tapez apt <nom> pour un dossier.', 'b.showMap': 'voir sur la carte', 'b.aka': 'alias', 'b.since': 'actif depuis {y}', 'b.targets': 'cibles',
+    'b.playbook': 'mode opératoire', 'b.catch': 'première détection',
+    'b.certsHead': 'Certifications, de la plus récente à la plus ancienne.', 'b.showCerts': 'voir les scellés',
+    'b.isoNote': 'Chez Global IT Vision, il a aussi contribué à la certification ISO 27001 de l’entreprise.',
+    'b.eduHead': 'Formation.', 'b.eduFoot': 'Plus {n} certifications. Tapez certs.',
+    'b.contactHead': 'L’e-mail reste le plus rapide pour joindre Rayen.', 'b.copyEmail': 'copier l’e-mail', 'b.copied': '{e} copié.', 'b.copyFail': 'La copie est bloquée ici, voici l’adresse : {e}',
+    'b.phone': 'Le numéro n’est pas public. L’e-mail ou LinkedIn restent le plus rapide.',
+    'b.hireAns': 'Pour un poste ou une opportunité, ouvrez un ticket P1. Trois questions ici, puis il part depuis votre propre messagerie. On commence ?',
+    'b.cvYes': 'CV en PDF :', 'b.cvNo': 'Le CV est envoyé sur demande. Demandez-le avec un ticket.',
+    'b.where': 'Basé en Tunisie, UTC+1. Il est actuellement {time} là-bas.',
+    'b.whereMore': 'Pour toute question sur le lieu d’un poste, ouvrez un ticket et Rayen répondra directement.',
+    'b.langs': 'Arabe, français et anglais. Ce site existe en français et en anglais : tapez lang en ou lang fr.',
+    'b.dfir': 'La DFIR est le domaine où Rayen se spécialise. Il investigue chaque jour des incidents sur l’EDR, le NDR et le SIEM, et il est certifié eCDFP en investigation numérique, eCIRv3 en réponse à incident et eCTHPv2 en threat hunting.',
+    'b.methodHead': 'Chaque dossier traverse quatre phases :', 'b.seeMethod': 'voir la méthode',
+    'b.drill': 'Lancement de l’exercice de confinement. Isolez les hôtes infectés avant la chute de DC01.',
+    'b.greet': 'Bonjour ! Posez une question sur le travail de Rayen, ou choisissez une commande.', 'b.greetTn': 'Aslema ! Posez une question sur le travail de Rayen, ou choisissez une commande.',
+    'b.thanks': 'Avec plaisir. Autre chose ?',
+    'b.hack': 'Un hacker éthique demande d’abord le périmètre. Dans le périmètre : cette page. Commencez par ls -a.',
+    'b.flag': 'Un flag est caché dans cette page. Commencez par ls -a, puis soumettez-le ici.',
+    'b.fallback': 'Aucune réponse pour « {q} ». Essayez une de ces commandes, ou posez la question directement à Rayen avec un ticket.',
+    'b.noMatch': 'Rien sur cette page ne mentionne {q}.', 'b.match1': '1 résultat.', 'b.matches': '{n} résultats.',
+    'k.xp': 'poste', 'k.project': 'projet', 'k.method': 'méthode', 'k.cert': 'certif',
+    'b.exitHero': 'Bien essayé. Faites défiler pour voir la suite du site.',
+    'b.yes': 'oui, on commence', 'b.techUsed': 'Dans la liste, utilisée par {g}.', 'b.techNone': 'Aucun des six groupes de la liste ne l’a dans son mode opératoire ici.',
+    'tk.pri': 'Choisissez une priorité :', 'tk.start': 'Ouverture d’un ticket {p} : {label}. Trois questions rapides, tapez cancel pour arrêter.',
+    'tk.name': 'Votre nom ?', 'tk.org': 'Entreprise ou équipe ? Appuyez sur Entrée pour passer.',
+    'tk.msg.P1': 'Quel est le poste, et où est-il basé ?', 'tk.msg.P2': 'Que construisez-vous, et où Rayen interviendrait-il ?',
+    'tk.msg.P3': 'Quel événement ou challenge, et quand ?', 'tk.msg.P4': 'Allez-y, dites bonjour.',
+    'tk.ready': 'Le ticket {id} est prêt. Envoyez-le depuis votre messagerie :', 'tk.cancel': 'Ticket annulé.',
+    'tk.copy': 'copier le ticket', 'tk.mail': 'ouvrir la messagerie', 'tk.form': 'modifier dans le formulaire', 'tk.skip': 'passer', 'tk.cancelBtn': 'annuler',
+    'tk.copied': 'Ticket copié. Collez-le dans un nouvel e-mail à {e}.', 'tk.copyFail': 'La copie est bloquée ici. Le texte du ticket est sélectionné, copiez-le au clavier.',
+    'tk.ph.pri': 'P1, P2, P3 ou P4', 'tk.ph.name': 'votre nom', 'tk.ph.org': 'entreprise ou équipe, ou Entrée pour passer', 'tk.ph.msg': 'votre message',
+    'drill.dek': 'Essayez le confinement vous-même. Stoppez l’intrusion avant qu’elle n’atteigne le contrôleur de domaine.',
+    'drill.r1': 'Une charge de phishing arrive sur un poste au hasard, loin des serveurs.',
+    'drill.r2': 'Bleu signale une alerte récente. Laissée telle quelle, elle passe au rouge puis se propage.',
+    'drill.r3': 'Cliquez sur un hôte pour l’isoler. Isoler DC01 n’est pas une option.',
+    'drill.r4': 'Vous gagnez quand plus aucun attaquant n’est actif.',
     'drill.start': 'Lancer l’exercice', 'drill.restart': 'Recommencer', 'drill.again': 'Rejouer',
     'drill.idle': 'Les {n} hôtes remontent leurs logs. Aucune alerte ouverte.',
     'drill.hint': 'Cliquez sur un hôte pour l’isoler. Bleu signale une alerte récente, rouge un attaquant capable de se déplacer.',
@@ -909,7 +1191,7 @@ const I18N = {
     'ticket.to': 'À', 'ticket.subject': 'Objet',
     'ticket.hi': 'Bonjour Rayen,', 'ticket.msgEmpty': '(votre message)',
     'ticket.foot': 'Ticket {id}, priorité {p}, ouvert depuis votre portfolio.',
-    'foot.top': 'Haut de page', 'foot.kbd': 'Appuyez sur {k} pour le terminal',
+    'foot.top': 'Haut de page', 'foot.kbd': 'Appuyez sur {k} pour ouvrir la console',
   },
 };
 
@@ -1449,8 +1731,8 @@ function t(key, vars) {
 }
 const L = (x) => (x == null ? '' : typeof x === 'string' ? x : (x[lang] != null ? x[lang] : (x.en != null ? x.en : '')));
 
-function tunisTime() {
-  try { return new Intl.DateTimeFormat(lang === 'fr' ? 'fr-FR' : 'en-GB', { timeZone: PROFILE.timeZone, hour: '2-digit', minute: '2-digit' }).format(new Date()); }
+function tunisTime(withSeconds) {
+  try { return new Intl.DateTimeFormat(lang === 'fr' ? 'fr-FR' : 'en-GB', { timeZone: PROFILE.timeZone, hour: '2-digit', minute: '2-digit', second: withSeconds ? '2-digit' : undefined, hour12: false }).format(new Date()); }
   catch (e) { return ''; }
 }
 function fmtDay(iso) {
@@ -1466,14 +1748,15 @@ function applyStatic() {
   document.documentElement.lang = lang;
   $$('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n); });
   $$('[data-i18n-aria]').forEach((el) => { el.setAttribute('aria-label', t(el.dataset.i18nAria)); });
+  $$('[data-i18n-ph]').forEach((el) => { el.placeholder = t(el.dataset.i18nPh); });
   $$('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
   $('#kbd-hint').replaceChildren(...t('foot.kbd', { k: '\u0001' }).split('\u0001').flatMap((part, i) => (i ? [h('kbd', null, '`'), part] : [part])));
   $('#copyright').textContent = '© ' + new Date().getFullYear() + ' ' + PROFILE.name;
 }
-function renderFacts() {
-  const rows = [['fact.now', t('fact.nowV')], ['fact.focus', t('fact.focusV')], ['fact.base', t('fact.baseV', { time: tunisTime() })], ['fact.lang', t('fact.langV')]];
-  $('#facts').replaceChildren(...rows.flatMap(([k, v]) => [h('dt', null, t(k)), h('dd', null, v)]));
-  $('#local-time').textContent = t('contact.timeV', { time: tunisTime() });
+function renderClock() {
+  Con.tick();
+  const lt = $('#local-time');
+  if (lt) { const v = t('contact.timeV', { time: tunisTime() }); if (lt.textContent !== v) lt.textContent = v; }
 }
 
 function currentTheme() { return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark'; }
@@ -1807,30 +2090,10 @@ const AptMap = (() => {
   return { init, select };
 })();
 
-/* ---------------- ticker, name decrypt, spotlight ---------------- */
+/* ---------------- ticker and spotlight ---------------- */
 function renderTicker() {
   const items = TICKER.concat(TICKER);
   $('#ticker').replaceChildren(...items.map(([id, name]) => h('span', { class: 'tk' }, h('i'), h('b', null, id), name)));
-}
-function decryptName() {
-  if (reduceMotion) return;
-  const glyphs = 'ABCDEFGHKLMNPRSTVXZ0123456789#%&<>/';
-  $$('.name span').forEach((sp, si) => {
-    const final = sp.textContent;
-    const width = sp.getBoundingClientRect().width;
-    sp.style.width = width + 'px'; sp.style.whiteSpace = 'nowrap'; sp.style.overflow = 'hidden'; sp.style.verticalAlign = 'bottom';
-    const start = performance.now() + 120 + si * 140, dur = 950;
-    const step = (now) => {
-      const prog = Math.min(1, Math.max(0, (now - start) / dur));
-      const fixed = Math.floor(prog * final.length);
-      let out = final.slice(0, fixed);
-      for (let i = fixed; i < final.length; i++) out += glyphs[Math.floor(Math.random() * glyphs.length)];
-      sp.textContent = out;
-      if (prog < 1) requestAnimationFrame(step);
-      else { sp.textContent = final; sp.style.width = ''; sp.style.whiteSpace = ''; sp.style.overflow = ''; sp.style.verticalAlign = ''; }
-    };
-    requestAnimationFrame(step);
-  });
 }
 function initSpotlight() {
   document.addEventListener('pointermove', (ev) => {
@@ -2216,144 +2479,697 @@ const Drill = (() => {
   return { init, start, relabel, nodes: NODES };
 })();
 
-/* ---------------- terminal ---------------- */
-const Term = (() => {
-  const box = $('#term'), out = $('#term-out'), form = $('#term-form'), input = $('#term-input');
-  const hist = []; let hi = 0; let booted = false;
-  function print(content, cls) {
-    const line = h('div', { class: cls || null });
-    if (Array.isArray(content)) line.append(...content); else line.textContent = content;
-    out.append(line); out.scrollTop = out.scrollHeight;
+/* ---------------- console: hero terminal and chatbot ---------------- */
+const Con = (() => {
+  const PS = 'rayen@soc:~$';
+  let shell, log, chipsEl, form, input, psEl, home, note, dock, dockBody, launcher, win, nfTemplate;
+  let ready = false, docked = false, heroVisible = true, bootDone = false, bootAbort = false, nameDone = false, skip = false, pending = 0;
+  let mode = null;   // ticket flow state
+  let ctx = null;    // last list or item shown, so "2" or "next" make sense
+  let chain = Promise.resolve();
+  const hist = []; let hi = 0;
+
+  const fast = () => reduceMotion || skip;
+  const wait = (ms) => new Promise((r) => setTimeout(r, fast() ? 0 : ms));
+  const narrow = () => window.matchMedia('(max-width: 700px)').matches;
+  const pad2 = (n) => String(n).padStart(2, '0');
+  const cap = (x) => x.charAt(0).toUpperCase() + x.slice(1);
+  const counts = () => ({ np: CASES.length, na: APTS.length, nc: CERTS.filter((c) => !c.progress).length });
+  const norm = (x) => String(x || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[’'`"“”«»?!,;:()[\]{}]/g, ' ').replace(/\s+/g, ' ').trim();
+  const words = (q) => q.split(' ').map((w) => w.replace(/^[.\-]+|[.\-]+$/g, '')).filter(Boolean);
+  const phrase = (q, w) => (' ' + q + ' ').includes(' ' + w + ' ');
+  const multi = (w) => /[ &.\-\/]/.test(w);
+  function hit(q, tk, w) {
+    if (multi(w)) return phrase(q, w) || q.includes(w);
+    if (w.length <= 3) return tk.includes(w) || tk.includes(w + 's');
+    return tk.some((x) => x.startsWith(w));
   }
-  function open() {
-    box.hidden = false;
-    if (!booted) { booted = true; print('Incident response console for ' + PROFILE.name + '. Type help to list commands.', 't-dim'); }
-    input.focus();
+  const exact = (q, tk, w) => (multi(w) ? phrase(q, w) : tk.includes(w));
+
+  /* ----- output ----- */
+  function scrollEnd() { if (shell) shell.scrollTop = shell.scrollHeight; }
+  function put(node) { log.append(node); scrollEnd(); return node; }
+  const ln = (content, cls) => h('div', { class: 'ln' + (cls ? ' ' + cls : '') }, content);
+  const say = (text, cls) => put(ln(text, 'say' + (cls ? ' ' + cls : '')));
+  const link = (href, text) => h('a', { href, target: '_blank', rel: 'noopener' }, text);
+  function table(rows, opt) {
+    const o = opt || [];
+    return h('div', { class: 'tbl' }, rows.filter(Boolean).map((r) => h('div', { class: 'tr' },
+      r.map((cell, i) => h('span', { class: [i === 0 ? 'k' : '', o.includes(i) ? 'opt' : ''].join(' ').trim() || null }, cell)))));
   }
-  function close() { box.hidden = true; $('#term-btn').focus(); }
-  function toggle() { if (box.hidden) open(); else close(); }
-  function goTo(sel) { close(); const el = $(sel); if (el) el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' }); }
-  async function sha256(s) {
-    const buf = await window.crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  async function emit(nodes) {
+    for (const n of nodes.flat()) { if (!n) continue; put(n); await wait(36); }
+  }
+  function echo(text) { put(ln([h('span', { class: 'ps' }, mode ? 'ticket>' : PS), ' ', text], 'pl')); }
+  async function spin(label) {
+    if (fast()) return;
+    const el = put(ln('', 'dim')); el.setAttribute('aria-hidden', 'true');
+    const fr = '|/-\\'; let i = 0;
+    const tick = () => { el.textContent = fr[i++ % 4] + ' ' + label; };
+    tick(); const id = setInterval(tick, 90);
+    await wait(420); clearInterval(id); el.remove();
+  }
+  const C = (cmd, label) => ({ cmd, label });
+  const A = (label, act, go) => ({ label, act, go });
+  function chips(list) {
+    chipsEl.replaceChildren(...(list || []).filter(Boolean).map((c) => {
+      if (c.href) return h('a', { class: 'chip-btn act', href: c.href, onclick: c.onclick || null }, c.label);
+      return h('button', { type: 'button', class: 'chip-btn' + (c.act ? ' act' : '') + (c.go ? ' go' : ''), onclick: () => { endBoot(); if (c.act) c.act(); else submit(c.cmd, true); } }, c.label || c.cmd);
+    }));
+    scrollEnd();
+  }
+  const startChips = () => [C('projects'), C('apt'), C('skills'), C('xp'), C('hire')];
+  function setVal(v) { input.value = v; form.classList.toggle('typed', !!v); }
+  function refreshPrompt() {
+    psEl.replaceChildren(...(mode ? ['ticket>'] : [h('span', { class: 'ps-host' }, 'rayen@soc:~'), '$']));
+    input.placeholder = mode ? t('tk.ph.' + mode.step) : t('con.ph');
+  }
+
+  /* ----- running commands ----- */
+  function submit(raw, typed) {
+    endBoot();
+    pending++; if (pending > 1) skip = true;
+    chain = chain.then(() => run(raw, typed)).catch((e) => { put(ln('error: ' + (e && e.message), 'err')); })
+      .then(() => { pending--; if (!pending) skip = false; });
+    return chain;
+  }
+  async function run(raw, typed) {
+    const text = String(raw == null ? '' : raw);
+    if (typed && !fast()) { setVal(''); for (const ch of text) { setVal(input.value + ch); await wait(26); } await wait(90); }
+    setVal('');
+    chips([]);
+    echo(text.trim());
+    if (mode) { await ticketStep(text.trim()); refreshPrompt(); after(); return; }
+    const q = text.trim();
+    if (!q) return;
+    hist.push(q); hi = hist.length;
+    await route(q);
+    refreshPrompt(); after();
+  }
+  function after() {
+    scrollEnd();
+    if (!docked && narrow()) { try { form.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' }); } catch (e) { /* older browser */ } }
+  }
+  async function route(raw) {
+    if (raw === '?') return cHelp();
+    const parts = raw.split(/\s+/);
+    const head = norm(parts[0]);
+    const args = parts.slice(1);
+    const q = norm(raw), tk = words(q);
+    if (/^\d+$/.test(q) && ctx) {
+      if (ctx.kind === 'project') return cOpen([q]);
+      if (ctx.kind === 'apt') return cApt([q]);
+      if (ctx.kind === 'xp') return cXp([q]);
+    }
+    if (ctx && ctx.kind === 'offer' && /^(y|yes|yeah|yep|sure|ok|okay|oui|ouais|go|start|let s go|allons-y|vas-y|d accord)$/.test(q)) { ctx = null; return startTicket('P1'); }
+    const cmd = CMDS[head] || CMDS[ALIAS[head]];
+    if (cmd) { const r = await cmd(args); if (r !== false) return; }
+    await spin(t('b.search'));
+    return answer(q, tk, raw);
+  }
+
+  /* ----- understanding plain questions ----- */
+  const GREET = ['hi', 'hello', 'hey', 'hola', 'salut', 'bonjour', 'bonsoir', 'salam', 'coucou', 'yo', 'hii', 'helo'];
+  const GREET_TN = ['aslema', 'asslema', 'ahla', 'ahlan', '3aslema'];
+  const THANKS = ['thanks', 'thank', 'thx', 'merci', 'yaatik', 'choukran', 'shukran'];
+  const INTENTS = [
+    ['hack', ['hack', 'hacking', 'pirat', 'exploit this', 'pentest this']],
+    ['hire', ['hire', 'hiring', 'recruit', 'recrut', 'embauch', 'offer', 'offre', 'opportunit', 'position', 'vacanc', 'available', 'availability', 'disponib', 'interview', 'entretien', 'salary', 'salaire', 'freelance', 'contract', 'contrat', 'cdi']],
+    ['cv', ['cv', 'resume', 'curriculum']],
+    ['contact', ['contact', 'email', 'e-mail', 'mail', 'reach', 'joindre', 'linkedin', 'ecrire', 'message', 'appeler', 'call']],
+    ['flag', ['flag', 'easter', 'secret', 'hidden', 'cache']],
+    ['drill', ['drill', 'game', 'jeu', 'play', 'jouer', 'simulation', 'exercice', 'exercise', 'containment', 'confinement']],
+    ['method', ['method', 'methode', 'methodolog', 'process', 'approach', 'approche', 'lifecycle', 'phase', 'handle', 'gerer', 'gere', ['playbook', 0.5], ['incident', 0.5], ['how do', 0.5], ['how does', 0.5], ['comment', 0.5]]],
+    ['dfir', ['dfir', 'forensi', 'investigat', 'enquete', 'hunt', 'triage', ['incident', 0.6], ['response', 0.5], ['reponse', 0.5], ['soc', 0.5], ['alert', 0.5], ['alerte', 0.5]]],
+    ['apt', ['apt', 'threat actor', 'threat group', 'threat intel', 'acteur', 'groupe', 'group', 'mitre', 'att&ck', 'adversar', 'nation-state', 'espionage', 'espionnage', 'ransomware', 'rancongiciel', 'watchlist', 'menace', ['threat', 0.6]]],
+    ['projects', ['project', 'projet', 'lab', 'github', 'repo', 'build', 'realisation', 'portfolio', ['code', 0.5]]],
+    ['certs', ['cert', 'certif', 'ine', 'ec-council', 'eccouncil', 'badge', 'exam', 'examen']],
+    ['edu', ['degree', 'diplom', 'universit', 'study', 'studies', 'etude', 'school', 'ecole', 'education', 'formation', 'bachelor', 'licence', 'ingenieur', 'engineering', 'tek-up', 'tekup', 'graduat']],
+    ['where', ['where', 'based', 'base', 'location', 'located', 'country', 'pays', 'timezone', 'fuseau', 'tunis', 'tunisia', 'tunisie', 'habite', 'relocat', 'remote', 'teletravail', 'heure', ['live', 0.6]]],
+    ['langs', ['language', 'langue', 'speak', 'parle', 'arabic', 'french', 'english', 'arabe', 'francais', 'anglais']],
+    ['xp', ['experience', 'job', 'career', 'carriere', 'parcours', 'emploi', 'company', 'entreprise', 'employ', 'intern', 'stage', 'gitv', 'global it vision', 'onetech', 'teligencia', 'pwn and patch', ['work', 0.6], ['poste', 0.6], ['role', 0.5]]],
+    ['skills', ['skill', 'competen', 'tool', 'outil', 'stack', 'technolog', 'siem', 'edr', 'ndr', 'soar', 'xdr', 'software', 'logiciel', ['use', 0.5], ['utilise', 0.5], ['know', 0.5], ['connai', 0.5]]],
+    ['whoami', ['who', 'qui', 'yourself', 'presente', 'presentation', 'introduce', 'about', 'profile', 'profil', 'summary', 'he do', 'you do', 'fait-il', 'tu fais', 'vous faites']],
+  ];
+  const APT_KEYS = [['apt29', 'apt29'], ['apt 29', 'apt29'], ['cozy bear', 'apt29'], ['midnight blizzard', 'apt29'], ['nobelium', 'apt29'], ['the dukes', 'apt29'], ['solarwinds', 'apt29'],
+    ['apt28', 'apt28'], ['apt 28', 'apt28'], ['fancy bear', 'apt28'], ['forest blizzard', 'apt28'], ['sofacy', 'apt28'], ['strontium', 'apt28'],
+    ['lazarus', 'lazarus'], ['hidden cobra', 'lazarus'], ['diamond sleet', 'lazarus'], ['zinc', 'lazarus'], ['sony', 'lazarus'],
+    ['volt typhoon', 'volt'], ['volt', 'volt'], ['vanguard panda', 'volt'], ['bronze silhouette', 'volt'], ['voltzite', 'volt'],
+    ['wizard spider', 'wizard'], ['trickbot', 'wizard'], ['ryuk', 'wizard'], ['conti', 'wizard'], ['grim spider', 'wizard'],
+    ['muddywater', 'muddy'], ['muddy water', 'muddy'], ['seedworm', 'muddy'], ['mango sandstorm', 'muddy'], ['static kitten', 'muddy']];
+  const CERT_KEYS = [['pcap', 1], ['aws', 2], ['saa', 2], ['rhcsa', 3], ['rhce', 4], ['ejpt', 5], ['ejptv2', 5], ['csa', 6], ['ecthp', 7], ['ecthpv2', 7],
+    ['ecdfp', 8], ['ecir', 10], ['ecirv3', 10], ['eeda', 11], ['iso 27001', 12], ['iso', 12], ['27001', 12], ['lead implementer', 12]];
+  const PROJ_KEYS = [['soc automation', 'soc'], ['soc-automation', 'soc'], ['automatisation soc', 'soc'], ['automatisation du soc', 'soc'], ['mimikatz', 'soc'], ['soar pipeline', 'soc'],
+    ['active directory lab', 'ad'], ['ad lab', 'ad'], ['lab ad', 'ad'], ['detection lab', 'ad'], ['lab de detection', 'ad'], ['active-directory-monitoring', 'ad'],
+    ['sd-wan', 'sdwan'], ['sdwan', 'sdwan'], ['sd wan', 'sdwan'], ['fortimanager', 'sdwan'], ['pfe', 'sdwan'],
+    ['securify', 'securify'], ['vulnerability scanner', 'securify'], ['scanner', 'securify'],
+    ['machine learning', 'ml'], ['ml ids', 'ml'], ['xgboost', 'ml'], ['intrusion detection', 'ml'], ['apprentissage', 'ml'],
+    ['ctf', 'ctf'], ['capture the flag', 'ctf'], ['challenge', 'ctf'], ['challenges', 'ctf'], ['securinets', 'ctf']];
+  const TOOL_IDX = [['CrowdStrike', ['crowdstrike', 'falcon']], ['Darktrace', ['darktrace']], ['LogRhythm', ['logrhythm']], ['Splunk', ['splunk']], ['Wazuh', ['wazuh']],
+    ['SOCRadar', ['socradar']], ['MISP', ['misp']], ['VirusTotal', ['virustotal']], ['Sysmon', ['sysmon']], ['Suricata', ['suricata']],
+    ['Atomic Red Team', ['atomic red team', 'atomic']], ['Shuffle', ['shuffle']], ['TheHive', ['thehive', 'the hive']], ['Cortex', ['cortex']],
+    ['Metasploit', ['metasploit']], ['Burp Suite', ['burp']], ['Nuclei', ['nuclei']], ['SQLMap', ['sqlmap']], ['Nikto', ['nikto']], ['Dirb', ['dirb']],
+    ['Nmap', ['nmap']], ['Wafw00f', ['wafw00f']], ['XSSer', ['xsser']], ['FortiGate', ['fortigate', 'fortinet', 'fortianalyzer']], ['Ansible', ['ansible']],
+    ['Terraform', ['terraform']], ['VMware', ['vmware']], ['Python', ['python']], ['Docker', ['docker']], ['FastAPI', ['fastapi']], ['MongoDB', ['mongodb', 'mongo']],
+    ['Node.js', ['node.js', 'nodejs', 'node']], ['PHP', ['php']], ['Jinja2', ['jinja2', 'jinja']], ['Kali Linux', ['kali']], ['Active Directory', ['active directory']],
+    ['Linux', ['linux', 'red hat', 'redhat', 'rhel']]];
+  const TECH = {};
+  TICKER.forEach(([id, name]) => { TECH[id] = name; });
+  APTS.forEach((g) => g.chain.forEach(([, id, name]) => { TECH[id] = name; }));
+  const TECH_ALIAS = [['kerberoast', ['T1558.003']], ['dcsync', ['T1003.006']], ['password spray', ['T1110.003']], ['spraying', ['T1110.003']], ['webshell', ['T1505.003']],
+    ['web shell', ['T1505.003']], ['lsass', ['T1003.001']], ['ntdsutil', ['T1003.003']], ['ntds', ['T1003.003']], ['supply chain', ['T1195.002']],
+    ['shadow copies', ['T1490']], ['shadow copy', ['T1490']], ['vssadmin', ['T1490']], ['rclone', ['T1567.002']], ['portproxy', ['T1090.001']],
+    ['powershell', ['T1059.001']], ['spearphishing', ['T1566.001', 'T1566.002']], ['phishing', ['T1566.001', 'T1566.002']],
+    ['lateral movement', ['T1021.002']], ['scheduled task', ['T1053.005']], ['obfuscat', ['T1027']], ['wiper', ['T1561.002']]];
+  function findApt(q, tk) { const k = APT_KEYS.find(([w]) => exact(q, tk, w)); return k ? APTS.find((g) => g.id === k[1]) : null; }
+  function findCert(q, tk) { const k = CERT_KEYS.find(([w]) => exact(q, tk, w)); return k ? CERTS.find((c) => c.ex === k[1]) : null; }
+  function findProject(q, tk) { const k = PROJ_KEYS.find(([w]) => exact(q, tk, w)); return k ? CASES.find((c) => c.id === k[1]) : null; }
+  function findTool(q, tk) { const k = TOOL_IDX.find(([, terms]) => terms.some((w) => exact(q, tk, w))); return k ? { label: k[0], terms: k[1] } : null; }
+  function findTech(q, tk) {
+    const m = q.match(/\bt1\d{3}(?:\.\d{3})?\b/);
+    if (m) return [m[0].toUpperCase()];
+    const a = TECH_ALIAS.find(([w]) => hit(q, tk, w));
+    return a ? a[1] : null;
+  }
+  async function answer(q, tk, raw) {
+    if (tk.length <= 3 && tk.some((w) => GREET_TN.includes(w))) return cGreet(true);
+    if (tk.length <= 3 && tk.some((w) => GREET.includes(w))) return cGreet(false);
+    if (tk.length <= 5 && tk.some((w) => THANKS.some((x) => w === x || (x.length > 4 && w.startsWith(x))))) return cThanks();
+    if (tk.includes('flag')) return cFlag();
+    const g = findApt(q, tk); if (g) return aptDetail(APTS.indexOf(g));
+    const tech = findTech(q, tk); if (tech) return cTech(tech);
+    const c = findCert(q, tk); if (c) return certDetail(c);
+    const p = findProject(q, tk); if (p) return projectDetail(CASES.indexOf(p));
+    const tool = findTool(q, tk); if (tool) return cTool(tool);
+    if (/\b(phone|telephone|numero|whatsapp|tel)\b/.test(q)) return cContact([], true);
+    let best = null, top = 0;
+    INTENTS.forEach(([id, kws]) => {
+      let sc = 0;
+      kws.forEach((k) => { const [w, wt] = Array.isArray(k) ? k : [k, 1]; if (hit(q, tk, w)) sc += wt; });
+      if (sc > top) { top = sc; best = id; }
+    });
+    if (best && top >= 1) return INTENT_RUN[best]();
+    return cFallback(raw);
+  }
+
+  /* ----- answers ----- */
+  function uptime() {
+    const d = new Date();
+    const months = Math.max(0, (d.getUTCFullYear() - 2025) * 12 + (d.getUTCMonth() + 1 - 6));
+    const yr = Math.floor(months / 12), mo = months % 12;
+    if (lang === 'fr') return [yr ? yr + (yr > 1 ? ' ans' : ' an') : '', mo ? mo + ' mois' : ''].filter(Boolean).join(' ') || '1 mois';
+    return [yr ? yr + ' yr' : '', mo ? mo + ' mo' : ''].filter(Boolean).join(' ') || '1 mo';
+  }
+  function fillNf(root) {
+    const set = (k, v) => { const el = root.querySelector('[data-nf="' + k + '"]'); if (el && el.textContent !== v) el.textContent = v; };
+    set('base', t('nf.v.base', { time: tunisTime() }));
+    set('uptime', t('nf.v.uptime', { d: uptime() }));
+    set('certs', t('nf.v.certs', { n: counts().nc }));
+  }
+  function nfClone() {
+    const n = nfTemplate.cloneNode(true);
+    n.removeAttribute('id'); n.removeAttribute('data-boot'); n.classList.add('shown');
+    n.querySelectorAll('[id]').forEach((e) => e.removeAttribute('id'));
+    const h1 = n.querySelector('h1');
+    if (h1) h1.replaceWith(h('div', { class: h1.className }, 'Rayen Salem'));
+    n.querySelectorAll('[data-i18n]').forEach((e) => { e.textContent = t(e.dataset.i18n); });
+    fillNf(n);
+    return n;
+  }
+  async function cHelp() {
+    const rows = [['whoami', 'm.whoami'], ['xp [n]', 'm.xp'], ['skills', 'm.skills'], ['projects', 'm.projects'], ['open <n>', 'h.open'], ['apt [name]', 'h.apt'],
+      ['certs', 'm.certs'], ['education', 'h.edu'], ['contact', 'h.contact'], ['hire', 'm.hire'], ['cv', 'h.cv'], ['drill', 'm.drill'],
+      ['theme console|report', 'h.view'], ['lang en|fr', 'h.lang'], ['clear', 'h.clear']];
+    await emit([ln(t('b.helpHead'), 'mut'), table(rows.map(([c, k]) => [c, t(k, counts())])), ln(t('b.helpFoot'), 'mut')]);
+    chips(startChips());
+  }
+  async function cWhoami(args) {
+    if (args && args.length) return false;
+    await emit([nfClone()]);
+    chips([C('xp'), C('skills'), C('projects'), C('hire')]);
+  }
+  const workList = () => TIMELINE.filter((e) => e.type !== 'edu');
+  async function cXp(args) {
+    const list = workList();
+    if (args && args.length) {
+      const n = parseInt(args[0], 10);
+      if (args.length === 1 && n >= 1 && n <= list.length) return xpDetail(n - 1);
+      return false;
+    }
+    await emit([ln(t('b.xpHead'), 'mut'), table(list.map((e, i) => [String(i + 1), e.from + ' → ' + (e.to || t('timeline.now')), L(e.title) + ', ' + L(e.org)]), [1])]);
+    ctx = { kind: 'xp' };
+    chips([C('xp 1', t('b.chipCurrent')), C('skills'), C('projects'), C('hire')]);
+  }
+  async function xpDetail(i) {
+    const list = workList(), e = list[i];
+    await emit([ln([h('b', null, L(e.title)), ', ' + L(e.org)]),
+      ln(e.from + ' → ' + (e.to || t('timeline.now')) + (e.note ? ', ' + L(e.note) : ''), 'mut'),
+      ...(e.points ? L(e.points).map((x) => ln('- ' + x, 'li')) : []),
+      e.tools ? ln(t('b.tools') + ': ' + e.tools.join(', '), 'acc') : null,
+      ...(e.links || []).map((l) => ln(link(l.href, L(l.label))))]);
+    ctx = { kind: 'xp', i };
+    chips([i + 1 < list.length ? C('xp ' + (i + 2), t('b.next')) : null, e.caseLink ? A(t('b.showProject'), () => showCase(e.caseLink), true) : null, C('xp'), C('hire')]);
+  }
+  const SKILLS = [['g.detect', 'CrowdStrike Falcon (EDR), Darktrace (NDR), LogRhythm, Splunk, Wazuh (SIEM)'], ['g.respond', 'Shuffle (SOAR), TheHive, Cortex'],
+    ['g.intel', 'SOCRadar, MISP, VirusTotal'], ['g.telemetry', 'Sysmon, Suricata'], ['g.offense', 'Metasploit, Burp Suite, Nuclei, SQLMap, Atomic Red Team'],
+    ['g.infra', 'FortiGate, FortiManager, Ansible, Terraform, VMware, Docker, AWS, Red Hat Linux'], ['g.code', 'Python']];
+  async function cSkills(args) {
+    if (args && args.length) return false;
+    await emit([table(SKILLS.map(([k, v]) => [t(k), v])), ln(t('b.skillsFoot'), 'mut')]);
+    chips([C('splunk'), C('crowdstrike'), C('wazuh'), C('projects')]);
+  }
+  async function cProjects(args) {
+    if (args && args.length) return false;
+    await emit([ln(t('b.projHead'), 'mut'), table(CASES.map((c, i) => [String(i + 1), L(c.title), h('span', { class: 'dim' }, L(c.kind))]), [2])]);
+    ctx = { kind: 'project' };
+    chips([C('open 1'), C('open 3'), C('apt'), C('hire')]);
+  }
+  async function cOpen(args) {
+    const a = norm((args || []).join(' '));
+    if (!a) return false;
+    let i = /^\d+$/.test(a) ? parseInt(a, 10) - 1 : -1;
+    if (!(i >= 0 && i < CASES.length)) { const p = findProject(a, words(a)); i = p ? CASES.indexOf(p) : -1; }
+    if (i < 0) return false;
+    return projectDetail(i);
+  }
+  async function projectDetail(i) {
+    const c = CASES[i];
+    const url = c.repo ? 'https://github.com/' + PROFILE.github + '/' + c.repo : null;
+    await emit([ln(h('b', null, (i + 1) + '. ' + L(c.title))), ln(L(c.kind), 'dim'), ln(L(c.sum)), ln(t('b.stack') + ': ' + c.stack.join(', '), 'acc'),
+      url ? ln([t('b.repo') + ': ', link(url, 'github.com/' + PROFILE.github + '/' + c.repo)]) : ln(t('b.noRepo'), 'dim')]);
+    ctx = { kind: 'project', i };
+    chips([A(t('b.showDiagram'), () => showCase(c.id), true), C('open ' + (((i + 1) % CASES.length) + 1), t('b.next')), C('projects')]);
+  }
+  async function cApt(args) {
+    const a = norm((args || []).join(' '));
+    if (a) {
+      const n = /^\d+$/.test(a) ? parseInt(a, 10) : 0;
+      const g = n >= 1 && n <= APTS.length ? APTS[n - 1] : findApt(a, words(a));
+      if (!g) return false;
+      return aptDetail(APTS.indexOf(g));
+    }
+    await emit([ln(t('b.aptHead'), 'mut'), table(APTS.map((g, i) => [String(i + 1), g.name, g.mitre, h('span', { class: 'mut' }, L(g.motive))]), [2])]);
+    ctx = { kind: 'apt' };
+    chips([C('apt29'), C('lazarus'), C('volt typhoon'), A(t('b.showMap'), () => goTo('#apt'), true)]);
+  }
+  async function aptDetail(i) {
+    const g = APTS[i];
+    await emit([
+      ln([h('b', null, g.name), '  ', link('https://attack.mitre.org/groups/' + g.mitre + '/', g.mitre)]),
+      ln(t('b.aka') + ': ' + g.aka, 'mut'),
+      ln(L(g.motive) + ', ' + t('b.since', { y: g.since }) + '. ' + cap(t('b.targets')) + ': ' + g.regions.map((r) => L(REGIONS[r].name)).join(', ') + '.', 'mut'),
+      ln(L(g.known)),
+      ln(t('b.playbook') + ':', 'acc'),
+      table(g.chain.map(([tac, id, name]) => [id, name, h('span', { class: 'dim' }, L(TACTICS[tac]))]), [2]),
+      ln(t('b.catch') + ': ' + L(g.dets[0].t), 'good'),
+    ]);
+    ctx = { kind: 'apt', i };
+    chips([A(t('b.showMap'), () => showApt(g.id), true), C('apt ' + (((i + 1) % APTS.length) + 1), t('b.next')), C('apt')]);
+  }
+  async function cTech(ids) {
+    const users = APTS.filter((g) => g.chain.some((c) => ids.includes(c[1])));
+    await emit([
+      ...ids.map((id) => ln([h('b', null, id), TECH[id] ? '  ' + TECH[id] : ''])),
+      users.length ? ln(t('b.techUsed', { g: users.map((g) => g.name).join(', ') })) : ln(t('b.techNone'), 'mut'),
+      ...ids.map((id) => { const path = id.replace('.', '/'); return ln(link('https://attack.mitre.org/techniques/' + path + '/', 'attack.mitre.org/techniques/' + path), 'dim'); }),
+    ]);
+    chips([...users.slice(0, 2).map((g) => C('apt ' + (APTS.indexOf(g) + 1), g.name)), C('apt')]);
+  }
+  async function cCerts(args) {
+    const a = norm((args || []).join(' '));
+    if (a) { const c = findCert(a, words(a)); return c ? certDetail(c) : false; }
+    const list = CERTS.slice().sort((x, y) => y.ex - x.ex);
+    await emit([ln(t('b.certsHead'), 'mut'), table(list.map((c) => ['E-' + pad2(c.ex), c.code, h('span', { class: 'mut' }, c.issuer || ''), c.date || t('certs.progress')]), [2])]);
+    chips([C('ecirv3'), C('ecdfp'), C('iso 27001'), A(t('b.showCerts'), () => goTo('#certs'), true)]);
+  }
+  async function certDetail(c) {
+    await emit([ln([h('b', null, c.code), '  ', c.name]),
+      ln([c.issuer, c.date].filter(Boolean).join(', ') || t('certs.progress'), 'mut'),
+      ln(t('certs.domain') + ': ' + L(c.domain) + '. ' + t('certs.exhibit') + ' E-' + pad2(c.ex) + '.', 'dim'),
+      c.progress ? ln(t('b.isoNote')) : null]);
+    chips([C('certs'), C('dfir'), A(t('b.showCerts'), () => goTo('#certs'), true)]);
+  }
+  async function cEdu(args) {
+    if (args && args.length) return false;
+    const list = TIMELINE.filter((e) => e.type === 'edu');
+    await emit([ln(t('b.eduHead'), 'mut'), table(list.map((e) => [e.from + ' → ' + e.to, L(e.title) + ', ' + L(e.org)])), ln(t('b.eduFoot', { n: counts().nc }), 'mut')]);
+    chips([C('certs'), C('projects'), C('xp')]);
+  }
+  async function copyEmail() { const ok = await copyText(EMAIL); say(ok ? t('b.copied', { e: EMAIL }) : t('b.copyFail', { e: EMAIL }), ok ? 'good' : ''); }
+  async function cContact(args, phone) {
+    if (args && args.length) return false;
+    const rows = [['email', EMAIL], ['linkedin', link(PROFILE.linkedin, 'linkedin.com/in/rayensalem')], ['github', link('https://github.com/' + PROFILE.github, 'github.com/' + PROFILE.github)]];
+    if (PROFILE.cv) rows.push(['cv', link(PROFILE.cv, PROFILE.cv)]);
+    await emit([phone ? ln(t('b.phone')) : ln(t('b.contactHead'), 'mut'), table(rows)]);
+    chips([A(t('b.copyEmail'), copyEmail), C('hire'), C('ticket')]);
+  }
+  async function cCv() {
+    if (PROFILE.cv) { await emit([ln([t('b.cvYes') + ' ', link(PROFILE.cv, PROFILE.cv)])]); chips([C('contact'), C('hire')]); return; }
+    await emit([ln(t('b.cvNo'))]); chips([C('ticket'), C('contact')]);
+  }
+  async function cDrill() {
+    say(t('b.drill'));
+    if (docked) closeDock(false);
+    goTo('#drill-sec');
+    Drill.start();
+    chips([C('apt'), C('projects')]);
+  }
+  async function cMethod(args) {
+    if (args && args.length) return false;
+    await emit([ln(t('b.methodHead'), 'mut'), table(PHASES.map((ph, i) => [pad2(i + 1), L(ph.name), h('span', { class: 'mut' }, L(ph.sum))]), [2])]);
+    chips([A(t('b.seeMethod'), () => goTo('#method'), true), C('drill'), C('dfir')]);
+  }
+  async function cDfir(args) {
+    if (args && args.length) return false;
+    await emit([ln(t('b.dfir'))]);
+    chips([C('method'), C('apt'), C('certs')]);
+  }
+  async function cWhere() { await emit([ln(t('b.where', { time: tunisTime() })), ln(t('b.whereMore'), 'mut')]); chips([C('hire'), C('contact')]); }
+  async function cLangs() { await emit([ln(t('b.langs'))]); chips([C(lang === 'fr' ? 'lang en' : 'lang fr'), C('help')]); }
+  function cGreet(tn) { say(t(tn ? 'b.greetTn' : 'b.greet')); chips(startChips()); }
+  function cThanks() { say(t('b.thanks')); chips(startChips()); }
+  function cHack() { say(t('b.hack')); chips([C('ls -a')]); }
+  function cFlag() { say(t('b.flag')); chips([C('ls -a')]); }
+  function cHireNL() { say(t('b.hireAns')); ctx = { kind: 'offer' }; chips([C('hire', t('b.yes')), C('contact')]); }
+  function cFallback(raw) { say(t('b.fallback', { q: raw.length > 48 ? raw.slice(0, 48) + '…' : raw })); chips([C('help'), C('projects'), C('skills'), C('hire')]); }
+  async function cTool(tool) {
+    const terms = tool.terms.concat([tool.label.toLowerCase()]);
+    const inS = (x) => { const l = String(x || '').toLowerCase(); return terms.some((w) => l.includes(w)); };
+    const hits = [];
+    TIMELINE.forEach((e) => { if ((e.tools || []).some(inS)) hits.push(['xp', L(e.title) + ', ' + L(e.org)]); });
+    CASES.forEach((c, i) => { if (c.stack.some(inS)) hits.push(['project', L(c.title), i]); });
+    PHASES.forEach((ph) => { if (ph.tools.some((k) => inS(TOOLS[k].name))) hits.push(['method', L(ph.name)]); });
+    CERTS.forEach((c) => { if (inS(c.code) || inS(c.name) || inS(c.issuer)) hits.push(['cert', c.code + ', ' + c.name]); });
+    const nodes = [ln('grep -ri "' + tool.label.toLowerCase() + '" ~/rayen', 'dim')];
+    if (!hits.length) nodes.push(ln(t('b.noMatch', { q: tool.label })));
+    else {
+      nodes.push(table(hits.map(([k, label]) => [t('k.' + k), label])));
+      nodes.push(ln(hits.length === 1 ? t('b.match1') : t('b.matches', { n: hits.length }), 'mut'));
+    }
+    await emit(nodes);
+    chips([...hits.filter((x) => x[0] === 'project').slice(0, 2).map((x) => C('open ' + (x[2] + 1))), C('skills'), C('projects')]);
+  }
+  function cNext() {
+    if (!ctx) return cFallback('next');
+    const i = ctx.i == null ? -1 : ctx.i;
+    if (ctx.kind === 'project') return projectDetail((i + 1) % CASES.length);
+    if (ctx.kind === 'apt') return aptDetail((i + 1) % APTS.length);
+    if (ctx.kind === 'xp') return xpDetail((i + 1) % workList().length);
+    return cFallback('next');
+  }
+
+  /* ----- ticket flow ----- */
+  const priChips = () => PRIORITIES.map((x) => C(x.id, x.id + ' ' + L(x.label))).concat([C('cancel', t('tk.cancelBtn'))]);
+  async function startTicket(p) {
+    mode = { kind: 'ticket', step: p ? 'name' : 'pri', p: p || null, name: '', org: '', msg: '' };
+    if (!p) { say(t('tk.pri')); chips(priChips()); }
+    else { const pr = PRIORITIES.find((x) => x.id === p); say(t('tk.start', { p, label: L(pr.label) })); await wait(160); say(t('tk.name')); chips([C('cancel', t('tk.cancelBtn'))]); }
+    refreshPrompt();
+    if (!narrow()) input.focus({ preventScroll: true });
+  }
+  async function ticketStep(v) {
+    const m = mode;
+    if (/^(cancel|annuler|stop|quit|exit)$/i.test(v)) { mode = null; say(t('tk.cancel')); chips(startChips()); return; }
+    if (m.step === 'pri') {
+      const p = (v.toUpperCase().match(/P[1-4]/) || [])[0] || ({ 1: 'P1', 2: 'P2', 3: 'P3', 4: 'P4' })[v];
+      if (!p) { say(t('tk.pri')); chips(priChips()); return; }
+      m.p = p; m.step = 'name';
+      const pr = PRIORITIES.find((x) => x.id === p);
+      say(t('tk.start', { p, label: L(pr.label) })); await wait(160); say(t('tk.name')); chips([C('cancel', t('tk.cancelBtn'))]);
+      return;
+    }
+    if (m.step === 'name') { m.name = v; m.step = 'org'; say(t('tk.org')); chips([C('', t('tk.skip')), C('cancel', t('tk.cancelBtn'))]); return; }
+    if (m.step === 'org') { m.org = v; m.step = 'msg'; say(t('tk.msg.' + m.p)); chips([C('cancel', t('tk.cancelBtn'))]); return; }
+    m.msg = v; mode = null;
+    priority = m.p;
+    $('#t-name').value = m.name; $('#t-org').value = m.org; $('#t-msg').value = m.msg;
+    renderContact();
+    const { subject, body } = composeTicket();
+    const text = t('ticket.to') + ': ' + EMAIL + '\n' + t('ticket.subject') + ': ' + subject + '\n\n' + body;
+    say(t('tk.ready', { id: ticketId }));
+    const pre = put(h('pre', { class: 'tk-pre' }, text));
+    const mail = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    chips([A(t('tk.copy'), async () => { const ok = await copyText(text); if (ok) say(t('tk.copied', { e: EMAIL }), 'good'); else { selectAll(pre); say(t('tk.copyFail')); } }),
+      { label: t('tk.mail'), href: mail, onclick: () => setTimeout(() => say(t('contact.mailNote')), 400) },
+      A(t('tk.form'), () => goTo('#contact'), true)]);
+  }
+
+  /* ----- shell-flavoured extras ----- */
+  const files = () => ['projects/', 'intel/', 'certs/', 'timeline.log', 'contact.txt'].concat(PROFILE.cv ? ['cv.pdf'] : []);
+  function cLs(args) {
+    const all = args.some((a) => /^-[a-z]*a/i.test(a));
+    const dir = args.find((a) => !a.startsWith('-'));
+    if (dir) {
+      const d = dir.replace(/\/$/, '');
+      if (d === 'projects') return cProjects([]);
+      if (d === 'intel') return cApt([]);
+      if (d === 'certs') return cCerts([]);
+      put(ln('ls: cannot access \'' + dir + '\': no such file or directory', 'err')); return;
+    }
+    put(ln((all ? '.  ..  .investigator_notes  ' : '') + files().join('  ')));
+    chips(all ? [C('cat .investigator_notes')] : [C('ls -a'), C('cat contact.txt')]);
+  }
+  function cCat(args) {
+    const f = (args[0] || '').replace(/^\.\//, '');
+    if (!f) { put(ln('cat: missing file name', 'err')); return; }
+    if (f === 'contact.txt') return cContact([]);
+    if (f === 'timeline.log') return cXp([]);
+    if (f === '.investigator_notes') { put(ln('Base64 is encoding, not encryption.\nGood investigators read the page source. Start near the timeline.', 'acc')); return; }
+    if (f === 'cv.pdf' && PROFILE.cv) { put(ln('cat: cv.pdf: binary file. Try cv instead.', 'err')); return; }
+    if (/^(projects|intel|certs)\/?$/.test(f)) { const d = f.replace('/', ''); put(ln('cat: ' + f + ': is a directory. Try ' + (d === 'intel' ? 'apt' : d) + '.', 'err')); return; }
+    put(ln('cat: ' + f + ': no such file or directory', 'err'));
+  }
+  async function sha256(x) {
+    const buf = await window.crypto.subtle.digest('SHA-256', new TextEncoder().encode(x));
     return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, '0')).join('');
   }
-  const pad = (s, n) => (s + ' '.repeat(n)).slice(0, Math.max(n, s.length + 1));
+  async function cSubmit(args) {
+    const guess = args.join(' ').trim();
+    if (!guess) { put(ln('usage: submit RS{...}', 'err')); return; }
+    let ok = false;
+    try { ok = (await sha256(guess)) === FLAG_SHA256; } catch (e) { put(ln('submit: hashing is unavailable here. Try the published site over HTTPS.', 'err')); return; }
+    if (ok) { put(ln('Flag accepted. You read page source for fun, so Rayen would like to hear from you. Type hire.', 'good')); chips([C('hire')]); }
+    else put(ln('Not the flag. Hint: ls -a', 'err'));
+  }
+  function cSudo(args) {
+    if (norm(args.join(' ')) === 'hire rayen') return startTicket('P1');
+    put(ln('rayen is not in the sudoers file. This incident will be reported.', 'err'));
+    put(ln('(It was. Rayen is triaging it.)', 'dim'));
+  }
+  function cRm(args) { put(ln(args.some((a) => /^-\w*r/i.test(a)) ? 'rm: refused. Evidence stays on the write blocker.' : 'rm: read-only evidence volume', 'err')); }
+  function cNmap() {
+    put(ln('Starting Nmap at ' + tunisTime() + ' (UTC+1)', 'dim'));
+    put(ln('Nmap scan report for rayensalem.github.io'));
+    put(table([['PORT', 'STATE', 'SERVICE'], ['443/tcp', 'open', 'https, this portfolio'], ['1337/tcp', 'filtered', 'ctf, try ls -a']]));
+    put(ln('Nmap done: 1 IP address (1 host up)', 'dim'));
+  }
+  function cTheme(args) {
+    const a = norm(args[0] || '');
+    const map = { console: 'dark', dark: 'dark', report: 'light', light: 'light', rapport: 'light' };
+    if (!map[a]) { put(ln('usage: theme console|report', 'err')); return; }
+    applyTheme(map[a], true); put(ln('view: ' + (map[a] === 'dark' ? 'console' : 'report'), 'good'));
+  }
+  function cLang(args) {
+    const a = norm(args[0] || '');
+    if (a !== 'en' && a !== 'fr') { put(ln('usage: lang en|fr', 'err')); return; }
+    setLang(a); put(ln('language: ' + a, 'good')); chips(startChips());
+  }
+  function cClear() { log.replaceChildren(); chips(startChips()); }
+  function cHistory() { put(ln(hist.map((c, i) => String(i + 1).padStart(3, ' ') + '  ' + c).join('\n'))); }
+  function cDate() { put(ln(new Date().toUTCString() + '\nTunisia ' + tunisTime(true) + ' (UTC+1)')); }
+  function cEcho(args) { put(ln(args.join(' '))); }
+  function cPwd() { put(ln('/home/rayen')); }
+  function cId() { put(ln('uid=1000(rayen) gid=1000(soc) groups=1000(soc),1001(blue-team),1002(dfir)')); }
+  function cExit() { if (docked) { closeDock(true); return; } say(t('b.exitHero')); }
+  async function cHire(args) {
+    const a = norm((args || []).join(' '));
+    if (a && !/^(rayen|me|him|lui|moi|rayen salem)$/.test(a)) return false;
+    return startTicket('P1');
+  }
+  async function cTicket(args) {
+    const p = (norm((args || []).join(' ')).toUpperCase().match(/P[1-4]/) || [])[0];
+    return startTicket(p || null);
+  }
   const CMDS = {
-    help() {
-      print([
-        ['whoami', 'who this is'], ['about', 'short profile'], ['ls [-a]', 'list files'], ['cat <file>', 'read a file'],
-        ['projects', 'list projects'], ['open <n>', 'open project n'], ['apt [n]', 'APT watchlist'], ['certs', 'certifications'],
-        ['contact', 'how to reach me'], ['cv', 'link to the CV'], ['drill', 'start the containment drill'], ['hire', 'open a P1 ticket'],
-        ['theme console|report', 'switch view'], ['lang en|fr', 'switch language'], ['submit <flag>', 'found the flag?'], ['clear', 'clear the screen'], ['exit', 'close the terminal'],
-      ].map(([c, d]) => pad(c, 24) + d).join('\n'));
-    },
-    whoami() { print(PROFILE.name + '\n' + t('hero.role') + ', Global IT Vision'); },
-    about() { print(t('hero.intro')); },
-    ls(args) {
-      const files = ['projects/', 'intel/', 'certs/', 'timeline.log', 'contact.txt'].concat(PROFILE.cv ? ['cv.pdf'] : []);
-      if (args.some((a) => /^-[a-z]*a/.test(a))) files.unshift('.investigator_notes');
-      print(files.join('  '));
-    },
-    cat(args) {
-      const f = (args[0] || '').replace(/^\.\//, '');
-      if (!f) { print('cat: missing file name', 't-err'); return; }
-      if (f === 'contact.txt') return CMDS.contact();
-      if (f === 'timeline.log') { print(TIMELINE.map((e) => e.from + '  ' + pad(e.type, 6) + L(e.title) + ', ' + L(e.org)).join('\n')); return; }
-      if (f === '.investigator_notes') { print('Base64 is encoding, not encryption.\nGood investigators read the page source. Start near the timeline.', 't-acc'); return; }
-      if (f === 'cv.pdf') { print('cat: cv.pdf: binary file. Try cv instead.', 't-err'); return; }
-      if (/^(projects|intel|certs)\/?$/.test(f)) { const d = f.replace('/', ''); print('cat: ' + f + ': is a directory. Try ' + (d === 'intel' ? 'apt' : d) + ' instead.', 't-err'); return; }
-      print('cat: ' + f + ': no such file', 't-err');
-    },
-    projects() { print(CASES.map((c, i) => (i + 1) + '  ' + L(c.title)).join('\n') + '\n\nType open <n> to read one.'); },
-    open(args) {
-      const n = parseInt(args[0], 10);
-      if (!n || n < 1 || n > CASES.length) { print('open: pick a number from 1 to ' + CASES.length, 't-err'); return; }
-      close(); selectCase(CASES[n - 1].id, true);
-    },
-    certs() { print(CERTS.slice().sort((a, b) => b.ex - a.ex).map((c) => 'E-' + String(c.ex).padStart(2, '0') + '  ' + pad(c.code, 14) + pad(c.issuer || 'in progress', 22) + (c.date || '')).join('\n')); },
-    apt(args) {
-      const n = parseInt(args[0], 10);
-      if (n >= 1 && n <= APTS.length) { close(); selectApt(APTS[n - 1].id, true); return; }
-      print(APTS.map((a, i) => (i + 1) + '  ' + pad(a.name, 15) + pad(a.mitre, 7) + L(a.motive)).join('\n') + '\n\nType apt <n> to open a dossier.');
-    },
-    contact() {
-      print('email     ' + EMAIL);
-      print(['linkedin  ', h('a', { href: PROFILE.linkedin, target: '_blank', rel: 'noopener' }, 'linkedin.com/in/rayensalem')]);
-      print(['github    ', h('a', { href: 'https://github.com/' + PROFILE.github, target: '_blank', rel: 'noopener' }, 'github.com/' + PROFILE.github)]);
-    },
-    cv() { if (!PROFILE.cv) { print('The CV is shared on request. Type contact.', 't-dim'); return; } print(['CV (PDF, French): ', h('a', { href: PROFILE.cv, target: '_blank', rel: 'noopener' }, PROFILE.cv)]); },
-    drill() { goTo('#top'); Drill.start(); },
-    hire() {
-      close(); priority = 'P1'; renderContact();
-      $('#contact').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
-      setTimeout(() => $('#t-name').focus({ preventScroll: true }), reduceMotion ? 0 : 500);
-    },
-    sudo(args) {
-      if (args.join(' ').toLowerCase() === 'hire rayen') return CMDS.hire();
-      print('rayen is not in the sudoers file. This incident will be reported.', 't-err');
-      print('(It was. Rayen is triaging it.)', 't-dim');
-    },
-    theme(args) {
-      const a = (args[0] || '').toLowerCase();
-      const map = { console: 'dark', dark: 'dark', report: 'light', light: 'light' };
-      if (!map[a]) { print('usage: theme console|report', 't-err'); return; }
-      applyTheme(map[a], true); print('view: ' + (map[a] === 'dark' ? 'console' : 'report'), 't-ok');
-    },
-    lang(args) {
-      const a = (args[0] || '').toLowerCase();
-      if (a !== 'en' && a !== 'fr') { print('usage: lang en|fr', 't-err'); return; }
-      setLang(a); print('language: ' + a, 't-ok');
-    },
-    async submit(args) {
-      const guess = args.join(' ').trim();
-      if (!guess) { print('usage: submit RS{...}', 't-err'); return; }
-      let ok = false;
-      try { ok = (await sha256(guess)) === FLAG_SHA256; } catch (e) { print('submit: this browser cannot hash here. Try the published page over HTTPS.', 't-err'); return; }
-      if (ok) { print('Flag accepted. You read source for fun, so we should talk. Type hire.', 't-ok'); }
-      else print('Not the flag. Hint: ls -a', 't-err');
-    },
-    history() { print(hist.map((c, i) => String(i + 1).padStart(3, ' ') + '  ' + c).join('\n')); },
-    date() { print(new Date().toUTCString() + '\nTunisia ' + tunisTime() + ' (UTC+1)'); },
-    echo(args) { print(args.join(' ')); },
-    rm(args) { if (args.some((a) => a.startsWith('-') && a.includes('r'))) print('rm: refused. Evidence stays on the write blocker.', 't-err'); else print('rm: read-only evidence volume', 't-err'); },
-    clear() { out.replaceChildren(); },
-    exit() { close(); },
+    help: cHelp, whoami: cWhoami, xp: cXp, skills: cSkills, projects: cProjects, open: cOpen, apt: cApt, certs: cCerts,
+    education: cEdu, contact: (a) => cContact(a, false), hire: cHire, ticket: cTicket, cv: cCv, drill: cDrill, method: cMethod, dfir: cDfir, next: cNext,
+    ls: cLs, cat: cCat, submit: cSubmit, sudo: cSudo, rm: cRm, nmap: cNmap, theme: cTheme, lang: cLang, clear: cClear, history: cHistory,
+    date: cDate, echo: cEcho, pwd: cPwd, id: cId, exit: cExit,
   };
-  CMDS.quit = CMDS.exit; CMDS.case = CMDS.open; CMDS.cases = CMDS.projects; CMDS.intel = CMDS.apt; CMDS['?'] = CMDS.help;
-  async function run(raw) {
-    const line = raw.trim();
-    print([h('span', { class: 't-acc' }, 'rayen@soc:~$ '), line]);
-    if (!line) return;
-    hist.push(line); hi = hist.length;
-    const [cmd, ...args] = line.split(/\s+/);
-    const fn = CMDS[cmd.toLowerCase()];
-    if (fn) await fn(args); else print(cmd + ': command not found. Type help.', 't-err');
+  const ALIAS = {
+    aide: 'help', commands: 'help', commandes: 'help', man: 'help', about: 'whoami', profile: 'whoami', profil: 'whoami', neofetch: 'whoami', whois: 'whoami',
+    experience: 'xp', exp: 'xp', parcours: 'xp', jobs: 'xp', career: 'xp', carriere: 'xp', stack: 'skills', tools: 'skills', outils: 'skills', competences: 'skills',
+    projets: 'projects', projet: 'projects', project: 'projects', labs: 'projects', ouvrir: 'open', case: 'open', intel: 'apt', threats: 'apt', menaces: 'apt',
+    certifs: 'certs', certifications: 'certs', cert: 'certs', edu: 'education', formation: 'education', diplomes: 'education', degrees: 'education',
+    email: 'contact', mail: 'contact', links: 'contact', liens: 'contact', embaucher: 'hire', recruter: 'hire', recruit: 'hire', resume: 'cv',
+    exercice: 'drill', play: 'drill', jouer: 'drill', game: 'drill', methode: 'method', process: 'method', forensics: 'dfir', suivant: 'next',
+    quit: 'exit', cls: 'clear', effacer: 'clear',
+  };
+  const INTENT_RUN = {
+    hack: cHack, hire: cHireNL, cv: cCv, contact: () => cContact([], false), flag: cFlag, drill: cDrill, method: () => cMethod([]), dfir: () => cDfir([]),
+    apt: () => cApt([]), projects: () => cProjects([]), certs: () => cCerts([]), edu: () => cEdu([]), where: cWhere, langs: cLangs,
+    xp: () => cXp([]), skills: () => cSkills([]), whoami: () => cWhoami([]),
+  };
+
+  /* ----- navigation, dock and launcher ----- */
+  function goTo(sel) {
+    if (docked && narrow()) closeDock(false);
+    const el = $(sel); if (el) el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+  }
+  function showCase(id) { if (docked && narrow()) closeDock(false); selectCase(id, true); }
+  function showApt(id) { if (docked && narrow()) closeDock(false); selectApt(id, true); }
+  function updateLauncher() { if (launcher) launcher.hidden = docked || heroVisible; }
+  function openDock() {
+    endBoot();
+    if (!docked) {
+      docked = true;
+      dockBody.append(shell);
+      note.hidden = false; dock.hidden = false;
+      updateLauncher(); scrollEnd();
+    }
+    input.focus({ preventScroll: true });
+  }
+  function closeDock(focusBack) {
+    if (!docked) return;
+    docked = false;
+    home.insertBefore(shell, note);
+    note.hidden = true; dock.hidden = true;
+    updateLauncher(); scrollEnd();
+    if (focusBack) { if (!launcher.hidden) launcher.focus(); else input.focus({ preventScroll: true }); }
+  }
+  function summon() {
+    endBoot();
+    if (docked || !heroVisible) { openDock(); return; }
+    input.focus({ preventScroll: true });
+    try { form.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' }); } catch (e) { /* older browser */ }
+  }
+  function onKey(ev) {
+    if (ev.defaultPrevented) return;
+    if (ev.key === 'Escape' && docked) { closeDock(true); return; }
+    if (ev.ctrlKey || ev.metaKey || ev.altKey) return;
+    const tg = ev.target;
+    const typing = tg && (tg.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(tg.tagName));
+    if (ev.key === '`') { if (typing) return; ev.preventDefault(); if (docked) closeDock(true); else summon(); return; }
+    if (typing || ev.key.length !== 1 || ev.key === ' ') return;
+    if (!(docked || heroVisible)) return;
+    if (tg && tg !== document.body && !shell.contains(tg) && tg.closest && tg.closest('button, a, [role="tab"], summary, label')) return;
+    ev.preventDefault();
+    endBoot();
+    setVal(input.value + ev.key);
+    input.focus({ preventScroll: true });
+  }
+
+  /* ----- boot sequence ----- */
+  function scramble(el) {
+    if (!el || reduceMotion) return;
+    const final = 'Rayen Salem', glyphs = '01#%&<>/\\|ABCDEFGHKLMNPRSTVXZ';
+    const start = performance.now(), dur = 620;
+    const step = (now) => {
+      if (nameDone) { el.textContent = final; return; }
+      const pr = Math.min(1, (now - start) / dur), fixed = Math.floor(pr * final.length);
+      let out = final.slice(0, fixed);
+      for (let i = fixed; i < final.length; i++) out += final[i] === ' ' ? ' ' : glyphs[Math.floor(Math.random() * glyphs.length)];
+      el.textContent = out;
+      if (pr < 1) requestAnimationFrame(step); else el.textContent = final;
+    };
+    requestAnimationFrame(step);
+  }
+  async function bootSeq() {
+    if (reduceMotion) { endBoot(); return; }
+    const html = document.documentElement;
+    html.classList.add('booting');
+    const parts = $$('[data-boot]', log), lines = $$('.bl', log);
+    const cmd = $('#boot-cmd'), greet = $('#greet');
+    lines.forEach((l) => { l.style.visibility = 'hidden'; });
+    parts[0].classList.add('shown');
+    for (const l of lines) { await wait(130); if (bootAbort) return; l.style.visibility = ''; }
+    await wait(140); if (bootAbort) return;
+    cmd.textContent = ''; parts[1].classList.add('shown');
+    for (const ch of 'whoami') { await wait(65); if (bootAbort) return; cmd.textContent += ch; }
+    await wait(220); if (bootAbort) return;
+    parts[2].classList.add('shown'); scramble($('#nf-name'));
+    await wait(700); if (bootAbort) return;
+    const text = t('con.greet');
+    greet.textContent = ''; parts[3].classList.add('shown');
+    for (const w of text.split(/(\s+)/)) { if (bootAbort) return; greet.textContent += w; if (w.trim()) await wait(22); }
+    await wait(120); if (bootAbort) return;
+    endBoot();
+  }
+  function endBoot() {
+    if (bootDone || !ready) return;
+    bootDone = true; bootAbort = true; nameDone = true;
+    $$('.bl', log).forEach((l) => { l.style.visibility = ''; });
+    const cmd = $('#boot-cmd'); if (cmd) cmd.textContent = 'whoami';
+    const greet = $('#greet'); if (greet) greet.textContent = t('con.greet');
+    const nm = $('#nf-name'); if (nm) nm.textContent = 'Rayen Salem';
+    const html = document.documentElement;
+    html.classList.remove('booting'); html.classList.add('booted');
+    log.setAttribute('aria-live', 'polite');
+    if (!mode && !chipsEl.children.length) chips(startChips());
+    scrollEnd();
+  }
+
+  /* ----- setup ----- */
+  function renderMenu() {
+    const ul = $('#menu'); if (!ul) return;
+    const MENU = [['whoami', 'm.whoami'], ['xp', 'm.xp'], ['skills', 'm.skills'], ['projects', 'm.projects'], ['apt', 'm.apt'], ['certs', 'm.certs'], ['drill', 'm.drill'], ['hire', 'm.hire']];
+    ul.replaceChildren(...MENU.map(([c, k]) => h('li', null, h('button', { type: 'button', onclick: () => submit(c, true) }, h('b', null, c), h('span', null, t(k, counts()))))));
+  }
+  function tmuxDate() {
+    try { return new Intl.DateTimeFormat('en-GB', { timeZone: PROFILE.timeZone, day: '2-digit', month: 'short', year: '2-digit' }).format(new Date()).replace(/ /g, '-'); }
+    catch (e) { return ''; }
+  }
+  function tick() {
+    if (!ready) return;
+    const set = (sel, v) => { const el = $(sel); if (el && el.textContent !== v) el.textContent = v; };
+    set('#ws-clock', tunisTime(true)); set('#st-clock', tunisTime()); set('#st-date', tmuxDate());
+    fillNf(document);
+  }
+  function relabel() {
+    if (!ready) return;
+    endBoot();
+    renderMenu(); refreshPrompt(); tick();
+    const greet = $('#greet'); if (greet) greet.textContent = t('con.greet');
   }
   function init() {
-    $('#term-btn').addEventListener('click', toggle);
-    $('#term-x').addEventListener('click', close);
-    form.addEventListener('submit', (ev) => { ev.preventDefault(); const v = input.value; input.value = ''; run(v); });
+    shell = $('#shell'); log = $('#shell-log'); chipsEl = $('#shell-chips'); form = $('#shell-form'); input = $('#shell-input'); psEl = $('#shell-ps');
+    home = $('#console-home'); note = $('#docked-note'); dock = $('#dock'); dockBody = $('#dock-body'); launcher = $('#launcher'); win = $('#term-win');
+    if (!shell) return;
+    nfTemplate = $('#nf').cloneNode(true);
+    $$('.nf-kv > *').forEach((el, i) => el.style.setProperty('--d', (Math.floor(i / 2) * 55) + 'ms'));
+    ready = true;
+    form.addEventListener('submit', (ev) => { ev.preventDefault(); const v = input.value; setVal(''); submit(v, false); });
+    input.addEventListener('input', () => { form.classList.toggle('typed', !!input.value); endBoot(); });
     input.addEventListener('keydown', (ev) => {
-      if (ev.key === 'ArrowUp') { ev.preventDefault(); if (hi > 0) { hi--; input.value = hist[hi] || ''; } }
-      else if (ev.key === 'ArrowDown') { ev.preventDefault(); if (hi < hist.length) { hi++; input.value = hist[hi] || ''; } }
-      else if (ev.key === 'Tab') {
-        ev.preventDefault();
-        const v = input.value.trim().toLowerCase();
-        const m = Object.keys(CMDS).filter((c) => c.startsWith(v) && c !== '?');
-        if (v && m.length === 1) input.value = m[0] + ' ';
-        else if (v && m.length > 1) print(m.join('  '), 't-dim');
-      } else if (ev.key === 'Escape') { ev.preventDefault(); close(); }
-      else if (ev.key === '`' && !input.value) { ev.preventDefault(); close(); }
+      if (ev.key === 'ArrowUp') { ev.preventDefault(); if (hi > 0) { hi--; setVal(hist[hi] || ''); } }
+      else if (ev.key === 'ArrowDown') { ev.preventDefault(); if (hi < hist.length) { hi++; setVal(hist[hi] || ''); } }
+      else if (ev.key === 'Tab' && input.value.trim() && !mode) {
+        const v = norm(input.value);
+        const m = Object.keys(CMDS).filter((c) => c.startsWith(v));
+        if (m.length === 1) { ev.preventDefault(); setVal(m[0] + ' '); }
+        else if (m.length > 1) { ev.preventDefault(); put(ln(m.join('  '), 'dim')); }
+      } else if (ev.key === 'Escape') { if (docked) { ev.preventDefault(); closeDock(true); } else input.blur(); }
     });
-    document.addEventListener('keydown', (ev) => {
-      if (ev.key === 'Escape' && !box.hidden) { close(); return; }
-      if (ev.key !== '`' || ev.ctrlKey || ev.metaKey || ev.altKey) return;
-      const tg = ev.target;
-      if (tg && (tg.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(tg.tagName))) return;
-      ev.preventDefault(); toggle();
+    shell.addEventListener('click', (ev) => {
+      if (ev.target.closest('a, button, input, .tk-pre')) return;
+      const sel = window.getSelection ? String(window.getSelection()) : '';
+      if (sel) return;
+      endBoot();
+      input.focus({ preventScroll: true });
     });
+    $('#tw-clear').addEventListener('click', () => { endBoot(); cClear(); input.focus({ preventScroll: true }); });
+    $('#tw-pop').addEventListener('click', openDock);
+    $('#undock').addEventListener('click', () => { closeDock(false); input.focus({ preventScroll: true }); });
+    $('#dock-close').addEventListener('click', () => closeDock(true));
+    launcher.addEventListener('click', openDock);
+    $('#term-btn').addEventListener('click', summon);
+    document.addEventListener('keydown', onKey);
+    if ('IntersectionObserver' in window) new IntersectionObserver((es) => { heroVisible = es[0].isIntersecting; updateLauncher(); }, { threshold: 0.15 }).observe(win);
+    renderMenu(); refreshPrompt(); tick(); updateLauncher();
+    bootSeq();
   }
-  return { init, open };
+  return { init, relabel, tick, summon, run: (x) => submit(x, false) };
 })();
 
 /* ---------------- CV link: hidden when the PDF is not published next to the page ---------------- */
@@ -2370,7 +3186,7 @@ function setLang(l) {
   renderAll();
 }
 function renderAll() {
-  applyStatic(); renderFacts(); renderMethod(); renderTimeline(); renderCases(); renderApt(); renderCerts(); renderContact(); Drill.relabel();
+  applyStatic(); renderMethod(); renderTimeline(); renderCases(); renderApt(); renderCerts(); renderContact(); Drill.relabel(); Con.relabel(); renderClock();
 }
 
 (function boot() {
@@ -2385,14 +3201,13 @@ function renderAll() {
   AptMap.init();
   renderTicker();
   renderAll();
-  Term.init();
+  Con.init();
   initSpotlight();
-  decryptName();
   checkCv();
-  setInterval(renderFacts, 30000);
+  setInterval(renderClock, 1000);
   if (location.hash && location.hash.startsWith('#case-')) { const id = location.hash.slice(6); if (CASES.some((c) => c.id === id)) selectCase(id, true); }
   try {
-    console.log('%cRS%c  Investigator mode. A flag is hidden in this page. Submit it in the terminal: press ` or click >_ in the top bar.', 'background:#1F6BFF;color:#FFFFFF;font-weight:800;padding:2px 6px;border-radius:3px', 'color:inherit');
+    console.log('%cRS%c  Investigator mode. A flag is hidden in this page. Submit it in the console at the top: submit RS{...}', 'background:#1F6BFF;color:#FFFFFF;font-weight:800;padding:2px 6px;border-radius:3px', 'color:inherit');
   } catch (e) { /* no console */ }
 })();
 })();
