@@ -169,12 +169,15 @@ button{font-family:inherit}
 .tw-status b{padding:3px 6px;border-radius:3px;background:color-mix(in srgb,var(--on-accent) 22%,transparent);font-weight:700}
 @media (max-width:900px){.tw-panes{grid-template-columns:minmax(0,1fr)}.tw-side{display:none}.tw-main{border-right:0}.st-date,.st-menu{display:none}}
 
-.shell{display:flex;flex-direction:column;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:16px 20px 14px;font:14px/1.6 var(--font-data);color:var(--fg);scrollbar-width:thin;scrollbar-color:var(--line-strong) transparent}
+.shell{display:flex;flex-direction:column;min-height:0;font:14px/1.6 var(--font-data);color:var(--fg)}
+.shell-scroll{flex:0 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:16px 20px 0;scrollbar-width:thin;scrollbar-color:var(--line-strong) transparent}
 @media (min-width:901px){.tw-main .shell{height:clamp(540px,70vh,650px)}}
-@media (max-width:700px){.shell{padding:14px 14px 12px;font-size:13.5px}}
+@media (max-width:700px){.shell{font-size:13.5px}.shell-scroll{padding:14px 14px 0}}
 .shell-log{display:grid;align-content:start;gap:1px;min-width:0}
 .ln{min-width:0;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
 .ln.li{padding-left:2ch;text-indent:-2ch}
+.ln.li::before{content:"- "}
+[data-con="chat"] .ln.li::before{content:"•";display:inline-block;width:2ch;text-indent:0;color:var(--accent-ink)}
 .ln.pl{margin-top:10px}
 .shell-log > .ln.pl:first-child,.boot + .ln.pl{margin-top:8px}
 .dim{color:var(--fg-faint)}
@@ -210,7 +213,8 @@ button{font-family:inherit}
 .nf-sw i{width:22px;height:14px}
 .nf-sw i:nth-child(1){background:var(--bg-raise)}.nf-sw i:nth-child(2){background:var(--red)}.nf-sw i:nth-child(3){background:var(--green)}.nf-sw i:nth-child(4){background:var(--accent)}
 .nf-sw i:nth-child(5){background:var(--accent-line)}.nf-sw i:nth-child(6){background:var(--accent-ink)}.nf-sw i:nth-child(7){background:var(--fg-muted)}.nf-sw i:nth-child(8){background:var(--fg)}
-@media (prefers-reduced-motion:no-preference){.booting .nf.shown .nf-kv > *{animation:kvIn .32s var(--d,0ms) both}}
+@media (prefers-reduced-motion:no-preference){.booting .shown .nf-kv > *{animation:kvIn .32s var(--d,0ms) both}[data-con="chat"].booting .msg.shown{animation:msgIn .45s ease-out both}}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}}
 @keyframes kvIn{from{opacity:0;transform:translateX(-6px)}}
 @media (max-width:700px){.nf{grid-template-columns:minmax(0,1fr)}.nf-logo{display:none}.nf-name{font-size:30px}.nf-kv{gap:1px 12px}}
 
@@ -223,7 +227,7 @@ button{font-family:inherit}
 .chip-btn.act{border-color:color-mix(in srgb,var(--accent-line) 55%,transparent);background:var(--accent-wash)}
 .chip-btn.act::before{content:none}
 .chip-btn.go::before{content:"↗";color:var(--accent-ink)}
-.shell-in{display:flex;align-items:center;gap:10px;margin-top:10px;padding-bottom:2px;box-shadow:inset 0 -1px 0 transparent;transition:box-shadow .15s}
+.shell-in{display:flex;align-items:center;gap:10px;margin:8px 20px 14px;padding-bottom:2px;box-shadow:inset 0 -1px 0 transparent;transition:box-shadow .15s}
 .shell-in:focus-within{box-shadow:inset 0 -1px 0 var(--accent-line)}
 .shell-in input{flex:1;min-width:0;padding:4px 0;border:0;background:transparent;color:var(--fg);font:inherit;caret-color:var(--accent-line)}
 .shell-in input:focus{outline:none}
@@ -233,7 +237,7 @@ button{font-family:inherit}
 @media (prefers-reduced-motion:no-preference){.caret{animation:caret 1.05s steps(1) infinite}}
 @keyframes caret{50%{opacity:0}}
 @media (max-width:900px){.shell-in input{font-size:16px}}
-@media (max-width:700px){.shell-in .ps-host{display:none}}
+@media (max-width:700px){.shell-in .ps-host{display:none}.shell-in{margin:8px 14px 12px}}
 
 .docked-note{display:grid;place-content:center;justify-items:center;gap:14px;min-height:260px;padding:24px;text-align:center;color:var(--fg-muted);font:14px/1.5 var(--font-data)}
 @media (min-width:901px){.docked-note{height:clamp(540px,70vh,650px)}}
@@ -511,6 +515,75 @@ button.tl-sum:hover{background:var(--bg-raise)}
 .foot a{color:var(--fg-muted);text-underline-offset:3px}
 @media (hover:none){.kbd-hint{display:none}}
 
+/* ---------- console modes: chat for everyone, terminal for the technical crowd ---------- */
+[data-con="chat"] .term-only,[data-con="term"] .chat-only,:root:not([data-con]) .chat-only{display:none!important}
+[data-con="term"] .msg,[data-con="term"] .bubble,:root:not([data-con]) .msg,:root:not([data-con]) .bubble{display:contents}
+.tw-modes{display:inline-flex;gap:2px;padding:3px;border:1px solid var(--line-strong);border-radius:9px;background:var(--bg-sunk)}
+.tw-mode{appearance:none;display:inline-flex;align-items:center;gap:7px;min-height:30px;padding:0 13px;border:0;border-radius:6px;background:transparent;color:var(--fg-muted);font:600 13px/1 var(--font-body);cursor:pointer}
+.tw-mode svg{flex:none}
+.tw-mode:hover{color:var(--fg)}
+.tw-mode[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+@media (max-width:480px){.tw-actions{display:none}}
+[data-con="chat"] .shell{font:15px/1.55 var(--font-body)}
+[data-con="chat"] .tw-btn{font-family:var(--font-body)}
+[data-con="chat"] .shell-scroll{flex:1 1 auto;padding-top:20px}
+[data-con="chat"] .shell-log{gap:14px}
+[data-con="chat"] .msg{display:flex;gap:10px;align-items:flex-start;min-width:0}
+[data-con="chat"] .msg.user{justify-content:flex-end}
+[data-con="chat"] .msg.bot::before{content:"RS";flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:linear-gradient(140deg,var(--logo-a),var(--logo-b));color:#fff;font:800 11px/1 var(--font-display)}
+[data-con="chat"] .msg.intro::before{content:none}
+[data-con="chat"] .bubble{display:grid;gap:6px;min-width:0;max-width:min(86%,620px);padding:11px 15px;border-radius:16px}
+[data-con="chat"] .msg.bot .bubble{background:var(--bg-raise);border:1px solid var(--line-strong);border-top-left-radius:5px}
+[data-con="chat"] .msg.user .bubble{background:var(--accent);color:var(--on-accent);border-bottom-right-radius:5px}
+[data-con="chat"] .msg.intro .bubble{max-width:none;width:100%;padding:20px 22px;border-radius:14px}
+[data-con="chat"] .ln.pl,[data-con="chat"] .say{margin:0}
+[data-con="chat"] .say::before{content:none}
+[data-con="chat"] .tbl{font-size:14.5px}
+[data-con="chat"] .tr > span{padding-right:14px}
+.typing{display:inline-flex;gap:5px;padding:5px 2px}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--fg-muted);opacity:.35}
+@media (prefers-reduced-motion:no-preference){.typing i{animation:dot 1.1s ease-in-out infinite}.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}}
+@keyframes dot{30%{opacity:1;transform:translateY(-3px)}60%{opacity:.35;transform:none}}
+.nf-avatar{display:grid;place-items:center;width:68px;height:68px;border-radius:50%;background:linear-gradient(140deg,var(--logo-a),var(--logo-b));color:#fff;font:800 24px/1 var(--font-display);font-stretch:112%;box-shadow:0 0 0 5px var(--accent-wash)}
+[data-con="chat"] .nf{align-items:start;gap:20px;margin:0}
+[data-con="chat"] .nf-name{margin:0;font:800 clamp(27px,3vw,36px)/1.08 var(--font-display);font-stretch:106%;letter-spacing:-.01em;filter:none}
+[data-con="chat"] .nf-role{margin-top:2px;font-size:16px}
+[data-con="chat"] .nf-kv{margin-top:14px;gap:5px 20px;font-size:14.5px}
+[data-con="chat"] .nf-kv dt{color:var(--fg-muted);font-weight:500}
+.nf-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.shell a.btn{color:var(--fg);text-decoration:none}
+.shell a.btn-primary{color:var(--on-accent)}
+@media (max-width:700px){.nf-avatar{width:54px;height:54px;font-size:19px}}
+[data-con="chat"] .chips{margin:14px 0 4px 40px}
+[data-con="chat"] .chip-btn{min-height:36px;padding:0 15px;border-color:color-mix(in srgb,var(--accent-line) 50%,transparent);background:transparent;color:var(--accent-ink);font:600 14px/1.2 var(--font-body)}
+[data-con="chat"] .shell a.chip-btn{color:var(--accent-ink)}
+[data-con="chat"] .chip-btn::before{content:none}
+[data-con="chat"] .chip-btn.go::after{content:"↗"}
+[data-con="chat"] .chip-btn:hover{background:var(--accent-wash)}
+@media (max-width:700px){[data-con="chat"] .chips{margin-left:0}}
+[data-con="chat"] .shell-in{margin:10px 20px 16px;padding:6px 6px 6px 16px;border:1px solid var(--line-strong);border-radius:14px;background:var(--bg-raise);box-shadow:none}
+[data-con="chat"] .shell-in:focus-within{border-color:var(--accent-line);box-shadow:0 0 0 3px var(--accent-wash)}
+[data-con="chat"] .shell-in input{font:15px/1.4 var(--font-body)}
+@media (max-width:900px){[data-con="chat"] .shell-in input{font-size:16px}}
+@media (max-width:700px){[data-con="chat"] .shell-in{margin:8px 14px 12px}}
+.send{flex:none;display:grid;place-items:center;width:38px;height:38px;border:0;border-radius:10px;background:var(--accent);color:var(--on-accent);cursor:pointer}
+.send:hover{filter:brightness(1.12)}
+.side-chat,.side-term{display:grid;gap:12px;align-content:start}
+.side-term{gap:14px}
+.sc-head{margin:0;font:600 13px/1.3 var(--font-body);color:var(--fg-muted)}
+.qlist{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.qlist button{appearance:none;width:100%;padding:9px 12px;border:1px solid var(--line-strong);border-radius:10px;background:var(--bg-raise);color:var(--fg);font:500 14px/1.35 var(--font-body);text-align:left;cursor:pointer}
+.qlist button:hover{border-color:var(--accent-line);background:var(--accent-wash)}
+.sc-term{display:grid;gap:6px;margin-top:6px;padding:14px;border:1px dashed var(--line-strong);border-radius:10px}
+.sc-term p{margin:0}
+.sc-t{font:700 14px/1.3 var(--font-body)}
+.sc-x{font:13.5px/1.45 var(--font-body);color:var(--fg-muted)}
+.sc-term .btn{justify-self:start;margin-top:6px}
+.tw-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:32px;padding:0 16px;border-top:1px solid var(--line);font:12.5px/1.3 var(--font-body);color:var(--fg-faint)}
+@media (max-width:560px){#cf-clock{display:none}}
+.linkish{appearance:none;padding:0;border:0;background:none;color:var(--accent-ink);font:inherit;font-weight:600;text-decoration:underline;text-underline-offset:4px;cursor:pointer}
+.lc-ic svg{display:block}
+
 /* drill section */
 .drill-layout{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,4vw,56px);align-items:start}
 .drill-layout .sec-head{margin-bottom:0}
@@ -613,7 +686,7 @@ button.tl-sum:hover{background:var(--bg-raise)}
 </style>
 </head>
 <body>
-<script>document.documentElement.classList.add('js');setTimeout(function(){document.documentElement.classList.add('booted');},5000);</script>
+<script>(function(){var d=document.documentElement,m='chat';d.classList.add('js');try{var v=localStorage.getItem('rs-con');if(v==='term'||v==='chat')m=v;}catch(e){}if(location.hash==='#terminal')m='term';else if(location.hash==='#chat')m='chat';d.setAttribute('data-con',m);setTimeout(function(){d.classList.add('booted');},5000);})();</script>
 
 <a class="skip" href="#main" data-i18n="skip">Skip to content</a>
 <div class="bg-fx" aria-hidden="true"></div>
@@ -649,7 +722,10 @@ button.tl-sum:hover{background:var(--bg-raise)}
   <section class="hero" id="top" aria-labelledby="nf-name">
     <div class="term-win" id="term-win">
       <div class="tw-bar">
-        <div class="tw-tab"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 3.5l3.5 3.5L2 10.5M7.5 11H12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>rayen@soc: ~</span></div>
+        <div class="tw-modes" role="group" data-i18n-aria="con.modeAria" aria-label="Console mode">
+          <button type="button" class="tw-mode" data-con-set="chat" aria-pressed="true"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.2 3.4c0-.9.7-1.6 1.6-1.6h6.4c.9 0 1.6.7 1.6 1.6v4.2c0 .9-.7 1.6-1.6 1.6H6.4L3.6 11.6V9.2h0c-.8-.1-1.4-.8-1.4-1.6z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><span data-i18n="con.modeChat">Chat</span></button>
+          <button type="button" class="tw-mode" data-con-set="term" aria-pressed="false"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 3.5l3.5 3.5L2 10.5M7.5 11H12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="con.modeTerm">Terminal</span></button>
+        </div>
         <div class="tw-actions">
           <button type="button" class="tw-btn" id="tw-clear" data-i18n="con.clear">clear</button>
           <button type="button" class="tw-btn" id="tw-pop" data-i18n="con.pop">Pop out</button>
@@ -658,15 +734,17 @@ button.tl-sum:hover{background:var(--bg-raise)}
       <div class="tw-panes">
         <div class="tw-main" id="console-home">
           <div class="shell" id="shell">
+            <div class="shell-scroll" id="shell-scroll">
             <div class="shell-log" id="shell-log" role="log" aria-live="off">
-              <div class="boot" data-boot aria-hidden="true">
+              <div class="boot term-only" data-boot aria-hidden="true">
                 <div class="ln bl"><span class="ok">[ ok ]</span> mounting /evidence read-only</div>
                 <div class="ln bl"><span class="ok">[ ok ]</span> loading ATT&amp;CK techniques</div>
                 <div class="ln bl"><span class="ok">[ ok ]</span> console ready, TLP:CLEAR</div>
               </div>
-              <div class="ln pl" data-boot><span class="ps">rayen@soc:~$</span> <span id="boot-cmd">whoami</span></div>
-              <div class="nf" id="nf" data-boot>
-                <pre class="nf-logo" aria-hidden="true">#########################
+              <div class="ln pl term-only" data-boot><span class="ps">rayen@soc:~$</span> <span id="boot-cmd">whoami</span></div>
+              <div class="msg bot intro" data-boot><div class="bubble">
+              <div class="nf" id="nf">
+                <pre class="nf-logo term-only" aria-hidden="true">#########################
 ##:::::::::::::::::::::##
 ##:::::::::::::::::::::##
 ##::::::::#####::::::::##
@@ -680,30 +758,42 @@ button.tl-sum:hover{background:var(--bg-raise)}
      .##:::::::::##.
         *##:::##*
           .###.</pre>
+                <span class="nf-avatar chat-only" aria-hidden="true">RS</span>
                 <div class="nf-info">
-                  <span class="nf-host">rayen@soc</span>
+                  <span class="nf-host term-only">rayen@soc</span>
                   <h1 class="nf-name" id="nf-name" aria-label="Rayen Salem">Rayen Salem</h1>
                   <span class="nf-role" data-i18n="nf.role">SOC analyst and incident responder</span>
-                  <span class="nf-rule" aria-hidden="true"></span>
+                  <span class="nf-rule term-only" aria-hidden="true"></span>
                   <dl class="nf-kv">
-                    <dt data-i18n="nf.k.org">org</dt><dd data-i18n="nf.v.org">Global IT Vision, managed SOC (MSSP)</dd>
-                    <dt data-i18n="nf.k.base">base</dt><dd data-nf="base">Tunisia (UTC+1)</dd>
-                    <dt data-i18n="nf.k.uptime">uptime</dt><dd data-nf="uptime">SOC analyst since June 2025</dd>
-                    <dt data-i18n="nf.k.focus">focus</dt><dd data-i18n="nf.v.focus">DFIR, threat hunting, detection</dd>
-                    <dt data-i18n="nf.k.stack">stack</dt><dd>CrowdStrike, Darktrace, LogRhythm, Wazuh, Splunk</dd>
-                    <dt data-i18n="nf.k.certs">certs</dt><dd data-nf="certs">11 earned, ISO 27001 LI in progress</dd>
-                    <dt data-i18n="nf.k.speaks">speaks</dt><dd data-i18n="nf.v.speaks">Arabic, French, English</dd>
+                    <dt><span class="term-only" data-i18n="nf.k.org">org</span><span class="chat-only" data-i18n="nf.c.org">Company</span></dt><dd data-i18n="nf.v.org">Global IT Vision, managed SOC (MSSP)</dd>
+                    <dt><span class="term-only" data-i18n="nf.k.base">base</span><span class="chat-only" data-i18n="nf.c.base">Location</span></dt><dd data-nf="base">Tunisia (UTC+1)</dd>
+                    <dt><span class="term-only" data-i18n="nf.k.uptime">uptime</span><span class="chat-only" data-i18n="nf.c.uptime">Experience</span></dt><dd data-nf="uptime">SOC analyst since June 2025</dd>
+                    <dt><span class="term-only" data-i18n="nf.k.focus">focus</span><span class="chat-only" data-i18n="nf.c.focus">Focus</span></dt><dd data-i18n="nf.v.focus">DFIR, threat hunting, detection</dd>
+                    <dt><span class="term-only" data-i18n="nf.k.stack">stack</span><span class="chat-only" data-i18n="nf.c.stack">Tools</span></dt><dd>CrowdStrike, Darktrace, LogRhythm, Wazuh, Splunk</dd>
+                    <dt><span class="term-only" data-i18n="nf.k.certs">certs</span><span class="chat-only" data-i18n="nf.c.certs">Certifications</span></dt><dd data-nf="certs">11 earned, ISO 27001 LI in progress</dd>
+                    <dt><span class="term-only" data-i18n="nf.k.speaks">speaks</span><span class="chat-only" data-i18n="nf.c.speaks">Languages</span></dt><dd data-i18n="nf.v.speaks">Arabic, French, English</dd>
                   </dl>
-                  <span class="nf-sw" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                  <span class="nf-sw term-only" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                  <div class="nf-cta chat-only">
+                    <button type="button" class="btn btn-primary btn-small" data-cmd="hire" data-i18n="f.hire">Discuss a role</button>
+                    <button type="button" class="btn btn-quiet btn-small" data-cmd="contact" data-i18n="f.contact">Contact details</button>
+                    <a class="btn btn-quiet btn-small" href="https://www.linkedin.com/in/rayensalem" target="_blank" rel="noopener">LinkedIn</a>
+                  </div>
                 </div>
               </div>
-              <p class="ln say" id="greet" data-boot data-i18n="con.greet">Hi, welcome to Rayen’s console. Ask about his work in plain words, or pick a command.</p>
+              </div></div>
+              <div class="msg bot" data-boot><div class="bubble">
+                <p class="ln say term-only" id="greet" data-i18n="con.greet">Hi, welcome to Rayen’s console.</p>
+                <p class="ln say chat-only" id="greet-chat" data-i18n="con.greetChat">Hi! I answer questions about Rayen using his CV and this page.</p>
+              </div></div>
             </div>
             <div class="chips" id="shell-chips"></div>
+            </div>
             <form class="shell-in" id="shell-form" autocomplete="off">
-              <label class="ps" for="shell-input" id="shell-ps"><span class="ps-host">rayen@soc:~</span>$</label>
-              <span class="caret" aria-hidden="true"></span>
+              <label class="ps term-only" for="shell-input" id="shell-ps"><span class="ps-host">rayen@soc:~</span>$</label>
+              <span class="caret term-only" aria-hidden="true"></span>
               <input id="shell-input" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" enterkeyhint="send" data-i18n-ph="con.ph" placeholder="Ask a question or type help">
+              <button type="submit" class="send chat-only" data-i18n-aria="con.send" aria-label="Send"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 13V3.5M3.8 7.6L8 3.4l4.2 4.2" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             </form>
           </div>
           <div class="docked-note" id="docked-note" hidden>
@@ -712,6 +802,16 @@ button.tl-sum:hover{background:var(--bg-raise)}
           </div>
         </div>
         <aside class="tw-side" data-i18n-aria="con.menuAria" aria-label="Quick commands">
+          <div class="side-chat chat-only">
+            <p class="sc-head" data-i18n="sc.head">Popular questions</p>
+            <ul class="qlist" id="qlist"></ul>
+            <div class="sc-term">
+              <p class="sc-t" data-i18n="sc.termTitle">Technical visitor?</p>
+              <p class="sc-x" data-i18n="sc.termText">Switch to the terminal for commands, MITRE ATT&amp;CK lookups and a hidden flag.</p>
+              <button type="button" class="btn btn-quiet btn-small" data-con-set="term"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 3.5l3.5 3.5L2 10.5M7.5 11H12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="sc.termBtn">Open terminal mode</span></button>
+            </div>
+          </div>
+          <div class="side-term term-only">
           <p class="ws-head">Every 1.0s: rayen --menu</p>
           <ul class="menu" id="menu"></ul>
           <dl class="ws-stats">
@@ -719,14 +819,16 @@ button.tl-sum:hover{background:var(--bg-raise)}
             <dt>tlp</dt><dd>CLEAR</dd>
             <dt data-i18n="ws.next">next cert</dt><dd>ISO 27001 LI</dd>
           </dl>
+          </div>
         </aside>
       </div>
-      <div class="tw-status" aria-hidden="true">
+      <div class="tw-foot chat-only"><span data-i18n="con.footChat">Answers come from Rayen’s CV and this page.</span><span id="cf-clock"></span></div>
+      <div class="tw-status term-only" aria-hidden="true">
         <span>[soc] <b>0:shell*</b><span class="st-menu"> 1:menu</span></span>
         <span>"rayen@soc" <span id="st-clock">--:--</span><span class="st-date"> <span id="st-date"></span></span></span>
       </div>
     </div>
-    <p class="hero-alt"><span data-i18n="hero.alt">Not a terminal person?</span><a href="#projects" data-i18n="hero.altProjects">Projects</a><a href="#apt" data-i18n="hero.altApt">APT watchlist</a><a href="#contact" data-i18n="hero.altTicket">Open a ticket</a></p>
+    <p class="hero-alt"><span class="term-only" data-i18n="hero.alt">Not a terminal person?</span><button type="button" class="linkish term-only" data-con-set="chat" data-i18n="hero.toChat">Switch to chat</button><span class="chat-only" data-i18n="hero.altChat">Prefer to browse?</span><a href="#timeline" data-i18n="hero.altXp">Experience</a><a href="#projects" data-i18n="hero.altProjects">Projects</a><a href="#contact" data-i18n="hero.altTicket">Open a ticket</a></p>
   </section>
 
   <div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
@@ -896,10 +998,10 @@ button.tl-sum:hover{background:var(--bg-raise)}
   <div class="foot-l"><span class="kbd-hint" id="kbd-hint"></span><a href="#top" data-i18n="foot.top">Back to top</a></div>
 </footer>
 
-<button type="button" class="launcher" id="launcher" hidden><span class="lc-ic" aria-hidden="true">&gt;_</span><span data-i18n="con.launch">Ask the console</span></button>
+<button type="button" class="launcher" id="launcher" hidden><span class="lc-ic" aria-hidden="true"><span class="term-only">&gt;_</span><span class="chat-only"><svg width="16" height="16" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.2 3.4c0-.9.7-1.6 1.6-1.6h6.4c.9 0 1.6.7 1.6 1.6v4.2c0 .9-.7 1.6-1.6 1.6H6.4L3.6 11.6V9.2h0c-.8-.1-1.4-.8-1.4-1.6z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span></span><span class="term-only" data-i18n="con.launch">Ask the console</span><span class="chat-only" data-i18n="con.launchChat">Ask about Rayen</span></button>
 <div class="dock" id="dock" hidden role="dialog" aria-labelledby="dock-title">
   <div class="tw-bar">
-    <div class="tw-tab"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 3.5l3.5 3.5L2 10.5M7.5 11H12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="dock-title">rayen@soc: ~</span></div>
+    <div class="tw-tab"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 3.5l3.5 3.5L2 10.5M7.5 11H12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="dock-title"><span class="term-only">rayen@soc: ~</span><span class="chat-only" data-i18n="con.titleChat">Ask about Rayen</span></span></div>
     <div class="tw-actions"><button type="button" class="tw-btn" id="dock-close" data-i18n="con.close">Close</button></div>
   </div>
   <div class="dock-body" id="dock-body"></div>
@@ -934,7 +1036,7 @@ const I18N = {
     'drill.title': 'Containment drill',
     'drill.sub': '13 hosts in 2 zones',
     'nav.drill': 'Drill',
-    'con.clear': 'clear', 'con.pop': 'Pop out', 'con.close': 'Close', 'con.launch': 'Ask the console',
+    'con.clear': 'Clear', 'con.pop': 'Pop out', 'con.close': 'Close', 'con.launch': 'Ask the console',
     'con.ph': 'Ask a question or type help',
     'con.greet': 'Hi, welcome to Rayen’s console. Ask about his work in plain words, like “which tools does he use?”, or pick a command.',
     'con.docked': 'The console is docked at the bottom right.', 'con.undock': 'Bring it back here', 'con.menuAria': 'Quick commands',
@@ -979,6 +1081,23 @@ const I18N = {
     'b.noMatch': 'Nothing on this page mentions {q}.', 'b.match1': '1 match.', 'b.matches': '{n} matches.',
     'k.xp': 'work', 'k.project': 'project', 'k.method': 'method', 'k.cert': 'cert',
     'b.exitHero': 'Nice try. Scroll down for the rest of the site.',
+    'con.modeChat': 'Chat', 'con.modeTerm': 'Terminal', 'con.modeAria': 'Console mode', 'con.send': 'Send',
+    'con.greetChat': 'Hi! I answer questions about Rayen using his CV and this page. What would you like to know?',
+    'con.phChat': 'Ask about his experience, skills, certifications…', 'con.launchChat': 'Ask about Rayen', 'con.titleChat': 'Ask about Rayen',
+    'con.footChat': 'Answers come from Rayen’s CV and this page.', 'con.local': 'Tunisia, {time}',
+    'sc.head': 'Popular questions', 'sc.termTitle': 'Technical visitor?', 'sc.termText': 'Switch to the terminal for commands, MITRE ATT&CK lookups and a hidden flag.', 'sc.termBtn': 'Open terminal mode',
+    'hero.altChat': 'Prefer to browse?', 'hero.toChat': 'Switch to chat', 'hero.altXp': 'Experience',
+    'nf.c.org': 'Company', 'nf.c.base': 'Location', 'nf.c.uptime': 'Experience', 'nf.c.focus': 'Focus', 'nf.c.stack': 'Tools', 'nf.c.certs': 'Certifications', 'nf.c.speaks': 'Languages',
+    'f.xp': 'Experience', 'f.skills': 'Skills', 'f.certs': 'Certifications', 'f.projects': 'Projects', 'f.hire': 'Discuss a role', 'f.contact': 'Contact details',
+    'f.ticket': 'Write to Rayen', 'f.apt': 'Threat research', 'f.dfir': 'Forensics focus', 'f.method': 'How he works', 'f.drill': 'Try the drill', 'f.help': 'What can I ask?',
+    'f.education': 'Education', 'f.whoami': 'About Rayen', 'f.cv': 'CV', 'f.where': 'Location', 'f.languages': 'Languages',
+    'q.whoami': 'What does Rayen do?', 'q.xp': 'Where has he worked?', 'q.skills': 'Which tools does he use?', 'q.certs': 'Which certifications does he have?',
+    'q.projects': 'What has he built?', 'q.where': 'Where is he based?', 'q.langs': 'Which languages does he speak?', 'q.contact': 'How can I contact him?',
+    'b.helpHeadChat': 'You can ask things like:', 'b.toolHead': 'Here’s where {q} shows up:',
+    'b.xpHeadChat': 'Here’s his experience, newest first. Pick a role for details.',
+    'b.projHeadChat': 'Here are his main projects. Pick one to learn more.',
+    'b.aptHeadChat': 'Rayen studies how these threat groups operate and how to detect them. Pick one:',
+    'b.fallbackChat': 'I don’t have an answer for “{q}”. Try one of these, or ask Rayen directly.',
     'b.yes': 'yes, start', 'b.techUsed': 'On the watchlist, used by {g}.', 'b.techNone': 'None of the six watchlist groups lists it in its playbook here.',
     'tk.pri': 'Pick a priority:', 'tk.start': 'Opening a {p} ticket: {label}. Three quick questions, type cancel to stop.',
     'tk.name': 'Your name?', 'tk.org': 'Company or team? Press Enter to skip.',
@@ -1112,6 +1231,23 @@ const I18N = {
     'b.noMatch': 'Rien sur cette page ne mentionne {q}.', 'b.match1': '1 résultat.', 'b.matches': '{n} résultats.',
     'k.xp': 'poste', 'k.project': 'projet', 'k.method': 'méthode', 'k.cert': 'certif',
     'b.exitHero': 'Bien essayé. Faites défiler pour voir la suite du site.',
+    'con.modeChat': 'Chat', 'con.modeTerm': 'Terminal', 'con.modeAria': 'Mode de la console', 'con.send': 'Envoyer',
+    'con.greetChat': 'Bonjour ! Je réponds aux questions sur Rayen à partir de son CV et de cette page. Que souhaitez-vous savoir ?',
+    'con.phChat': 'Posez une question sur son parcours, ses compétences…', 'con.launchChat': 'Questions sur Rayen', 'con.titleChat': 'Questions sur Rayen',
+    'con.footChat': 'Les réponses viennent du CV de Rayen et de cette page.', 'con.local': 'Tunisie, {time}',
+    'sc.head': 'Questions fréquentes', 'sc.termTitle': 'Profil technique ?', 'sc.termText': 'Passez au terminal pour les commandes, les recherches MITRE ATT&CK et un flag caché.', 'sc.termBtn': 'Passer en mode terminal',
+    'hero.altChat': 'Vous préférez parcourir ?', 'hero.toChat': 'Passer au chat', 'hero.altXp': 'Parcours',
+    'nf.c.org': 'Entreprise', 'nf.c.base': 'Localisation', 'nf.c.uptime': 'Expérience', 'nf.c.focus': 'Spécialités', 'nf.c.stack': 'Outils', 'nf.c.certs': 'Certifications', 'nf.c.speaks': 'Langues',
+    'f.xp': 'Parcours', 'f.skills': 'Compétences', 'f.certs': 'Certifications', 'f.projects': 'Projets', 'f.hire': 'Proposer un poste', 'f.contact': 'Coordonnées',
+    'f.ticket': 'Écrire à Rayen', 'f.apt': 'Recherche sur les menaces', 'f.dfir': 'Spécialité forensique', 'f.method': 'Sa méthode', 'f.drill': 'Essayer l’exercice', 'f.help': 'Que puis-je demander ?',
+    'f.education': 'Formation', 'f.whoami': 'À propos de Rayen', 'f.cv': 'CV', 'f.where': 'Localisation', 'f.languages': 'Langues',
+    'q.whoami': 'Que fait Rayen ?', 'q.xp': 'Où a-t-il travaillé ?', 'q.skills': 'Quels outils utilise-t-il ?', 'q.certs': 'Quelles certifications a-t-il ?',
+    'q.projects': 'Qu’a-t-il réalisé ?', 'q.where': 'Où est-il basé ?', 'q.langs': 'Quelles langues parle-t-il ?', 'q.contact': 'Comment le contacter ?',
+    'b.helpHeadChat': 'Vous pouvez demander par exemple :', 'b.toolHead': 'Voici où {q} apparaît :',
+    'b.xpHeadChat': 'Voici son parcours, du plus récent au plus ancien. Choisissez un poste pour le détail.',
+    'b.projHeadChat': 'Voici ses principaux projets. Choisissez-en un pour en savoir plus.',
+    'b.aptHeadChat': 'Rayen étudie le fonctionnement de ces groupes de menace et la façon de les détecter. Choisissez-en un :',
+    'b.fallbackChat': 'Je n’ai pas de réponse pour « {q} ». Essayez une de ces questions, ou demandez directement à Rayen.',
     'b.yes': 'oui, on commence', 'b.techUsed': 'Dans la liste, utilisée par {g}.', 'b.techNone': 'Aucun des six groupes de la liste ne l’a dans son mode opératoire ici.',
     'tk.pri': 'Choisissez une priorité :', 'tk.start': 'Ouverture d’un ticket {p} : {label}. Trois questions rapides, tapez cancel pour arrêter.',
     'tk.name': 'Votre nom ?', 'tk.org': 'Entreprise ou équipe ? Appuyez sur Entrée pour passer.',
@@ -2482,7 +2618,8 @@ const Drill = (() => {
 /* ---------------- console: hero terminal and chatbot ---------------- */
 const Con = (() => {
   const PS = 'rayen@soc:~$';
-  let shell, log, chipsEl, form, input, psEl, home, note, dock, dockBody, launcher, win, nfTemplate;
+  let shell, scroller, log, chipsEl, form, input, psEl, home, note, dock, dockBody, launcher, win, nfTemplate;
+  let cur = null, lastChips = [];
   let ready = false, docked = false, heroVisible = true, bootDone = false, bootAbort = false, nameDone = false, skip = false, pending = 0;
   let mode = null;   // ticket flow state
   let ctx = null;    // last list or item shown, so "2" or "next" make sense
@@ -2490,6 +2627,8 @@ const Con = (() => {
   const hist = []; let hi = 0;
 
   const fast = () => reduceMotion || skip;
+  const isChat = () => document.documentElement.dataset.con !== 'term';
+  const T = (key, vars) => (isChat() && I18N.en[key + 'Chat'] != null ? t(key + 'Chat', vars) : t(key, vars));
   const wait = (ms) => new Promise((r) => setTimeout(r, fast() ? 0 : ms));
   const narrow = () => window.matchMedia('(max-width: 700px)').matches;
   const pad2 = (n) => String(n).padStart(2, '0');
@@ -2508,8 +2647,10 @@ const Con = (() => {
   const exact = (q, tk, w) => (multi(w) ? phrase(q, w) : tk.includes(w));
 
   /* ----- output ----- */
-  function scrollEnd() { if (shell) shell.scrollTop = shell.scrollHeight; }
-  function put(node) { log.append(node); scrollEnd(); return node; }
+  function scrollEnd() { if (scroller) scroller.scrollTop = scroller.scrollHeight; }
+  function put(node) { (cur || log).append(node); scrollEnd(); return node; }
+  function openGroup() { const b = h('div', { class: 'bubble' }); log.append(h('div', { class: 'msg bot' }, b)); cur = b; }
+  function closeGroup() { if (cur && !cur.childNodes.length && cur.parentNode) cur.parentNode.remove(); cur = null; }
   const ln = (content, cls) => h('div', { class: 'ln' + (cls ? ' ' + cls : '') }, content);
   const say = (text, cls) => put(ln(text, 'say' + (cls ? ' ' + cls : '')));
   const link = (href, text) => h('a', { href, target: '_blank', rel: 'noopener' }, text);
@@ -2521,50 +2662,87 @@ const Con = (() => {
   async function emit(nodes) {
     for (const n of nodes.flat()) { if (!n) continue; put(n); await wait(36); }
   }
-  function echo(text) { put(ln([h('span', { class: 'ps' }, mode ? 'ticket>' : PS), ' ', text], 'pl')); }
-  async function spin(label) {
+  function echo(text, disp) {
+    if (!text && isChat()) return;
+    const row = ln([h('span', { class: 'ps term-only' }, mode ? 'ticket>' : PS), h('span', { class: 'term-only' }, ' ' + text), h('span', { class: 'chat-only' }, disp || text)], 'pl');
+    log.append(h('div', { class: 'msg user' }, h('div', { class: 'bubble' }, row)));
+    scrollEnd();
+  }
+  async function spin(label, nl) {
     if (fast()) return;
-    const el = put(ln('', 'dim')); el.setAttribute('aria-hidden', 'true');
-    const fr = '|/-\\'; let i = 0;
-    const tick = () => { el.textContent = fr[i++ % 4] + ' ' + label; };
-    tick(); const id = setInterval(tick, 90);
-    await wait(420); clearInterval(id); el.remove();
+    const chat = isChat();
+    if (!chat && !nl) return;
+    let el, id = 0;
+    if (chat) el = put(h('div', { class: 'typing', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')));
+    else {
+      el = put(ln('', 'dim')); el.setAttribute('aria-hidden', 'true');
+      const fr = '|/-\\'; let i = 0;
+      const tk = () => { el.textContent = fr[i++ % 4] + ' ' + label; };
+      tk(); id = setInterval(tk, 90);
+    }
+    await wait(chat ? 560 : 420); clearInterval(id); el.remove();
   }
   const C = (cmd, label) => ({ cmd, label });
   const A = (label, act, go) => ({ label, act, go });
+  function friendly(c) {
+    if (c.label) return c.label;
+    const cmd = c.cmd || '';
+    let m;
+    if ((m = cmd.match(/^open (\d+)$/)) && CASES[m[1] - 1]) return L(CASES[m[1] - 1].title);
+    if ((m = cmd.match(/^apt (\d+)$/)) && APTS[m[1] - 1]) return APTS[m[1] - 1].name;
+    if ((m = cmd.match(/^xp (\d+)$/)) && workList()[m[1] - 1]) return L(workList()[m[1] - 1].org);
+    if ((m = cmd.match(/^lang (en|fr)$/))) return m[1] === 'fr' ? 'Français' : 'English';
+    if (I18N.en['f.' + cmd] != null) return t('f.' + cmd);
+    const ck = CERT_KEYS.find(([w]) => w === cmd); if (ck) return CERTS.find((x) => x.ex === ck[1]).code;
+    const ak = APT_KEYS.find(([w]) => w === cmd); if (ak) return APTS.find((g) => g.id === ak[1]).name;
+    const tl = TOOL_IDX.find(([, terms]) => terms.includes(cmd)); if (tl) return tl[0];
+    return cmd;
+  }
+  const chatLabel = (c) => (c.label ? cap(c.label) : friendly(c));
+  function runAct(fn) {
+    chain = chain.then(async () => { openGroup(); try { await fn(); } finally { closeGroup(); } }).catch(() => {});
+    return chain;
+  }
   function chips(list) {
-    chipsEl.replaceChildren(...(list || []).filter(Boolean).map((c) => {
-      if (c.href) return h('a', { class: 'chip-btn act', href: c.href, onclick: c.onclick || null }, c.label);
-      return h('button', { type: 'button', class: 'chip-btn' + (c.act ? ' act' : '') + (c.go ? ' go' : ''), onclick: () => { endBoot(); if (c.act) c.act(); else submit(c.cmd, true); } }, c.label || c.cmd);
+    lastChips = (list || []).filter(Boolean);
+    const chat = isChat();
+    chipsEl.replaceChildren(...lastChips.map((c) => {
+      const label = chat ? chatLabel(c) : (c.label || c.cmd);
+      if (c.href) return h('a', { class: 'chip-btn act', href: c.href, onclick: c.onclick || null }, label);
+      return h('button', { type: 'button', class: 'chip-btn' + (c.act ? ' act' : '') + (c.go ? ' go' : ''), onclick: () => { endBoot(); if (c.act) runAct(c.act); else submit(c.cmd, true, chatLabel(c)); } }, label);
     }));
     scrollEnd();
   }
-  const startChips = () => [C('projects'), C('apt'), C('skills'), C('xp'), C('hire')];
+  const startChips = () => (isChat()
+    ? [C('xp'), C('skills'), C('certs'), C('projects'), C('hire'), C('contact')]
+    : [C('projects'), C('apt'), C('skills'), C('xp'), C('hire')]);
   function setVal(v) { input.value = v; form.classList.toggle('typed', !!v); }
   function refreshPrompt() {
     psEl.replaceChildren(...(mode ? ['ticket>'] : [h('span', { class: 'ps-host' }, 'rayen@soc:~'), '$']));
-    input.placeholder = mode ? t('tk.ph.' + mode.step) : t('con.ph');
+    input.placeholder = mode ? t('tk.ph.' + mode.step) : T('con.ph');
   }
 
   /* ----- running commands ----- */
-  function submit(raw, typed) {
+  function submit(raw, typed, shown) {
     endBoot();
     pending++; if (pending > 1) skip = true;
-    chain = chain.then(() => run(raw, typed)).catch((e) => { put(ln('error: ' + (e && e.message), 'err')); })
+    chain = chain.then(() => run(raw, typed, shown)).catch((e) => { closeGroup(); put(ln('error: ' + (e && e.message), 'err')); })
       .then(() => { pending--; if (!pending) skip = false; });
     return chain;
   }
-  async function run(raw, typed) {
-    const text = String(raw == null ? '' : raw);
-    if (typed && !fast()) { setVal(''); for (const ch of text) { setVal(input.value + ch); await wait(26); } await wait(90); }
+  async function run(raw, typed, shown) {
+    const text = String(raw == null ? '' : raw).trim();
+    const disp = String(shown || text).trim();
+    const fake = isChat() ? disp : text;
+    if (typed && !fast() && fake) { setVal(''); for (const ch of fake) { setVal(input.value + ch); await wait(isChat() ? 14 : 26); } await wait(90); }
     setVal('');
     chips([]);
-    echo(text.trim());
-    if (mode) { await ticketStep(text.trim()); refreshPrompt(); after(); return; }
-    const q = text.trim();
-    if (!q) return;
-    hist.push(q); hi = hist.length;
-    await route(q);
+    echo(text, disp);
+    if (mode) { openGroup(); try { await ticketStep(text); } finally { closeGroup(); } refreshPrompt(); after(); return; }
+    if (!text) return;
+    hist.push(text); hi = hist.length;
+    openGroup();
+    try { await route(text); } finally { closeGroup(); }
     refreshPrompt(); after();
   }
   function after() {
@@ -2584,8 +2762,8 @@ const Con = (() => {
     }
     if (ctx && ctx.kind === 'offer' && /^(y|yes|yeah|yep|sure|ok|okay|oui|ouais|go|start|let s go|allons-y|vas-y|d accord)$/.test(q)) { ctx = null; return startTicket('P1'); }
     const cmd = CMDS[head] || CMDS[ALIAS[head]];
+    await spin(t('b.search'), !cmd);
     if (cmd) { const r = await cmd(args); if (r !== false) return; }
-    await spin(t('b.search'));
     return answer(q, tk, raw);
   }
 
@@ -2608,7 +2786,7 @@ const Con = (() => {
     ['edu', ['degree', 'diplom', 'universit', 'study', 'studies', 'etude', 'school', 'ecole', 'education', 'formation', 'bachelor', 'licence', 'ingenieur', 'engineering', 'tek-up', 'tekup', 'graduat']],
     ['where', ['where', 'based', 'base', 'location', 'located', 'country', 'pays', 'timezone', 'fuseau', 'tunis', 'tunisia', 'tunisie', 'habite', 'relocat', 'remote', 'teletravail', 'heure', ['live', 0.6]]],
     ['langs', ['language', 'langue', 'speak', 'parle', 'arabic', 'french', 'english', 'arabe', 'francais', 'anglais']],
-    ['xp', ['experience', 'job', 'career', 'carriere', 'parcours', 'emploi', 'company', 'entreprise', 'employ', 'intern', 'stage', 'gitv', 'global it vision', 'onetech', 'teligencia', 'pwn and patch', ['work', 0.6], ['poste', 0.6], ['role', 0.5]]],
+    ['xp', ['experience', 'job', 'career', 'carriere', 'parcours', 'emploi', 'company', 'entreprise', 'employ', 'intern', 'stage', 'gitv', 'global it vision', 'onetech', 'teligencia', 'pwn and patch', ['work', 0.6], ['worked', 1.5], ['does he work', 1.5], ['do you work', 1.5], ['travaill', 1.5], ['poste', 0.6], ['role', 0.5]]],
     ['skills', ['skill', 'competen', 'tool', 'outil', 'stack', 'technolog', 'siem', 'edr', 'ndr', 'soar', 'xdr', 'software', 'logiciel', ['use', 0.5], ['utilise', 0.5], ['know', 0.5], ['connai', 0.5]]],
     ['whoami', ['who', 'qui', 'yourself', 'presente', 'presentation', 'introduce', 'about', 'profile', 'profil', 'summary', 'he do', 'you do', 'fait-il', 'tu fais', 'vous faites']],
   ];
@@ -2701,6 +2879,11 @@ const Con = (() => {
     const rows = [['whoami', 'm.whoami'], ['xp [n]', 'm.xp'], ['skills', 'm.skills'], ['projects', 'm.projects'], ['open <n>', 'h.open'], ['apt [name]', 'h.apt'],
       ['certs', 'm.certs'], ['education', 'h.edu'], ['contact', 'h.contact'], ['hire', 'm.hire'], ['cv', 'h.cv'], ['drill', 'm.drill'],
       ['theme console|report', 'h.view'], ['lang en|fr', 'h.lang'], ['clear', 'h.clear']];
+    if (isChat()) {
+      await emit([ln(t('b.helpHeadChat'))]);
+      chips(QUESTIONS.map(([c, k]) => C(c, t(k))));
+      return;
+    }
     await emit([ln(t('b.helpHead'), 'mut'), table(rows.map(([c, k]) => [c, t(k, counts())])), ln(t('b.helpFoot'), 'mut')]);
     chips(startChips());
   }
@@ -2717,15 +2900,15 @@ const Con = (() => {
       if (args.length === 1 && n >= 1 && n <= list.length) return xpDetail(n - 1);
       return false;
     }
-    await emit([ln(t('b.xpHead'), 'mut'), table(list.map((e, i) => [String(i + 1), e.from + ' → ' + (e.to || t('timeline.now')), L(e.title) + ', ' + L(e.org)]), [1])]);
+    await emit([ln(T('b.xpHead'), 'mut'), table(list.map((e, i) => [String(i + 1), e.from + ' → ' + (e.to || t('timeline.now')), L(e.title) + ', ' + L(e.org)]), [1])]);
     ctx = { kind: 'xp' };
-    chips([C('xp 1', t('b.chipCurrent')), C('skills'), C('projects'), C('hire')]);
+    chips(isChat() ? list.map((e, i) => C('xp ' + (i + 1))) : [C('xp 1', t('b.chipCurrent')), C('skills'), C('projects'), C('hire')]);
   }
   async function xpDetail(i) {
     const list = workList(), e = list[i];
     await emit([ln([h('b', null, L(e.title)), ', ' + L(e.org)]),
       ln(e.from + ' → ' + (e.to || t('timeline.now')) + (e.note ? ', ' + L(e.note) : ''), 'mut'),
-      ...(e.points ? L(e.points).map((x) => ln('- ' + x, 'li')) : []),
+      ...(e.points ? L(e.points).map((x) => ln(x, 'li')) : []),
       e.tools ? ln(t('b.tools') + ': ' + e.tools.join(', '), 'acc') : null,
       ...(e.links || []).map((l) => ln(link(l.href, L(l.label))))]);
     ctx = { kind: 'xp', i };
@@ -2741,9 +2924,9 @@ const Con = (() => {
   }
   async function cProjects(args) {
     if (args && args.length) return false;
-    await emit([ln(t('b.projHead'), 'mut'), table(CASES.map((c, i) => [String(i + 1), L(c.title), h('span', { class: 'dim' }, L(c.kind))]), [2])]);
+    await emit([ln(T('b.projHead'), 'mut'), table(CASES.map((c, i) => [String(i + 1), L(c.title), h('span', { class: 'dim' }, L(c.kind))]), [2])]);
     ctx = { kind: 'project' };
-    chips([C('open 1'), C('open 3'), C('apt'), C('hire')]);
+    chips(isChat() ? CASES.map((c, i) => C('open ' + (i + 1))) : [C('open 1'), C('open 3'), C('apt'), C('hire')]);
   }
   async function cOpen(args) {
     const a = norm((args || []).join(' '));
@@ -2769,9 +2952,9 @@ const Con = (() => {
       if (!g) return false;
       return aptDetail(APTS.indexOf(g));
     }
-    await emit([ln(t('b.aptHead'), 'mut'), table(APTS.map((g, i) => [String(i + 1), g.name, g.mitre, h('span', { class: 'mut' }, L(g.motive))]), [2])]);
+    await emit([ln(T('b.aptHead'), 'mut'), table(APTS.map((g, i) => [String(i + 1), g.name, g.mitre, h('span', { class: 'mut' }, L(g.motive))]), [2])]);
     ctx = { kind: 'apt' };
-    chips([C('apt29'), C('lazarus'), C('volt typhoon'), A(t('b.showMap'), () => goTo('#apt'), true)]);
+    chips(isChat() ? APTS.map((g, i) => C('apt ' + (i + 1))).concat([A(t('b.showMap'), () => goTo('#apt'), true)]) : [C('apt29'), C('lazarus'), C('volt typhoon'), A(t('b.showMap'), () => goTo('#apt'), true)]);
   }
   async function aptDetail(i) {
     const g = APTS[i];
@@ -2852,7 +3035,10 @@ const Con = (() => {
   function cHack() { say(t('b.hack')); chips([C('ls -a')]); }
   function cFlag() { say(t('b.flag')); chips([C('ls -a')]); }
   function cHireNL() { say(t('b.hireAns')); ctx = { kind: 'offer' }; chips([C('hire', t('b.yes')), C('contact')]); }
-  function cFallback(raw) { say(t('b.fallback', { q: raw.length > 48 ? raw.slice(0, 48) + '…' : raw })); chips([C('help'), C('projects'), C('skills'), C('hire')]); }
+  function cFallback(raw) {
+    say(T('b.fallback', { q: raw.length > 48 ? raw.slice(0, 48) + '…' : raw }));
+    chips(isChat() ? [C('help'), C('xp'), C('skills'), C('hire')] : [C('help'), C('projects'), C('skills'), C('hire')]);
+  }
   async function cTool(tool) {
     const terms = tool.terms.concat([tool.label.toLowerCase()]);
     const inS = (x) => { const l = String(x || '').toLowerCase(); return terms.some((w) => l.includes(w)); };
@@ -2861,7 +3047,7 @@ const Con = (() => {
     CASES.forEach((c, i) => { if (c.stack.some(inS)) hits.push(['project', L(c.title), i]); });
     PHASES.forEach((ph) => { if (ph.tools.some((k) => inS(TOOLS[k].name))) hits.push(['method', L(ph.name)]); });
     CERTS.forEach((c) => { if (inS(c.code) || inS(c.name) || inS(c.issuer)) hits.push(['cert', c.code + ', ' + c.name]); });
-    const nodes = [ln('grep -ri "' + tool.label.toLowerCase() + '" ~/rayen', 'dim')];
+    const nodes = [ln('grep -ri "' + tool.label.toLowerCase() + '" ~/rayen', 'dim term-only'), ln(t('b.toolHead', { q: tool.label }), 'chat-only')];
     if (!hits.length) nodes.push(ln(t('b.noMatch', { q: tool.label })));
     else {
       nodes.push(table(hits.map(([k, label]) => [t('k.' + k), label])));
@@ -2911,7 +3097,7 @@ const Con = (() => {
     const pre = put(h('pre', { class: 'tk-pre' }, text));
     const mail = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
     chips([A(t('tk.copy'), async () => { const ok = await copyText(text); if (ok) say(t('tk.copied', { e: EMAIL }), 'good'); else { selectAll(pre); say(t('tk.copyFail')); } }),
-      { label: t('tk.mail'), href: mail, onclick: () => setTimeout(() => say(t('contact.mailNote')), 400) },
+      { label: t('tk.mail'), href: mail, onclick: () => setTimeout(() => runAct(() => say(t('contact.mailNote'))), 400) },
       A(t('tk.form'), () => goTo('#contact'), true)]);
   }
 
@@ -2995,8 +3181,9 @@ const Con = (() => {
     help: cHelp, whoami: cWhoami, xp: cXp, skills: cSkills, projects: cProjects, open: cOpen, apt: cApt, certs: cCerts,
     education: cEdu, contact: (a) => cContact(a, false), hire: cHire, ticket: cTicket, cv: cCv, drill: cDrill, method: cMethod, dfir: cDfir, next: cNext,
     ls: cLs, cat: cCat, submit: cSubmit, sudo: cSudo, rm: cRm, nmap: cNmap, theme: cTheme, lang: cLang, clear: cClear, history: cHistory,
-    date: cDate, echo: cEcho, pwd: cPwd, id: cId, exit: cExit,
+    date: cDate, echo: cEcho, pwd: cPwd, id: cId, exit: cExit, where: (a) => (a && a.length ? false : cWhere()), languages: (a) => (a && a.length ? false : cLangs()),
   };
+  const QUESTIONS = [['whoami', 'q.whoami'], ['xp', 'q.xp'], ['skills', 'q.skills'], ['certs', 'q.certs'], ['projects', 'q.projects'], ['where', 'q.where'], ['languages', 'q.langs'], ['contact', 'q.contact']];
   const ALIAS = {
     aide: 'help', commands: 'help', commandes: 'help', man: 'help', about: 'whoami', profile: 'whoami', profil: 'whoami', neofetch: 'whoami', whois: 'whoami',
     experience: 'xp', exp: 'xp', parcours: 'xp', jobs: 'xp', career: 'xp', carriere: 'xp', stack: 'skills', tools: 'skills', outils: 'skills', competences: 'skills',
@@ -3004,7 +3191,7 @@ const Con = (() => {
     certifs: 'certs', certifications: 'certs', cert: 'certs', edu: 'education', formation: 'education', diplomes: 'education', degrees: 'education',
     email: 'contact', mail: 'contact', links: 'contact', liens: 'contact', embaucher: 'hire', recruter: 'hire', recruit: 'hire', resume: 'cv',
     exercice: 'drill', play: 'drill', jouer: 'drill', game: 'drill', methode: 'method', process: 'method', forensics: 'dfir', suivant: 'next',
-    quit: 'exit', cls: 'clear', effacer: 'clear',
+    quit: 'exit', cls: 'clear', effacer: 'clear', langues: 'languages', location: 'where',
   };
   const INTENT_RUN = {
     hack: cHack, hire: cHireNL, cv: cCv, contact: () => cContact([], false), flag: cFlag, drill: cDrill, method: () => cMethod([]), dfir: () => cDfir([]),
@@ -3080,6 +3267,16 @@ const Con = (() => {
     const html = document.documentElement;
     html.classList.add('booting');
     const parts = $$('[data-boot]', log), lines = $$('.bl', log);
+    if (isChat()) {
+      const gc = $('#greet-chat'), gtext = t('con.greetChat');
+      await wait(160); if (bootAbort) return;
+      parts[2].classList.add('shown');
+      await wait(650); if (bootAbort) return;
+      gc.textContent = ''; parts[3].classList.add('shown');
+      for (const w of gtext.split(/(\s+)/)) { if (bootAbort) return; gc.textContent += w; if (w.trim()) await wait(20); }
+      await wait(100); if (bootAbort) return;
+      endBoot(); return;
+    }
     const cmd = $('#boot-cmd'), greet = $('#greet');
     lines.forEach((l) => { l.style.visibility = 'hidden'; });
     parts[0].classList.add('shown');
@@ -3102,6 +3299,7 @@ const Con = (() => {
     $$('.bl', log).forEach((l) => { l.style.visibility = ''; });
     const cmd = $('#boot-cmd'); if (cmd) cmd.textContent = 'whoami';
     const greet = $('#greet'); if (greet) greet.textContent = t('con.greet');
+    const gc = $('#greet-chat'); if (gc) gc.textContent = t('con.greetChat');
     const nm = $('#nf-name'); if (nm) nm.textContent = 'Rayen Salem';
     const html = document.documentElement;
     html.classList.remove('booting'); html.classList.add('booted');
@@ -3116,6 +3314,19 @@ const Con = (() => {
     const MENU = [['whoami', 'm.whoami'], ['xp', 'm.xp'], ['skills', 'm.skills'], ['projects', 'm.projects'], ['apt', 'm.apt'], ['certs', 'm.certs'], ['drill', 'm.drill'], ['hire', 'm.hire']];
     ul.replaceChildren(...MENU.map(([c, k]) => h('li', null, h('button', { type: 'button', onclick: () => submit(c, true) }, h('b', null, c), h('span', null, t(k, counts()))))));
   }
+  function renderQuestions() {
+    const ul = $('#qlist'); if (!ul) return;
+    ul.replaceChildren(...QUESTIONS.map(([c, k]) => h('li', null, h('button', { type: 'button', onclick: () => submit(c, true, t(k)) }, t(k)))));
+  }
+  function syncModeButtons() { const m = isChat() ? 'chat' : 'term'; $$('[data-con-set]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.conSet === m))); }
+  function setMode(m, save) {
+    const v = m === 'term' ? 'term' : 'chat';
+    document.documentElement.dataset.con = v;
+    if (save) store.set('rs-con', v);
+    endBoot();
+    syncModeButtons(); refreshPrompt(); chips(lastChips.length ? lastChips : startChips());
+    scrollEnd();
+  }
   function tmuxDate() {
     try { return new Intl.DateTimeFormat('en-GB', { timeZone: PROFILE.timeZone, day: '2-digit', month: 'short', year: '2-digit' }).format(new Date()).replace(/ /g, '-'); }
     catch (e) { return ''; }
@@ -3123,17 +3334,18 @@ const Con = (() => {
   function tick() {
     if (!ready) return;
     const set = (sel, v) => { const el = $(sel); if (el && el.textContent !== v) el.textContent = v; };
-    set('#ws-clock', tunisTime(true)); set('#st-clock', tunisTime()); set('#st-date', tmuxDate());
+    set('#ws-clock', tunisTime(true)); set('#st-clock', tunisTime()); set('#st-date', tmuxDate()); set('#cf-clock', t('con.local', { time: tunisTime() }));
     fillNf(document);
   }
   function relabel() {
     if (!ready) return;
     endBoot();
-    renderMenu(); refreshPrompt(); tick();
+    renderMenu(); renderQuestions(); refreshPrompt(); tick(); chips(lastChips.length ? lastChips : startChips());
     const greet = $('#greet'); if (greet) greet.textContent = t('con.greet');
+    const gc = $('#greet-chat'); if (gc) gc.textContent = t('con.greetChat');
   }
   function init() {
-    shell = $('#shell'); log = $('#shell-log'); chipsEl = $('#shell-chips'); form = $('#shell-form'); input = $('#shell-input'); psEl = $('#shell-ps');
+    shell = $('#shell'); scroller = $('#shell-scroll'); log = $('#shell-log'); chipsEl = $('#shell-chips'); form = $('#shell-form'); input = $('#shell-input'); psEl = $('#shell-ps');
     home = $('#console-home'); note = $('#docked-note'); dock = $('#dock'); dockBody = $('#dock-body'); launcher = $('#launcher'); win = $('#term-win');
     if (!shell) return;
     nfTemplate = $('#nf').cloneNode(true);
@@ -3151,7 +3363,13 @@ const Con = (() => {
         else if (m.length > 1) { ev.preventDefault(); put(ln(m.join('  '), 'dim')); }
       } else if (ev.key === 'Escape') { if (docked) { ev.preventDefault(); closeDock(true); } else input.blur(); }
     });
+    document.addEventListener('click', (ev) => {
+      const b = ev.target.closest && ev.target.closest('[data-con-set]');
+      if (b) { ev.preventDefault(); setMode(b.dataset.conSet, true); if (!narrow()) input.focus({ preventScroll: true }); }
+    });
     shell.addEventListener('click', (ev) => {
+      const dc = ev.target.closest('[data-cmd]');
+      if (dc) { ev.preventDefault(); submit(dc.dataset.cmd, true, dc.textContent.trim()); return; }
       if (ev.target.closest('a, button, input, .tk-pre')) return;
       const sel = window.getSelection ? String(window.getSelection()) : '';
       if (sel) return;
@@ -3166,10 +3384,10 @@ const Con = (() => {
     $('#term-btn').addEventListener('click', summon);
     document.addEventListener('keydown', onKey);
     if ('IntersectionObserver' in window) new IntersectionObserver((es) => { heroVisible = es[0].isIntersecting; updateLauncher(); }, { threshold: 0.15 }).observe(win);
-    renderMenu(); refreshPrompt(); tick(); updateLauncher();
+    syncModeButtons(); renderMenu(); renderQuestions(); refreshPrompt(); tick(); updateLauncher();
     bootSeq();
   }
-  return { init, relabel, tick, summon, run: (x) => submit(x, false) };
+  return { init, relabel, tick, summon, setMode, run: (x) => submit(x, false) };
 })();
 
 /* ---------------- CV link: hidden when the PDF is not published next to the page ---------------- */
