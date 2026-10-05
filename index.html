@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rayen Salem | SOC Analyst and Incident Responder</title>
-<meta name="description" content="Rayen Salem, SOC analyst and incident responder at Global IT Vision in Tunisia. DFIR, threat hunting and detection, with projects, an APT watchlist mapped to MITRE ATT&CK, and certifications.">
+<meta name="description" content="Rayen Salem, SOC analyst and incident responder at Global IT Vision in Tunisia. DFIR, threat hunting and detection, with projects, certifications and a console that answers questions about his work.">
 <meta name="author" content="Rayen Salem">
 <meta name="theme-color" content="#000000">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://rayensalem.github.io/">
 <meta property="og:title" content="Rayen Salem | SOC Analyst and Incident Responder">
-<meta property="og:description" content="Rayen Salem, SOC analyst and incident responder at Global IT Vision in Tunisia. DFIR, threat hunting and detection, with projects, an APT watchlist mapped to MITRE ATT&CK, and certifications.">
+<meta property="og:description" content="Rayen Salem, SOC analyst and incident responder at Global IT Vision in Tunisia. DFIR, threat hunting and detection, with projects, certifications and a console that answers questions about his work.">
 <meta property="og:image" content="https://rayensalem.github.io/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -54,8 +54,6 @@
   --name-b:#D4E3FF;
   --name-c:#3D86FF;
   --name-glow:rgba(31,107,255,.30);
-  --map-dot:rgba(130,160,205,.32);
-  --map-dot-hi:rgba(160,200,255,.95);
   --term-bg:rgba(5,7,11,.84);
   --logo-a:#DCE8FF;
   --logo-b:#2F6BFF;
@@ -98,8 +96,6 @@
   --name-b:#16294D;
   --name-c:#1F5FE0;
   --name-glow:rgba(31,95,224,0);
-  --map-dot:rgba(40,70,120,.30);
-  --map-dot-hi:rgba(26,79,191,.95);
   --term-bg:rgba(255,255,255,.9);
   --logo-a:#7AA5F0;
   --logo-b:#1A4FBF;
@@ -439,6 +435,16 @@ button.tl-sum:hover{background:var(--bg-raise)}
 .ticket-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
 .note{margin:0;font-size:13.5px;color:var(--fg-muted)}
 .note.ok{color:var(--green)}
+.note.bad{color:var(--red)}
+.field-err{font-size:13px;line-height:1.4;color:var(--red)}
+.field input[aria-invalid="true"],.field textarea[aria-invalid="true"]{border-color:var(--red)}
+.hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.ticket-fallback{display:inline-flex;flex-wrap:wrap;gap:10px}
+.ticket-fallback[hidden]{display:none}
+.send-ico{width:16px;height:16px;flex:none;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 2 14.5 8 1.5 14 3.5 8.6 9 8 3.5 7.4z'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 2 14.5 8 1.5 14 3.5 8.6 9 8 3.5 7.4z'/%3E%3C/svg%3E") center/contain no-repeat}
+.btn.sending{cursor:progress;opacity:.82}
+.btn.sending .send-ico{width:14px;height:14px;background:none;-webkit-mask:none;mask:none;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .75s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 @media (max-width:920px){.contact{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:540px){.pri,.row2{grid-template-columns:minmax(0,1fr)}.line{grid-template-columns:84px minmax(0,1fr) auto}}
 
@@ -556,61 +562,11 @@ button.tl-sum:hover{background:var(--bg-raise)}
 .tk b{font-weight:600;color:var(--accent-ink)}
 
 /* gradient-edged panels and a cursor spotlight */
-.case-panel,.ticket,.apt-card,.apt-map,.phases{--pb:var(--bg-raise);border:1px solid transparent;background:linear-gradient(var(--pb),var(--pb)) padding-box,linear-gradient(140deg,var(--edge-hi),var(--edge-lo) 34%,var(--edge-lo) 66%,var(--edge-hi)) border-box}
-.apt-map{--pb:var(--bg-sunk)}
+.case-panel,.ticket,.phases{--pb:var(--bg-raise);border:1px solid transparent;background:linear-gradient(var(--pb),var(--pb)) padding-box,linear-gradient(140deg,var(--edge-hi),var(--edge-lo) 34%,var(--edge-lo) 66%,var(--edge-hi)) border-box}
 .spot{position:relative}
 .spot::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),var(--spot),transparent 45%);opacity:0;transition:opacity .25s}
 .spot:hover::after{opacity:1}
 @media (hover:none){.spot::after{display:none}}
-
-/* APT watchlist */
-.apt-map{position:relative;border-radius:12px;overflow:hidden}
-.apt-map canvas{display:block;width:100%;height:auto;aspect-ratio:2.65/1}
-.map-hud{position:absolute;left:clamp(12px,2vw,22px);top:clamp(10px,1.8vw,18px);display:grid;gap:3px;max-width:60%;pointer-events:none}
-.hud-k{font:500 12px/1.3 var(--font-data);color:var(--fg-faint)}
-.hud-v{font:800 clamp(19px,2.4vw,28px)/1.05 var(--font-display);font-stretch:116%}
-.hud-s{font:500 12.5px/1.35 var(--font-data);color:var(--accent-ink)}
-.map-legend{position:absolute;right:clamp(12px,2vw,20px);bottom:clamp(8px,1.4vw,14px);display:flex;flex-wrap:wrap;gap:4px 16px;font:500 12px/1.2 var(--font-data);color:var(--fg-muted);pointer-events:none}
-.map-legend span{display:inline-flex;align-items:center;gap:7px}
-.map-legend i{width:8px;height:8px;border-radius:50%;background:var(--accent-line);box-shadow:0 0 0 3px var(--accent-wash)}
-.map-legend i.soc{border-radius:1px;transform:rotate(45deg);background:var(--fg);box-shadow:none}
-@media (max-width:620px){.map-legend,.hud-s{display:none}.map-hud{position:static;max-width:none;padding:12px 14px 4px}}
-.apt-tabs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin:16px 0}
-.apt-tab{appearance:none;min-width:0;display:grid;gap:4px;align-content:start;text-align:left;padding:11px 13px;border:1px solid var(--line-strong);border-radius:8px;background:var(--bg-raise);color:var(--fg);font:inherit;cursor:pointer;transition:border-color .15s,background-color .15s,box-shadow .15s}
-.apt-tab:hover{border-color:var(--fg-muted)}
-.apt-tab b{font:760 16px/1.15 var(--font-display);font-stretch:108%;overflow-wrap:anywhere}
-.apt-tab small{font:500 11.5px/1.2 var(--font-data);color:var(--fg-faint)}
-.apt-tab[aria-selected="true"]{border-color:var(--accent-line);background:var(--accent-wash);box-shadow:0 0 22px -8px var(--accent-line)}
-.apt-tab[aria-selected="true"] small{color:var(--accent-ink)}
-@media (max-width:1000px){.apt-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (max-width:520px){.apt-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.apt-card{border-radius:12px;padding:clamp(18px,2.6vw,30px)}
-.ac-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:14px 28px}
-.ac-top > div{min-width:0;flex:1 1 320px}
-.ac-id{font:600 13px/1 var(--font-data);color:var(--accent-ink);text-underline-offset:3px}
-.ac-name{margin:10px 0 0;font:840 clamp(32px,4.4vw,50px)/.95 var(--font-display);font-stretch:120%;letter-spacing:-.012em;overflow-wrap:anywhere}
-.ac-aka{margin:10px 0 0;color:var(--fg-muted);font-size:15px;max-width:62ch}
-.ac-meta{display:grid;grid-template-columns:max-content minmax(0,auto);gap:6px 16px;margin:0;font-size:14px;align-content:start}
-.ac-meta dt{color:var(--fg-faint)}
-.ac-meta dd{margin:0;font:500 14px/1.45 var(--font-data)}
-.ac-known{margin:18px 0 24px;max-width:72ch}
-.ac-h{margin:0 0 10px;font:700 15px/1.2 var(--font-body)}
-.chain{list-style:none;margin:0 0 26px;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.chain li{position:relative;min-width:0;display:grid;gap:4px;align-content:start;padding:12px 14px;border:1px solid var(--line-strong);border-radius:8px;background:var(--bg-sunk)}
-.chain li:not(:last-child)::after{content:"";position:absolute;top:50%;right:-11px;width:7px;height:7px;border-top:1.5px solid var(--accent-line);border-right:1.5px solid var(--accent-line);transform:translateY(-50%) rotate(45deg)}
-.ch-tac{font:500 12px/1.3 var(--font-data);color:var(--fg-faint)}
-.ch-id{width:max-content;font:600 14px/1.2 var(--font-data);color:var(--accent-ink);text-underline-offset:3px}
-.ch-name{font-size:14.5px;line-height:1.35}
-@media (max-width:860px){.chain{grid-template-columns:repeat(2,minmax(0,1fr))}.chain li:nth-child(2)::after{display:none}}
-@media (max-width:480px){.chain{grid-template-columns:minmax(0,1fr)}.chain li::after{display:none}}
-.dets{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.det{min-width:0;display:grid;gap:8px;align-content:start;padding:14px;border:1px solid var(--line-strong);border-radius:8px;background:var(--bg-sunk)}
-.det-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font:600 12px/1.3 var(--font-data)}
-.det-h b{font-weight:600;color:var(--green)}
-.det-h span{color:var(--fg-faint);text-align:right}
-.det p{margin:0;font-size:14.5px;line-height:1.5}
-@media (max-width:900px){.dets{grid-template-columns:minmax(0,1fr)}}
-.apt-src{margin:14px 0 0;font-size:13.5px;color:var(--fg-muted)}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
@@ -629,7 +585,6 @@ button.tl-sum:hover{background:var(--bg-raise)}
       <a href="#method" data-i18n="nav.method">Method</a>
       <a href="#timeline" data-i18n="nav.timeline">Timeline</a>
       <a href="#projects" data-i18n="nav.cases">Projects</a>
-      <a href="#apt" data-i18n="nav.apt">APT</a>
       <a href="#certs" data-i18n="nav.certs">Certs</a>
       <a href="#contact" data-i18n="nav.contact">Contact</a>
     </nav>
@@ -804,22 +759,6 @@ button.tl-sum:hover{background:var(--bg-raise)}
     </section>
   </div>
 
-  <section class="sec" id="apt" aria-labelledby="apt-h">
-    <div class="sec-head">
-      <p class="prompt-line"><span>$</span>grep -i apt ~/intel/watchlist.md</p>
-      <h2 class="h2" id="apt-h" data-i18n="apt.title">APT watchlist</h2>
-      <p class="dek" data-i18n="apt.dek">Six threat groups whose playbooks I study.</p>
-    </div>
-    <div class="apt-map" id="apt-map">
-      <canvas id="apt-canvas" role="img" data-i18n-aria="apt.mapAria" aria-label="Map"></canvas>
-      <div class="map-hud" aria-hidden="true"><span class="hud-k" id="hud-k"></span><span class="hud-v" id="hud-v"></span><span class="hud-s" id="hud-s"></span></div>
-      <div class="map-legend" aria-hidden="true"><span><i></i><span data-i18n="apt.legendT">Targeted regions</span></span><span><i class="soc"></i><span data-i18n="apt.legendS">My SOC</span></span></div>
-    </div>
-    <div class="apt-tabs" id="apt-tabs" role="tablist" data-i18n-aria="apt.tabs" aria-label="Threat groups"></div>
-    <article class="apt-card spot" id="apt-card" role="tabpanel" tabindex="0"></article>
-    <p class="apt-src" data-i18n="apt.src">Group data from MITRE ATT&amp;CK.</p>
-  </section>
-
   <section class="sec" id="certs" aria-labelledby="certs-h">
     <div class="sec-head">
       <p class="prompt-line"><span>$</span>ls -l ~/evidence/certs</p>
@@ -851,17 +790,22 @@ button.tl-sum:hover{background:var(--bg-raise)}
           <fieldset class="pri" id="pri"><legend data-i18n="contact.priority">Priority</legend></fieldset>
           <div class="fields">
             <div class="row2">
-              <div class="field"><label for="t-name" data-i18n="contact.name">Your name</label><input id="t-name" name="name" autocomplete="name"></div>
-              <div class="field"><label for="t-org" data-i18n="contact.org">Company or team (optional)</label><input id="t-org" name="org" autocomplete="organization"></div>
+              <div class="field"><label for="t-name" data-i18n="contact.name">Your name</label><input id="t-name" name="name" autocomplete="name" required aria-describedby="t-name-err"><span class="field-err" id="t-name-err" hidden></span></div>
+              <div class="field"><label for="t-email" data-i18n="contact.yourEmail">Your email</label><input id="t-email" name="email" type="email" inputmode="email" autocomplete="email" spellcheck="false" required aria-describedby="t-email-err" data-i18n-ph="tk.ph.email" placeholder="you@company.com"><span class="field-err" id="t-email-err" hidden></span></div>
             </div>
-            <div class="field"><label for="t-msg" data-i18n="contact.msg">Message</label><textarea id="t-msg" name="msg"></textarea></div>
+            <div class="field"><label for="t-org" data-i18n="contact.org">Company or team (optional)</label><input id="t-org" name="org" autocomplete="organization"></div>
+            <div class="field"><label for="t-msg" data-i18n="contact.msg">Message</label><textarea id="t-msg" name="msg" required aria-describedby="t-msg-err"></textarea><span class="field-err" id="t-msg-err" hidden></span></div>
+            <div class="hp" aria-hidden="true"><label for="t-hp">Leave this field empty</label><input id="t-hp" name="_honey" tabindex="-1" autocomplete="off"></div>
           </div>
           <div class="preview-wrap"><span data-i18n="contact.preview">Ticket preview</span><pre class="preview" id="t-preview"></pre></div>
           <div class="ticket-actions">
-            <button type="submit" class="btn btn-primary" data-i18n="contact.copyTicket">Copy ticket</button>
-            <a class="btn btn-quiet" id="t-mail" href="#" data-i18n="contact.mail">Open in email app</a>
+            <button type="submit" class="btn btn-primary" id="t-send"><span class="send-ico" aria-hidden="true"></span><span id="t-send-label" data-i18n="contact.send">Send ticket</span></button>
+            <span class="ticket-fallback" id="t-fallback" hidden>
+              <a class="btn btn-quiet" id="t-mail" href="#" data-i18n="contact.mail">Open in email app</a>
+              <button type="button" class="btn btn-quiet" id="t-copy" data-i18n="contact.copyTicket">Copy ticket</button>
+            </span>
           </div>
-          <p class="note" id="t-note" aria-live="polite"></p>
+          <p class="note" id="t-note" role="status" aria-live="polite"></p>
         </form>
       </div>
     </section>
@@ -902,26 +846,31 @@ const PROFILE = {
   cv: 'Rayen_Salem_CV.pdf',
   avatar: 'avatar.jpg',   // profile photo shown in the chat; the RS initials stay if it is missing
   timeZone: 'Africa/Tunis',
+  // Tickets are emailed through FormSubmit (formsubmit.co), a free form-to-email relay for static sites.
+  // The first ticket sends a one-time "Activate Form" email to the address above. FormSubmit then
+  // replies with a random alias: put it in relayId to keep the address out of the page's requests.
+  relay: 'https://formsubmit.co/ajax/',
+  relayId: '',
 };
 
 const I18N = {
   en: {
     'skip': 'Skip to content',
-    'nav.method': 'Method', 'nav.timeline': 'Timeline', 'nav.cases': 'Projects', 'nav.apt': 'APT', 'nav.certs': 'Certs', 'nav.contact': 'Contact',
+    'nav.method': 'Method', 'nav.timeline': 'Timeline', 'nav.cases': 'Projects', 'nav.certs': 'Certs', 'nav.contact': 'Contact',
     'nav.view': 'View', 'nav.console': 'Console', 'nav.report': 'Report', 'nav.term': 'Open the console',
     'con.clear': 'Clear', 'con.pop': 'Pop out', 'con.close': 'Close', 'con.launch': 'Ask the console',
     'con.ph': 'Ask a question or type help',
     'con.greet': 'Hi, welcome to Rayen’s console. Ask about his work in plain words, like “which tools does he use?”, or pick a command.',
     'con.docked': 'The console is docked at the bottom right.', 'con.undock': 'Bring it back here', 'con.menuAria': 'Quick commands',
     'ws.time': 'tunisia', 'ws.next': 'next cert',
-    'hero.alt': 'Not a terminal person?', 'hero.altProjects': 'Projects', 'hero.altApt': 'APT watchlist', 'hero.altTicket': 'Open a ticket',
+    'hero.alt': 'Not a terminal person?', 'hero.altProjects': 'Projects', 'hero.altTicket': 'Open a ticket',
     'nf.role': 'SOC analyst and incident responder',
     'nf.k.org': 'org', 'nf.k.base': 'base', 'nf.k.uptime': 'uptime', 'nf.k.focus': 'focus', 'nf.k.stack': 'stack', 'nf.k.certs': 'certs', 'nf.k.speaks': 'speaks',
     'nf.v.org': 'Global IT Vision, managed SOC (MSSP)', 'nf.v.base': 'Tunisia, {time} local (UTC+1)', 'nf.v.uptime': '{d} as a SOC analyst',
     'nf.v.focus': 'DFIR, threat hunting, detection', 'nf.v.certs': '{n} earned, ISO 27001 LI in progress', 'nf.v.speaks': 'Arabic, French, English',
-    'm.whoami': 'profile card', 'm.xp': 'experience', 'm.skills': 'tools by domain', 'm.projects': '{np} labs and builds', 'm.apt': '{na} threat groups',
+    'm.whoami': 'profile card', 'm.xp': 'experience', 'm.skills': 'tools by domain', 'm.projects': '{np} labs and builds',
     'm.certs': '{nc} + 1 in progress', 'm.hire': 'open a P1 ticket',
-    'h.open': 'read project n', 'h.apt': 'APT watchlist, or one group', 'h.edu': 'degrees', 'h.contact': 'email and links', 'h.cv': 'the CV',
+    'h.open': 'read project n', 'h.tech': 'look up an ATT&CK technique', 'h.edu': 'degrees', 'h.contact': 'email and links', 'h.cv': 'the CV',
     'h.view': 'switch view', 'h.lang': 'switch language', 'h.clear': 'clear the screen',
     'b.helpHead': 'This console runs in your browser and answers from what’s on this page. Commands:',
     'b.helpFoot': 'Or just ask, in English or French.',
@@ -931,14 +880,12 @@ const I18N = {
     'g.detect': 'detection', 'g.respond': 'response', 'g.intel': 'intel', 'g.telemetry': 'telemetry', 'g.offense': 'offense', 'g.infra': 'infra', 'g.code': 'code',
     'b.skillsFoot': 'Ask about any tool, like “splunk”, to see where Rayen used it.',
     'b.projHead': 'Projects. Type open <n> for details.', 'b.stack': 'stack', 'b.repo': 'repo', 'b.noRepo': 'code not public', 'b.showDiagram': 'show diagram',
-    'b.aptHead': 'APT watchlist. Type apt <name> for a dossier.', 'b.showMap': 'show on map', 'b.aka': 'aka', 'b.since': 'active since {y}', 'b.targets': 'targets',
-    'b.playbook': 'playbook', 'b.catch': 'first detection',
     'b.certsHead': 'Certifications, newest first.', 'b.showCerts': 'see the tags',
     'b.isoNote': 'At Global IT Vision he also contributed to the company’s ISO 27001 certification.',
     'b.eduHead': 'Education.', 'b.eduFoot': 'Plus {n} certifications. Type certs.',
     'b.contactHead': 'Email reaches Rayen fastest.', 'b.copyEmail': 'copy email', 'b.copied': 'Copied {e}.', 'b.copyFail': 'Copy is blocked here, so here it is: {e}',
     'b.phone': 'The phone number isn’t public. Email or LinkedIn reach Rayen fastest.',
-    'b.hireAns': 'For roles and opportunities, open a P1 ticket. It takes three questions here, then goes out from your own inbox. Want to start?',
+    'b.hireAns': 'For roles and opportunities, open a P1 ticket. Four quick questions here and it lands straight in Rayen’s inbox. Want to start?',
     'b.cvYes': 'CV in PDF (French):', 'b.cvNo': 'The CV is shared on request. Ask for it with a ticket.',
     'b.where': 'Based in Tunisia, UTC+1. It’s {time} there right now.',
     'b.whereMore': 'For anything about where a role is based, open a ticket and Rayen will answer directly.',
@@ -961,24 +908,31 @@ const I18N = {
     'hero.altChat': 'Prefer to browse?', 'hero.toChat': 'Switch to chat', 'hero.altXp': 'Experience',
     'nf.c.org': 'Company', 'nf.c.base': 'Location', 'nf.c.uptime': 'Experience', 'nf.c.focus': 'Focus', 'nf.c.stack': 'Tools', 'nf.c.certs': 'Certifications', 'nf.c.speaks': 'Languages',
     'f.xp': 'Experience', 'f.skills': 'Skills', 'f.certs': 'Certifications', 'f.projects': 'Projects', 'f.hire': 'Discuss a role', 'f.contact': 'Contact details',
-    'f.ticket': 'Write to Rayen', 'f.apt': 'Threat research', 'f.dfir': 'Forensics focus', 'f.method': 'How he works', 'f.help': 'What can I ask?',
+    'f.ticket': 'Write to Rayen', 'f.dfir': 'Forensics focus', 'f.method': 'How he works', 'f.help': 'What can I ask?',
     'f.education': 'Education', 'f.whoami': 'About Rayen', 'f.cv': 'CV', 'f.where': 'Location', 'f.languages': 'Languages',
     'q.whoami': 'What does Rayen do?', 'q.xp': 'Where has he worked?', 'q.skills': 'Which tools does he use?', 'q.certs': 'Which certifications does he have?',
     'q.projects': 'What has he built?', 'q.where': 'Where is he based?', 'q.langs': 'Which languages does he speak?', 'q.contact': 'How can I contact him?',
     'b.helpHeadChat': 'You can ask things like:', 'b.toolHead': 'Here’s where {q} shows up:',
     'b.xpHeadChat': 'Here’s his experience, newest first. Pick a role for details.',
     'b.projHeadChat': 'Here are his main projects. Pick one to learn more.',
-    'b.aptHeadChat': 'Rayen studies how these threat groups operate and how to detect them. Pick one:',
     'b.fallbackChat': 'I don’t have an answer for “{q}”. Try one of these, or ask Rayen directly.',
-    'b.yes': 'yes, start', 'b.techUsed': 'On the watchlist, used by {g}.', 'b.techNone': 'None of the six watchlist groups lists it in its playbook here.',
-    'tk.pri': 'Pick a priority:', 'tk.start': 'Opening a {p} ticket: {label}. Three quick questions, type cancel to stop.',
-    'tk.name': 'Your name?', 'tk.org': 'Company or team? Press Enter to skip.',
+    'b.yes': 'yes, start', 'b.techFoot': 'Technique names from MITRE ATT&CK.',
+    'tk.pri': 'Pick a priority:', 'tk.start': 'Opening a {p} ticket: {label}. Four quick questions, type cancel to stop.',
+    'tk.name': 'Your name?', 'tk.email': 'Your email? Rayen will reply there.', 'tk.org': 'Company or team? Press Enter to skip.',
+    'tk.needName': 'A name helps Rayen reply. What should he call you?', 'tk.badEmail': 'That doesn’t look like an email address. Try again, like name@company.com.',
+    'tk.needMsg': 'Add a line or two so Rayen knows what it’s about.',
     'tk.msg.P1': 'What’s the role, and where is it based?', 'tk.msg.P2': 'What are you building, and where would Rayen fit in?',
     'tk.msg.P3': 'Which event or challenge, and when?', 'tk.msg.P4': 'Go ahead, say hello.',
-    'tk.ready': 'Ticket {id} is ready. Send it from your own inbox:', 'tk.cancel': 'Ticket cancelled.',
+    'tk.ready': 'Ticket {id} is ready. Send it to Rayen?', 'tk.cancel': 'Ticket cancelled.',
+    'tk.send': 'send ticket', 'tk.retry': 'try again', 'tk.sending': 'Sending ticket {id}…',
+    'tk.sent': 'Sent. Ticket {id} is in Rayen’s inbox, and he’ll reply to {e}.',
+    'tk.fail': 'That didn’t go through. Try again, or send the same ticket from your own email:',
+    'tk.confirmHelp': 'Type send to deliver it, edit to change it in the form, or cancel.',
+    'tk.toForm': 'Your ticket is in the form below. Change anything you like, then press Send ticket.',
     'tk.copy': 'copy ticket', 'tk.mail': 'open in email app', 'tk.form': 'edit in form', 'tk.skip': 'skip', 'tk.cancelBtn': 'cancel',
     'tk.copied': 'Ticket copied. Paste it into a new email to {e}.', 'tk.copyFail': 'Copy is blocked here. The ticket text is selected, so copy it with your keyboard.',
-    'tk.ph.pri': 'P1, P2, P3 or P4', 'tk.ph.name': 'your name', 'tk.ph.org': 'company or team, or Enter to skip', 'tk.ph.msg': 'your message',
+    'tk.ph.pri': 'P1, P2, P3 or P4', 'tk.ph.name': 'your name', 'tk.ph.email': 'you@company.com', 'tk.ph.org': 'company or team, or Enter to skip', 'tk.ph.msg': 'your message',
+    'tk.ph.confirm': 'send, edit or cancel',
     'method.title': 'How I work an incident',
     'method.dek': 'Every case runs through the same four phases. Here is what I bring to each one and the tools I reach for. Select a tool to see where it fits.',
     'method.tools': 'Tools', 'method.loop': 'Lessons learned feed back into preparation.',
@@ -992,48 +946,45 @@ const I18N = {
     'cases.dek': 'Labs and builds. Each one shows the architecture, what I did, and the repository when the code is public.',
     'cases.did': 'What I did', 'cases.stack': 'Stack', 'cases.repo': 'View repository', 'cases.noRepo': 'Code not public.',
     'cases.fig': 'Architecture', 'cases.board': 'Challenges',
-    'apt.title': 'APT watchlist',
-    'apt.dek': 'Six threat groups whose playbooks I study. Each is mapped to MITRE ATT&CK and to the detections I’d use to catch it in a SOC.',
-    'apt.mapAria': 'World map of the regions targeted by the selected group',
-    'apt.hudK': 'Tracking {id}', 'apt.legendT': 'Targeted regions', 'apt.legendS': 'My SOC', 'apt.soc': 'Tunisia',
-    'apt.tabs': 'Threat groups', 'apt.aka': 'Also known as', 'apt.motive': 'Motivation', 'apt.since': 'Active since', 'apt.targets': 'Targets',
-    'apt.chain': 'Playbook', 'apt.catch': 'How I’d catch it',
-    'apt.src': 'Group data from MITRE ATT&CK, regions from public reporting. The detections are my own starting points and get tuned to each environment.',
     'certs.title': 'Certifications',
     'certs.dek': 'Tagged like evidence and numbered in the order I earned them.',
     'certs.exhibit': 'Exhibit', 'certs.issuer': 'Issued by', 'certs.acquired': 'Acquired', 'certs.domain': 'Domain', 'certs.progress': 'In progress',
     'contact.title': 'Open a ticket',
-    'contact.dek': 'Email reaches me fastest. Set a priority, add a line or two, and the ticket becomes an email you send from your own inbox.',
+    'contact.dek': 'Pick a priority, add a line or two and press send. The ticket lands straight in my inbox, and I reply by email.',
     'contact.email': 'Email', 'contact.copy': 'Copy', 'contact.copied': 'Copied',
     'contact.cvLink': 'Open the PDF (French)', 'contact.time': 'Local time', 'contact.timeV': '{time} in Tunisia (UTC+1)',
     'contact.new': 'New ticket', 'contact.priority': 'Priority',
-    'contact.name': 'Your name', 'contact.org': 'Company or team (optional)', 'contact.msg': 'Message',
+    'contact.name': 'Your name', 'contact.yourEmail': 'Your email', 'contact.org': 'Company or team (optional)', 'contact.msg': 'Message',
+    'contact.send': 'Send ticket', 'contact.sending': 'Sending…',
+    'contact.sent': 'Sent. Ticket {id} is in my inbox, and I’ll reply to {e}.',
+    'contact.fail': 'The ticket didn’t go through. Nothing is lost: send it from your email app or copy it.',
+    'contact.errName': 'Add your name.', 'contact.errEmail': 'Enter a valid email so I can reply.', 'contact.errMsg': 'Add a short message.',
     'contact.preview': 'Ticket preview', 'contact.copyTicket': 'Copy ticket', 'contact.mail': 'Open in email app',
     'contact.copiedTicket': 'Ticket copied. Paste it into a new email to {e}.',
     'contact.copyFail': 'Copying is blocked here. The preview text is selected, so copy it with your keyboard.',
     'contact.mailNote': 'If no email app opens, copy the ticket instead.',
-    'ticket.to': 'To', 'ticket.subject': 'Subject',
+    'ticket.to': 'To', 'ticket.from': 'From', 'ticket.subject': 'Subject',
     'ticket.hi': 'Hi Rayen,', 'ticket.msgEmpty': '(your message)',
     'ticket.foot': 'Ticket {id}, priority {p}, opened from your portfolio.',
     'foot.top': 'Back to top', 'foot.kbd': 'Press {k} to open the console',
   },
   fr: {
     'skip': 'Aller au contenu',
-    'nav.method': 'Méthode', 'nav.timeline': 'Parcours', 'nav.cases': 'Projets', 'nav.apt': 'APT', 'nav.certs': 'Certifs', 'nav.contact': 'Contact',
+    'nav.method': 'Méthode', 'nav.timeline': 'Parcours', 'nav.cases': 'Projets', 'nav.certs': 'Certifs', 'nav.contact': 'Contact',
     'nav.view': 'Affichage', 'nav.console': 'Console', 'nav.report': 'Rapport', 'nav.term': 'Ouvrir la console',
     'con.clear': 'effacer', 'con.pop': 'Détacher', 'con.close': 'Fermer', 'con.launch': 'Interroger la console',
     'con.ph': 'Posez une question ou tapez help',
     'con.greet': 'Bonjour, bienvenue sur la console de Rayen. Posez vos questions sur son travail, par exemple « quels outils utilise-t-il ? », ou choisissez une commande.',
     'con.docked': 'La console est détachée en bas à droite.', 'con.undock': 'La remettre ici', 'con.menuAria': 'Commandes rapides',
     'ws.time': 'tunisie', 'ws.next': 'prochaine certif',
-    'hero.alt': 'Pas fan du terminal ?', 'hero.altProjects': 'Projets', 'hero.altApt': 'APT sous surveillance', 'hero.altTicket': 'Ouvrir un ticket',
+    'hero.alt': 'Pas fan du terminal ?', 'hero.altProjects': 'Projets', 'hero.altTicket': 'Ouvrir un ticket',
     'nf.role': 'Analyste SOC, réponse à incident',
     'nf.k.org': 'org', 'nf.k.base': 'base', 'nf.k.uptime': 'uptime', 'nf.k.focus': 'focus', 'nf.k.stack': 'stack', 'nf.k.certs': 'certifs', 'nf.k.speaks': 'langues',
     'nf.v.org': 'Global IT Vision, SOC managé (MSSP)', 'nf.v.base': 'Tunisie, {time} heure locale (UTC+1)', 'nf.v.uptime': '{d} comme analyste SOC',
     'nf.v.focus': 'DFIR, threat hunting, détection', 'nf.v.certs': '{n} obtenues, ISO 27001 LI en cours', 'nf.v.speaks': 'Arabe, français, anglais',
-    'm.whoami': 'fiche profil', 'm.xp': 'expérience', 'm.skills': 'outils par domaine', 'm.projects': '{np} labs et projets', 'm.apt': '{na} groupes APT',
+    'm.whoami': 'fiche profil', 'm.xp': 'expérience', 'm.skills': 'outils par domaine', 'm.projects': '{np} labs et projets',
     'm.certs': '{nc} + 1 en cours', 'm.hire': 'ouvrir un ticket P1',
-    'h.open': 'lire le projet n', 'h.apt': 'APT sous surveillance, ou un groupe', 'h.edu': 'diplômes', 'h.contact': 'e-mail et liens', 'h.cv': 'le CV',
+    'h.open': 'lire le projet n', 'h.tech': 'rechercher une technique ATT&CK', 'h.edu': 'diplômes', 'h.contact': 'e-mail et liens', 'h.cv': 'le CV',
     'h.view': 'changer d’affichage', 'h.lang': 'changer de langue', 'h.clear': 'effacer l’écran',
     'b.helpHead': 'Cette console tourne dans votre navigateur et répond à partir du contenu de cette page. Commandes :',
     'b.helpFoot': 'Ou posez simplement votre question, en français ou en anglais.',
@@ -1043,14 +994,12 @@ const I18N = {
     'g.detect': 'détection', 'g.respond': 'réponse', 'g.intel': 'renseignement', 'g.telemetry': 'télémétrie', 'g.offense': 'offensif', 'g.infra': 'infra', 'g.code': 'code',
     'b.skillsFoot': 'Demandez un outil, par exemple « splunk », pour voir où Rayen l’a utilisé.',
     'b.projHead': 'Projets. Tapez open <n> pour le détail.', 'b.stack': 'stack', 'b.repo': 'dépôt', 'b.noRepo': 'code non publié', 'b.showDiagram': 'voir le schéma',
-    'b.aptHead': 'APT sous surveillance. Tapez apt <nom> pour un dossier.', 'b.showMap': 'voir sur la carte', 'b.aka': 'alias', 'b.since': 'actif depuis {y}', 'b.targets': 'cibles',
-    'b.playbook': 'mode opératoire', 'b.catch': 'première détection',
     'b.certsHead': 'Certifications, de la plus récente à la plus ancienne.', 'b.showCerts': 'voir les scellés',
     'b.isoNote': 'Chez Global IT Vision, il a aussi contribué à la certification ISO 27001 de l’entreprise.',
     'b.eduHead': 'Formation.', 'b.eduFoot': 'Plus {n} certifications. Tapez certs.',
     'b.contactHead': 'L’e-mail reste le plus rapide pour joindre Rayen.', 'b.copyEmail': 'copier l’e-mail', 'b.copied': '{e} copié.', 'b.copyFail': 'La copie est bloquée ici, voici l’adresse : {e}',
     'b.phone': 'Le numéro n’est pas public. L’e-mail ou LinkedIn restent le plus rapide.',
-    'b.hireAns': 'Pour un poste ou une opportunité, ouvrez un ticket P1. Trois questions ici, puis il part depuis votre propre messagerie. On commence ?',
+    'b.hireAns': 'Pour un poste ou une opportunité, ouvrez un ticket P1. Quatre questions rapides ici, et il arrive directement dans la boîte mail de Rayen. On commence ?',
     'b.cvYes': 'CV en PDF :', 'b.cvNo': 'Le CV est envoyé sur demande. Demandez-le avec un ticket.',
     'b.where': 'Basé en Tunisie, UTC+1. Il est actuellement {time} là-bas.',
     'b.whereMore': 'Pour toute question sur le lieu d’un poste, ouvrez un ticket et Rayen répondra directement.',
@@ -1073,24 +1022,31 @@ const I18N = {
     'hero.altChat': 'Vous préférez parcourir ?', 'hero.toChat': 'Passer au chat', 'hero.altXp': 'Parcours',
     'nf.c.org': 'Entreprise', 'nf.c.base': 'Localisation', 'nf.c.uptime': 'Expérience', 'nf.c.focus': 'Spécialités', 'nf.c.stack': 'Outils', 'nf.c.certs': 'Certifications', 'nf.c.speaks': 'Langues',
     'f.xp': 'Parcours', 'f.skills': 'Compétences', 'f.certs': 'Certifications', 'f.projects': 'Projets', 'f.hire': 'Proposer un poste', 'f.contact': 'Coordonnées',
-    'f.ticket': 'Écrire à Rayen', 'f.apt': 'Recherche sur les menaces', 'f.dfir': 'Spécialité forensique', 'f.method': 'Sa méthode', 'f.help': 'Que puis-je demander ?',
+    'f.ticket': 'Écrire à Rayen', 'f.dfir': 'Spécialité forensique', 'f.method': 'Sa méthode', 'f.help': 'Que puis-je demander ?',
     'f.education': 'Formation', 'f.whoami': 'À propos de Rayen', 'f.cv': 'CV', 'f.where': 'Localisation', 'f.languages': 'Langues',
     'q.whoami': 'Que fait Rayen ?', 'q.xp': 'Où a-t-il travaillé ?', 'q.skills': 'Quels outils utilise-t-il ?', 'q.certs': 'Quelles certifications a-t-il ?',
     'q.projects': 'Qu’a-t-il réalisé ?', 'q.where': 'Où est-il basé ?', 'q.langs': 'Quelles langues parle-t-il ?', 'q.contact': 'Comment le contacter ?',
     'b.helpHeadChat': 'Vous pouvez demander par exemple :', 'b.toolHead': 'Voici où {q} apparaît :',
     'b.xpHeadChat': 'Voici son parcours, du plus récent au plus ancien. Choisissez un poste pour le détail.',
     'b.projHeadChat': 'Voici ses principaux projets. Choisissez-en un pour en savoir plus.',
-    'b.aptHeadChat': 'Rayen étudie le fonctionnement de ces groupes de menace et la façon de les détecter. Choisissez-en un :',
     'b.fallbackChat': 'Je n’ai pas de réponse pour « {q} ». Essayez une de ces questions, ou demandez directement à Rayen.',
-    'b.yes': 'oui, on commence', 'b.techUsed': 'Dans la liste, utilisée par {g}.', 'b.techNone': 'Aucun des six groupes de la liste ne l’a dans son mode opératoire ici.',
-    'tk.pri': 'Choisissez une priorité :', 'tk.start': 'Ouverture d’un ticket {p} : {label}. Trois questions rapides, tapez cancel pour arrêter.',
-    'tk.name': 'Votre nom ?', 'tk.org': 'Entreprise ou équipe ? Appuyez sur Entrée pour passer.',
+    'b.yes': 'oui, on commence', 'b.techFoot': 'Noms des techniques selon MITRE ATT&CK.',
+    'tk.pri': 'Choisissez une priorité :', 'tk.start': 'Ouverture d’un ticket {p} : {label}. Quatre questions rapides, tapez annuler pour arrêter.',
+    'tk.name': 'Votre nom ?', 'tk.email': 'Votre e-mail ? Rayen vous répondra à cette adresse.', 'tk.org': 'Entreprise ou équipe ? Appuyez sur Entrée pour passer.',
+    'tk.needName': 'Un nom aide Rayen à vous répondre. Comment vous appelez-vous ?', 'tk.badEmail': 'Cette adresse ne semble pas valide. Réessayez, par exemple nom@entreprise.com.',
+    'tk.needMsg': 'Ajoutez une phrase ou deux pour que Rayen sache de quoi il s’agit.',
     'tk.msg.P1': 'Quel est le poste, et où est-il basé ?', 'tk.msg.P2': 'Que construisez-vous, et où Rayen interviendrait-il ?',
     'tk.msg.P3': 'Quel événement ou challenge, et quand ?', 'tk.msg.P4': 'Allez-y, dites bonjour.',
-    'tk.ready': 'Le ticket {id} est prêt. Envoyez-le depuis votre messagerie :', 'tk.cancel': 'Ticket annulé.',
+    'tk.ready': 'Le ticket {id} est prêt. On l’envoie à Rayen ?', 'tk.cancel': 'Ticket annulé.',
+    'tk.send': 'envoyer le ticket', 'tk.retry': 'réessayer', 'tk.sending': 'Envoi du ticket {id}…',
+    'tk.sent': 'Envoyé. Le ticket {id} est dans la boîte mail de Rayen, il vous répondra à {e}.',
+    'tk.fail': 'L’envoi n’a pas abouti. Réessayez, ou envoyez le même ticket depuis votre messagerie :',
+    'tk.confirmHelp': 'Tapez envoyer pour le transmettre, modifier pour le reprendre dans le formulaire, ou annuler.',
+    'tk.toForm': 'Votre ticket est dans le formulaire ci-dessous. Modifiez ce que vous voulez, puis cliquez sur Envoyer le ticket.',
     'tk.copy': 'copier le ticket', 'tk.mail': 'ouvrir la messagerie', 'tk.form': 'modifier dans le formulaire', 'tk.skip': 'passer', 'tk.cancelBtn': 'annuler',
     'tk.copied': 'Ticket copié. Collez-le dans un nouvel e-mail à {e}.', 'tk.copyFail': 'La copie est bloquée ici. Le texte du ticket est sélectionné, copiez-le au clavier.',
-    'tk.ph.pri': 'P1, P2, P3 ou P4', 'tk.ph.name': 'votre nom', 'tk.ph.org': 'entreprise ou équipe, ou Entrée pour passer', 'tk.ph.msg': 'votre message',
+    'tk.ph.pri': 'P1, P2, P3 ou P4', 'tk.ph.name': 'votre nom', 'tk.ph.email': 'vous@entreprise.com', 'tk.ph.org': 'entreprise ou équipe, ou Entrée pour passer', 'tk.ph.msg': 'votre message',
+    'tk.ph.confirm': 'envoyer, modifier ou annuler',
     'method.title': 'Ma méthode face à un incident',
     'method.dek': 'Chaque dossier traverse les mêmes quatre phases. Voici ce que j’apporte à chacune et les outils que j’y utilise. Sélectionnez un outil pour voir où il intervient.',
     'method.tools': 'Outils', 'method.loop': 'Les retours d’expérience alimentent la préparation.',
@@ -1104,27 +1060,24 @@ const I18N = {
     'cases.dek': 'Labs et réalisations. Chaque projet présente l’architecture, ce que j’ai fait et le dépôt quand le code est public.',
     'cases.did': 'Ce que j’ai fait', 'cases.stack': 'Stack technique', 'cases.repo': 'Voir le dépôt', 'cases.noRepo': 'Code non publié.',
     'cases.fig': 'Architecture', 'cases.board': 'Challenges',
-    'apt.title': 'APT sous surveillance',
-    'apt.dek': 'Six groupes dont j’étudie les modes opératoires. Chacun est relié à MITRE ATT&CK et aux détections que j’utiliserais pour l’attraper dans un SOC.',
-    'apt.mapAria': 'Carte du monde des régions ciblées par le groupe sélectionné',
-    'apt.hudK': 'Suivi {id}', 'apt.legendT': 'Régions ciblées', 'apt.legendS': 'Mon SOC', 'apt.soc': 'Tunisie',
-    'apt.tabs': 'Groupes de menace', 'apt.aka': 'Aussi appelé', 'apt.motive': 'Motivation', 'apt.since': 'Actif depuis', 'apt.targets': 'Cibles',
-    'apt.chain': 'Mode opératoire', 'apt.catch': 'Comment je l’attraperais',
-    'apt.src': 'Données issues de MITRE ATT&CK, régions selon les sources publiques. Les détections sont mes propres points de départ, ajustés à chaque environnement.',
     'certs.title': 'Certifications',
     'certs.dek': 'Étiquetées comme des scellés et numérotées dans l’ordre d’obtention.',
     'certs.exhibit': 'Scellé', 'certs.issuer': 'Délivré par', 'certs.acquired': 'Obtenu', 'certs.domain': 'Domaine', 'certs.progress': 'En cours',
     'contact.title': 'Ouvrir un ticket',
-    'contact.dek': 'L’e-mail reste le plus rapide. Choisissez une priorité, ajoutez quelques mots, et le ticket devient un e-mail à envoyer depuis votre messagerie.',
+    'contact.dek': 'Choisissez une priorité, ajoutez quelques mots et envoyez. Le ticket arrive directement dans ma boîte mail, et je réponds par e-mail.',
     'contact.email': 'E-mail', 'contact.copy': 'Copier', 'contact.copied': 'Copié',
     'contact.cvLink': 'Ouvrir le PDF', 'contact.time': 'Heure locale', 'contact.timeV': '{time} en Tunisie (UTC+1)',
     'contact.new': 'Nouveau ticket', 'contact.priority': 'Priorité',
-    'contact.name': 'Votre nom', 'contact.org': 'Entreprise ou équipe (facultatif)', 'contact.msg': 'Message',
+    'contact.name': 'Votre nom', 'contact.yourEmail': 'Votre e-mail', 'contact.org': 'Entreprise ou équipe (facultatif)', 'contact.msg': 'Message',
+    'contact.send': 'Envoyer le ticket', 'contact.sending': 'Envoi…',
+    'contact.sent': 'Envoyé. Le ticket {id} est dans ma boîte mail, je vous réponds à {e}.',
+    'contact.fail': 'L’envoi n’a pas abouti. Rien n’est perdu : envoyez-le depuis votre messagerie ou copiez-le.',
+    'contact.errName': 'Indiquez votre nom.', 'contact.errEmail': 'Entrez un e-mail valide pour que je puisse vous répondre.', 'contact.errMsg': 'Ajoutez un court message.',
     'contact.preview': 'Aperçu du ticket', 'contact.copyTicket': 'Copier le ticket', 'contact.mail': 'Ouvrir dans la messagerie',
     'contact.copiedTicket': 'Ticket copié. Collez-le dans un nouvel e-mail à {e}.',
     'contact.copyFail': 'La copie est bloquée ici. Le texte de l’aperçu est sélectionné, copiez-le au clavier.',
     'contact.mailNote': 'Si aucune messagerie ne s’ouvre, copiez plutôt le ticket.',
-    'ticket.to': 'À', 'ticket.subject': 'Objet',
+    'ticket.to': 'À', 'ticket.from': 'De', 'ticket.subject': 'Objet',
     'ticket.hi': 'Bonjour Rayen,', 'ticket.msgEmpty': '(votre message)',
     'ticket.foot': 'Ticket {id}, priorité {p}, ouvert depuis votre portfolio.',
     'foot.top': 'Haut de page', 'foot.kbd': 'Appuyez sur {k} pour ouvrir la console',
@@ -1523,102 +1476,18 @@ const PRIORITIES = [
   { id: 'P4', label: { en: 'Just saying hi', fr: 'Simple bonjour' }, desc: { en: 'No SLA, but I still answer.', fr: 'Pas de SLA, mais je réponds quand même.' }, ph: { en: 'Say hello.', fr: 'Dites bonjour.' } },
 ];
 
-/* APT watchlist. Group facts follow MITRE ATT&CK (IDs, aliases, activity, techniques).
-   Regions follow public reporting. Detections are Rayen's own starting points. */
-const TACTICS = {
-  ia: { en: 'Initial access', fr: 'Accès initial' }, ex: { en: 'Execution', fr: 'Exécution' }, pe: { en: 'Persistence', fr: 'Persistance' },
-  ca: { en: 'Credential access', fr: 'Accès aux identifiants' }, lm: { en: 'Lateral movement', fr: 'Mouvement latéral' }, co: { en: 'Collection', fr: 'Collecte' },
-  c2: { en: 'Command and control', fr: 'Commande et contrôle' }, de: { en: 'Defense evasion', fr: 'Évasion des défenses' }, xf: { en: 'Exfiltration', fr: 'Exfiltration' }, im: { en: 'Impact', fr: 'Impact' },
-};
-const REGIONS = {
-  na: { lon: -98, lat: 40, name: { en: 'North America', fr: 'Amérique du Nord' } },
-  eu: { lon: 5, lat: 48, left: true, name: { en: 'Europe', fr: 'Europe' } },
-  ee: { lon: 31, lat: 51, name: { en: 'Eastern Europe', fr: 'Europe de l’Est' } },
-  me: { lon: 46, lat: 28, name: { en: 'Middle East', fr: 'Moyen-Orient' } },
-  af: { lon: 20, lat: 6, name: { en: 'Africa', fr: 'Afrique' } },
-  as: { lon: 95, lat: 34, name: { en: 'Asia', fr: 'Asie' } },
-  sa: { lon: 89, lat: 23.5, name: { en: 'South Asia', fr: 'Asie du Sud' } },
-  ea: { lon: 127.5, lat: 36.5, name: { en: 'East Asia', fr: 'Asie de l’Est' } },
-  gu: { lon: 144.8, lat: 13.4, name: { en: 'Guam', fr: 'Guam' } },
-};
-const SOC_POINT = { lon: 10.2, lat: 36.8 };
-const APTS = [
-  {
-    id: 'apt29', name: 'APT29', mitre: 'G0016', since: '2008', aka: 'Cozy Bear, Midnight Blizzard, NOBELIUM, The Dukes',
-    motive: { en: 'Espionage', fr: 'Espionnage' }, regions: ['eu', 'na'],
-    known: { en: 'Behind the SolarWinds supply chain compromise. Goes after government networks in Europe and NATO countries, research institutes and think tanks.', fr: 'Derrière la compromission de la chaîne d’approvisionnement SolarWinds. Vise les réseaux gouvernementaux en Europe et dans les pays de l’OTAN, les instituts de recherche et les think tanks.' },
-    chain: [['ia', 'T1195.002', 'Compromise Software Supply Chain'], ['ca', 'T1003.006', 'DCSync'], ['pe', 'T1098.001', 'Additional Cloud Credentials'], ['co', 'T1114.002', 'Remote Email Collection']],
-    dets: [
-      { src: { en: 'Windows Security on DCs', fr: 'Windows Security sur les DC' }, t: { en: 'DCSync from an account that isn’t a domain controller: event 4662 with the DS-Replication-Get-Changes-All right.', fr: 'DCSync depuis un compte qui n’est pas un contrôleur de domaine : événement 4662 avec le droit DS-Replication-Get-Changes-All.' } },
-      { src: { en: 'Entra ID audit log', fr: 'Audit Entra ID' }, t: { en: 'New credentials added to an app or service principal by someone who never manages apps.', fr: 'Nouveaux identifiants ajoutés à une application ou un service principal par quelqu’un qui ne gère jamais d’applications.' } },
-      { src: { en: 'EDR network events, DNS', fr: 'Réseau EDR, DNS' }, t: { en: 'A signed, trusted binary opening new outbound connections right after an update.', fr: 'Un binaire signé et de confiance qui ouvre de nouvelles connexions sortantes juste après une mise à jour.' } },
-    ],
-  },
-  {
-    id: 'apt28', name: 'APT28', mitre: 'G0007', since: '2004', aka: 'Fancy Bear, Forest Blizzard, Sofacy, STRONTIUM',
-    motive: { en: 'Espionage', fr: 'Espionnage' }, regions: ['eu', 'ee', 'na'],
-    known: { en: 'Credential theft at scale through phishing and password spraying, aimed at governments, militaries and political organizations.', fr: 'Vol d’identifiants à grande échelle par phishing et password spraying, contre des gouvernements, des armées et des organisations politiques.' },
-    chain: [['ia', 'T1566.002', 'Spearphishing Link'], ['ca', 'T1110.003', 'Password Spraying'], ['ca', 'T1003.001', 'LSASS Memory'], ['pe', 'T1505.003', 'Web Shell']],
-    dets: [
-      { src: { en: 'Windows Security, Entra sign-ins', fr: 'Windows Security, connexions Entra' }, t: { en: 'Password spraying: one source failing against many accounts in a short window (4625, or Entra error 50126).', fr: 'Password spraying : une même source qui échoue sur de nombreux comptes en peu de temps (4625, ou erreur Entra 50126).' } },
-      { src: { en: 'Sysmon 10, EDR', fr: 'Sysmon 10, EDR' }, t: { en: 'LSASS memory read by a process with no business there (GrantedAccess 0x1010 or 0x1410).', fr: 'Mémoire de LSASS lue par un processus qui n’a rien à y faire (GrantedAccess 0x1010 ou 0x1410).' } },
-      { src: { en: 'Sysmon 1, EDR', fr: 'Sysmon 1, EDR' }, t: { en: 'Web shell activity: a web server process spawning cmd.exe or powershell.exe.', fr: 'Activité de web shell : un processus de serveur web qui lance cmd.exe ou powershell.exe.' } },
-    ],
-  },
-  {
-    id: 'lazarus', name: 'Lazarus Group', mitre: 'G0032', since: '2009', aka: 'HIDDEN COBRA, Diamond Sleet, ZINC, Labyrinth Chollima',
-    motive: { en: 'Espionage, theft and destruction', fr: 'Espionnage, vol et destruction' }, regions: ['na', 'ea', 'sa'],
-    known: { en: 'The 2014 destructive wiper attack on Sony Pictures, and fake job offers that deliver malware to engineers.', fr: 'L’attaque destructrice par wiper contre Sony Pictures en 2014, et de fausses offres d’emploi qui livrent des malwares à des ingénieurs.' },
-    chain: [['ia', 'T1566.001', 'Spearphishing Attachment'], ['ex', 'T1204.002', 'Malicious File'], ['c2', 'T1105', 'Ingress Tool Transfer'], ['im', 'T1561.002', 'Disk Structure Wipe']],
-    dets: [
-      { src: { en: 'Sysmon 1, EDR', fr: 'Sysmon 1, EDR' }, t: { en: 'Office or a PDF reader spawning a shell or script host (parent WINWORD.EXE or AcroRd32.exe).', fr: 'Office ou un lecteur PDF qui lance un shell ou un interpréteur de scripts (parent WINWORD.EXE ou AcroRd32.exe).' } },
-      { src: { en: 'Process and proxy logs', fr: 'Logs processus et proxy' }, t: { en: 'Tools pulled down with certutil, bitsadmin or PowerShell right after a document opens.', fr: 'Outils téléchargés via certutil, bitsadmin ou PowerShell juste après l’ouverture d’un document.' } },
-      { src: { en: 'EDR telemetry', fr: 'Télémétrie EDR' }, t: { en: 'Raw writes to the disk or boot record from a process that isn’t a system tool, the wiper stage.', fr: 'Écritures brutes sur le disque ou le secteur de démarrage par un processus non système, l’étape du wiper.' } },
-    ],
-  },
-  {
-    id: 'volt', name: 'Volt Typhoon', mitre: 'G1017', since: '2021', aka: 'BRONZE SILHOUETTE, Vanguard Panda, Voltzite, Insidious Taurus',
-    motive: { en: 'Espionage and pre-positioning', fr: 'Espionnage et pré-positionnement' }, regions: ['na', 'gu'],
-    known: { en: 'Stays hidden inside US critical infrastructure by living off the land, with traffic routed through hijacked small office routers.', fr: 'Reste caché dans des infrastructures critiques américaines en se servant des outils du système, avec un trafic relayé par des routeurs de petits bureaux détournés.' },
-    chain: [['ia', 'T1190', 'Exploit Public-Facing Application'], ['ca', 'T1003.003', 'NTDS'], ['c2', 'T1090.001', 'Internal Proxy'], ['de', 'T1218', 'System Binary Proxy Execution']],
-    dets: [
-      { src: { en: '4688, Sysmon 1', fr: '4688, Sysmon 1' }, t: { en: 'ntdsutil creating an IFM copy of NTDS.dit (command line with “ac i ntds” and “ifm”).', fr: 'ntdsutil qui crée une copie IFM de NTDS.dit (ligne de commande avec « ac i ntds » et « ifm »).' } },
-      { src: { en: 'Sysmon 1 and 13', fr: 'Sysmon 1 et 13' }, t: { en: 'netsh interface portproxy rules that turn a host into a relay, or new keys under Services\\PortProxy.', fr: 'Règles netsh interface portproxy qui transforment un hôte en relais, ou nouvelles clés sous Services\\PortProxy.' } },
-      { src: { en: '4624, VPN and firewall logs', fr: '4624, logs VPN et pare-feu' }, t: { en: 'Admin logons coming from VPN or edge appliances instead of admin workstations.', fr: 'Connexions administrateur qui viennent d’équipements VPN ou de bordure au lieu des postes d’administration.' } },
-    ],
-  },
-  {
-    id: 'wizard', name: 'Wizard Spider', mitre: 'G0102', since: '2016', aka: 'Grim Spider, UNC1878, GOLD BLACKBURN, Periwinkle Tempest',
-    motive: { en: 'Financial, ransomware', fr: 'Financière, rançongiciel' }, regions: ['na', 'eu'],
-    known: { en: 'Built TrickBot, then ran Ryuk and Conti ransomware campaigns against companies and hospitals.', fr: 'A créé TrickBot, puis mené les campagnes de rançongiciels Ryuk et Conti contre des entreprises et des hôpitaux.' },
-    chain: [['ca', 'T1558.003', 'Kerberoasting'], ['lm', 'T1021.002', 'SMB/Windows Admin Shares'], ['xf', 'T1567.002', 'Exfiltration to Cloud Storage'], ['im', 'T1490', 'Inhibit System Recovery']],
-    dets: [
-      { src: { en: 'Windows Security on DCs', fr: 'Windows Security sur les DC' }, t: { en: 'Kerberoasting: a burst of event 4769 with RC4 tickets (0x17) for many service accounts from one user.', fr: 'Kerberoasting : une rafale d’événements 4769 avec des tickets RC4 (0x17) pour de nombreux comptes de service, depuis un seul utilisateur.' } },
-      { src: { en: '4688, Sysmon 1', fr: '4688, Sysmon 1' }, t: { en: 'Shadow copies deleted right before encryption (vssadmin delete shadows, wmic shadowcopy delete).', fr: 'Clichés instantanés supprimés juste avant le chiffrement (vssadmin delete shadows, wmic shadowcopy delete).' } },
-      { src: { en: 'Proxy, NDR', fr: 'Proxy, NDR' }, t: { en: 'Large uploads to cloud storage from rclone or a renamed copy of it.', fr: 'Gros envois vers un stockage cloud depuis rclone ou une copie renommée.' } },
-    ],
-  },
-  {
-    id: 'muddy', name: 'MuddyWater', mitre: 'G0069', since: '2017', aka: 'Seedworm, Mango Sandstorm, Static Kitten, MERCURY',
-    motive: { en: 'Espionage', fr: 'Espionnage' }, regions: ['me', 'as', 'af', 'eu', 'na'],
-    known: { en: 'Phishing that installs legitimate remote-management tools, against government, telecom, finance, defense and oil and gas organizations.', fr: 'Du phishing qui installe des outils d’administration à distance légitimes, contre des gouvernements, des télécoms, la finance, la défense et le secteur pétrolier et gazier.' },
-    chain: [['ia', 'T1566.002', 'Spearphishing Link'], ['c2', 'T1219', 'Remote Access Tools'], ['ex', 'T1059.001', 'PowerShell'], ['de', 'T1027', 'Obfuscated Files or Information']],
-    dets: [
-      { src: { en: 'EDR inventory, DNS', fr: 'Inventaire EDR, DNS' }, t: { en: 'ScreenConnect, SimpleHelp or Atera showing up on hosts outside the approved tool list.', fr: 'ScreenConnect, SimpleHelp ou Atera qui apparaissent sur des postes hors de la liste d’outils approuvés.' } },
-      { src: { en: 'PowerShell 4104', fr: 'PowerShell 4104' }, t: { en: 'Obfuscated PowerShell caught by script block logging (event 4104).', fr: 'PowerShell obfusqué repéré par la journalisation des blocs de script (événement 4104).' } },
-      { src: { en: 'Email gateway, proxy', fr: 'Passerelle mail, proxy' }, t: { en: 'Phishing links to file-sharing sites that hand out an MSI or ZIP installer.', fr: 'Liens de phishing vers des sites de partage de fichiers qui distribuent un installeur MSI ou ZIP.' } },
-    ],
-  },
-];
 const TICKER = [
   ['T1566.001', 'Spearphishing Attachment'], ['T1059.001', 'PowerShell'], ['T1003.001', 'LSASS Memory'], ['T1003.006', 'DCSync'],
   ['T1558.003', 'Kerberoasting'], ['T1021.002', 'SMB/Windows Admin Shares'], ['T1490', 'Inhibit System Recovery'], ['T1219', 'Remote Access Tools'],
   ['T1190', 'Exploit Public-Facing Application'], ['T1195.002', 'Compromise Software Supply Chain'], ['T1110.003', 'Password Spraying'],
   ['T1071.001', 'Web Protocols'], ['T1053.005', 'Scheduled Task'], ['T1505.003', 'Web Shell'], ['T1567.002', 'Exfiltration to Cloud Storage'], ['T1027', 'Obfuscated Files or Information'],
 ];
-/* Land mask for the dotted world map: Natural Earth 1:110m, 2 degree cells, latitudes 80N to 56S. */
-const MAP_GRID = { cols: 180, rows: 68, step: 2, latTop: 80, latBot: -56, b64: 'AAAAAAYd8P///wAA+AAAAAA8AAAAAAAAAAAwAnw////4AAIAAAAAAGAAAAAAAAAAADivwAf//wAAAAADAAf/wAHYAAAAAADoi3sAP//gAAAAAMAD///sAAAAgBgACfwz/AD/+gAAA4AEHf///+/8gBAP/7/nJdjwD/+AAAH/AA7f///////f4P//////h8H/gAAAf/6//f////////Mf/////9H4D8AeAA+ev///////////AP/////4A0B4AAAD5/////////////Af3////gHgA4AAAH5///////////LwAHgH///gHkAAAAAH4/////////+CIAABAB///4D+AAAAGCx/////////4A8AAIAAf///n/gAAAOCD/////////wA4AAAAAf///n/wAAAbP///////////AgAAAAAP/////wAAADf//////////9AAAAAAAF////0YAAAB///////////9AAAAAAAD////8EAAAB///////////5AAAAAAAD////2AAAAB/f5fP//////wAAAAAAAD////gAAAAfxnwPP//////jAAAAAAAD////AAAAAPCb3/n/////+CAAAAAAAD///8AAAAAfALf/n////+ECAAAAAAAB///8AAAAAGHQP/n/////mMAAAAAAAA///8AAAAAH+Ai///////E8AAAAAAAAf//wAAAAAP/AA///////BgAAAAAAAAP//gAAAAAf/73///////gAAAAAAAAAD/AQAAAAAf////f/////gAAAAAAAAAF+AQAAAAB///+/n/////AAAAAAAAAAC+AAAAAAB///+f0H////AAAAAAAAAAAeAwAAAAD////f/B///8gAAAAAAAAAAeGEAAAAH////v+B/z/AAAAAAAAAAAAPMAgAAAD////n+A/B+gAAAAAAAAAAAD8AAAAAD////n4AeB/AgAAAAAAAAAAAPAAAAAH////3gAcAfAgAAAAAAAAAAADAAAAAD////6AAcAfggAAAAAAAAAAABDwAAAD////8wAMATAIAAAAAAAAAAAAr/AAAB/////gAKASAAAAAAAAAAAAAAH/gAAA/////gACAAAIAAAAAAAAAAAAH/8AAAaH///AAAAsGAAAAAAAAAAAAAH/+AAAAB//+AAAAUOAAAAAAAAAAAAAP/+AAAAB//8AAAAYegAAAAAAAAAAAAP//gAAAD//4AAAAMeBgAAAAAAAAAAAP//8AAAB//wAAAAGdiuAAAAAAAAAAAf///AAAA//wAAAACAQHgAAAAAAAAAAP///gAAA//wAAAABwAHwgAAAAAAAAAH///AAAA//wAAAAACIDQIAAAAAAAAAH//+AAAAf/wAAAAAAAAAAAAAAAAAAAD//+AAAA//wgAAAAABxAAAAAAAAAAAD//+AAAA//wgAAAAAPxgBAAAAAAAAAA//8AAAA//jgAAAAAf5gAAAAAAAAAAAf/8AAAA//DgAAAAAf/gAAAAAAAAAAAf/8AAAAf/DAAAAAD//4CAAAAAAAAAAf/wAAAAf/DAAAAAH//4AAAAAAAAAAAf/AAAAAf+CAAAAAH//8AAAAAAAAAAAf/AAAAAP8AAAAAAH//+AAAAAAAAAAA/+AAAAAP8AAAAAAH//+AAAAAAAAAAA/+AAAAAH4AAAAAAD//+AAAAAAAAAAA/8AAAAAHwAAAAAADwf8AAAAAAAAAAA/gAAAAAAAAAAAAACAH4AIAAAAAAAAB/wAAAAAAAAAAAAAAAD4AEAAAAAAAAB+AAAAAAAAAAAAAAAAAAAGAAAAAAAAB6AAAAAAAAAAAAAAAAAwAMAAAAAAAAA8AAAAAAAAAAAAAAAAAQAYAAAAAAAAB4AAAAAAAAAAAAAAAAAAAwAAAAAAAAB4AAAAAAAAAAAAAAAAAAAAAAAAAAAADwAAAAAAAAAACAAAAAAAAAAAAAAAAADgAAAAAAAAAAAAAAAAAAAAAAAAAAAABwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAA' };
-
+/* More ATT&CK techniques the console can name when a visitor asks about them. */
+const TECH_MORE = [
+  ['T1003.003', 'NTDS'], ['T1090.001', 'Internal Proxy'], ['T1098.001', 'Additional Cloud Credentials'], ['T1105', 'Ingress Tool Transfer'],
+  ['T1114.002', 'Remote Email Collection'], ['T1204.002', 'Malicious File'], ['T1218', 'System Binary Proxy Execution'],
+  ['T1561.002', 'Disk Structure Wipe'], ['T1566.002', 'Spearphishing Link'], ['T1486', 'Data Encrypted for Impact'],
+];
 /* SHA-256 of the hidden flag. The flag itself is not in this script. */
 const FLAG_SHA256 = 'd3fbd6901cf459969031a149768281db8436b05314aad81f32108797a21bc2f7';
 
@@ -1868,164 +1737,6 @@ function diagram(spec, uid) {
   return root;
 }
 
-/* ---------------- APT watchlist ---------------- */
-let aptId = APTS[0].id;
-function renderApt() {
-  const tabs = $('#apt-tabs');
-  tabs.replaceChildren(...APTS.map((a) => h('button', {
-    type: 'button', role: 'tab', class: 'apt-tab', id: 'apt-tab-' + a.id, 'aria-controls': 'apt-card',
-    'aria-selected': String(a.id === aptId), tabindex: a.id === aptId ? '0' : '-1',
-    onclick: () => selectApt(a.id, false),
-    onkeydown: (ev) => {
-      const i = APTS.findIndex((x) => x.id === a.id);
-      let j = -1;
-      if (ev.key === 'ArrowRight' || ev.key === 'ArrowDown') j = (i + 1) % APTS.length;
-      if (ev.key === 'ArrowLeft' || ev.key === 'ArrowUp') j = (i - 1 + APTS.length) % APTS.length;
-      if (ev.key === 'Home') j = 0;
-      if (ev.key === 'End') j = APTS.length - 1;
-      if (j >= 0) { ev.preventDefault(); selectApt(APTS[j].id, false); $('#apt-tab-' + APTS[j].id).focus(); }
-    },
-  }, h('b', null, a.name), h('small', null, a.mitre + ', ' + L(a.motive).toLowerCase()))));
-  renderAptCard();
-}
-function selectApt(id, scroll) {
-  aptId = id;
-  $$('.apt-tab').forEach((b) => { const on = b.id === 'apt-tab-' + id; b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1; });
-  renderAptCard();
-  if (scroll) $('#apt').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
-}
-function renderAptCard() {
-  const a = APTS.find((x) => x.id === aptId) || APTS[0];
-  const colon = lang === 'fr' ? ' : ' : ': ';
-  const card = $('#apt-card');
-  card.setAttribute('aria-labelledby', 'apt-tab-' + a.id);
-  card.replaceChildren(
-    h('div', { class: 'ac-top' },
-      h('div', null,
-        h('a', { class: 'ac-id', href: 'https://attack.mitre.org/groups/' + a.mitre + '/', target: '_blank', rel: 'noopener' }, 'MITRE ATT&CK ' + a.mitre),
-        h('h3', { class: 'ac-name' }, a.name),
-        h('p', { class: 'ac-aka' }, t('apt.aka') + colon + a.aka)),
-      h('dl', { class: 'ac-meta' },
-        h('dt', null, t('apt.motive')), h('dd', null, L(a.motive)),
-        h('dt', null, t('apt.since')), h('dd', null, a.since),
-        h('dt', null, t('apt.targets')), h('dd', null, a.regions.map((r) => L(REGIONS[r].name)).join(', ')))),
-    h('p', { class: 'ac-known' }, L(a.known)),
-    h('h4', { class: 'ac-h' }, t('apt.chain')),
-    h('ol', { class: 'chain' }, a.chain.map(([tac, id, name]) => h('li', null,
-      h('span', { class: 'ch-tac' }, L(TACTICS[tac])),
-      h('a', { class: 'ch-id', href: 'https://attack.mitre.org/techniques/' + id.replace('.', '/') + '/', target: '_blank', rel: 'noopener' }, id),
-      h('span', { class: 'ch-name' }, name)))),
-    h('h4', { class: 'ac-h' }, t('apt.catch')),
-    h('ol', { class: 'dets' }, a.dets.map((d, i) => h('li', { class: 'det' },
-      h('div', { class: 'det-h' }, h('b', null, 'DET-' + String(i + 1).padStart(2, '0')), h('span', null, L(d.src))),
-      h('p', null, L(d.t))))));
-  $('#hud-k').textContent = t('apt.hudK', { id: a.mitre });
-  $('#hud-v').textContent = a.name;
-  $('#hud-s').textContent = a.regions.map((r) => L(REGIONS[r].name)).join(', ');
-  AptMap.select(a);
-}
-
-const AptMap = (() => {
-  const RATIO = 360 / (MAP_GRID.latTop - MAP_GRID.latBot);
-  let canvas, ctx, lonlat = [], pts = [], w = 0, hh = 0, raf = 0, inView = false, colors = {}, sel = null, ready = false;
-  function decode() {
-    const bin = atob(MAP_GRID.b64); const out = [];
-    for (let i = 0; i < MAP_GRID.cols * MAP_GRID.rows; i++) {
-      if (bin.charCodeAt(i >> 3) & (1 << (7 - (i & 7)))) {
-        const r = Math.floor(i / MAP_GRID.cols), c = i % MAP_GRID.cols;
-        out.push([-180 + MAP_GRID.step / 2 + c * MAP_GRID.step, MAP_GRID.latTop - MAP_GRID.step / 2 - r * MAP_GRID.step]);
-      }
-    }
-    return out;
-  }
-  const px = (lon, lat) => [(lon + 180) / 360 * w, (MAP_GRID.latTop - lat) / (MAP_GRID.latTop - MAP_GRID.latBot) * hh];
-  function rgba(c, a) {
-    const m = /^#([0-9a-f]{6})$/i.exec(c);
-    if (m) { const n = parseInt(m[1], 16); return 'rgba(' + (n >> 16) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')'; }
-    return c;
-  }
-  function readColors() {
-    const cs = getComputedStyle(document.documentElement); const g = (n) => cs.getPropertyValue(n).trim();
-    colors = { dot: g('--map-dot'), hi: g('--map-dot-hi'), accent: g('--accent-line'), ink: g('--accent-ink'), fg: g('--fg'), muted: g('--fg-muted'), bg: g('--bg-sunk') };
-  }
-  function resize() {
-    const r = canvas.getBoundingClientRect();
-    if (!r.width) return;
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
-    w = r.width; hh = r.width / RATIO;
-    canvas.width = Math.round(w * dpr); canvas.height = Math.round(hh * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    pts = lonlat.map(([lon, lat]) => px(lon, lat));
-    draw(performance.now());
-  }
-  function label(text, x, y, left, color, size) {
-    ctx.font = '600 ' + size + 'px "Atkinson Hyperlegible Mono", ui-monospace, monospace';
-    ctx.textAlign = left ? 'right' : 'left';
-    ctx.lineWidth = 4; ctx.lineJoin = 'round'; ctx.strokeStyle = colors.bg; ctx.strokeText(text, x, y);
-    ctx.fillStyle = color; ctx.fillText(text, x, y);
-  }
-  function draw(tm) {
-    if (!ctx || !w) return;
-    const s = Math.max(0.45, w / 1200);
-    const dr = Math.max(0.55, 1.2 * s);
-    ctx.clearRect(0, 0, w, hh);
-    ctx.fillStyle = colors.dot;
-    for (let i = 0; i < pts.length; i++) ctx.fillRect(pts[i][0] - dr, pts[i][1] - dr, dr * 2, dr * 2);
-    if (!reduceMotion) {
-      const band = 34 * s + 8;
-      const sx = ((tm / 7500) % 1) * (w + band * 4) - band * 2;
-      ctx.fillStyle = colors.hi;
-      for (let i = 0; i < pts.length; i++) {
-        const d = sx - pts[i][0];
-        if (d > -6 && d < band) { ctx.globalAlpha = Math.max(0, 1 - Math.abs(d) / band); ctx.fillRect(pts[i][0] - dr, pts[i][1] - dr, dr * 2, dr * 2); }
-      }
-      ctx.globalAlpha = 1;
-      const gr = ctx.createLinearGradient(sx - band * 1.6, 0, sx, 0);
-      gr.addColorStop(0, rgba(colors.accent, 0)); gr.addColorStop(1, rgba(colors.accent, 0.16));
-      ctx.fillStyle = gr; ctx.fillRect(sx - band * 1.6, 0, band * 1.6, hh);
-      ctx.fillStyle = rgba(colors.accent, 0.55); ctx.fillRect(sx, 0, 1, hh);
-    }
-    const fs = Math.max(10, Math.round(12.5 * s));
-    if (sel) {
-      sel.regions.forEach((rk, idx) => {
-        const R = REGIONS[rk]; const [x, y] = px(R.lon, R.lat);
-        const base = 4 + 3 * s;
-        ctx.strokeStyle = colors.accent; ctx.lineWidth = 1.5;
-        if (reduceMotion) { ctx.globalAlpha = 0.6; ctx.beginPath(); ctx.arc(x, y, base + 12 * s, 0, Math.PI * 2); ctx.stroke(); }
-        else for (let k = 0; k < 2; k++) {
-          const ph = ((tm / 2400) + k * 0.5 + idx * 0.17) % 1;
-          ctx.globalAlpha = (1 - ph) * 0.85; ctx.beginPath(); ctx.arc(x, y, base + ph * 30 * s, 0, Math.PI * 2); ctx.stroke();
-        }
-        ctx.globalAlpha = 1;
-        ctx.fillStyle = rgba(colors.accent, 0.25); ctx.beginPath(); ctx.arc(x, y, base + 3, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = colors.accent; ctx.beginPath(); ctx.arc(x, y, base, 0, Math.PI * 2); ctx.fill();
-        label(L(R.name), R.left ? x - base - 8 : x + base + 8, y + fs * 0.36, !!R.left, colors.ink, fs);
-      });
-    }
-    const [sx2, sy2] = px(SOC_POINT.lon, SOC_POINT.lat);
-    const ds = 4 + 2.5 * s;
-    ctx.save(); ctx.translate(sx2, sy2); ctx.rotate(Math.PI / 4);
-    ctx.fillStyle = colors.fg; ctx.fillRect(-ds, -ds, ds * 2, ds * 2);
-    ctx.restore();
-    label(t('apt.soc'), sx2 + ds + 7, sy2 + fs + 2, false, colors.muted, fs);
-  }
-  function frame(tm) { raf = 0; draw(tm); if (inView && !document.hidden && !reduceMotion) raf = requestAnimationFrame(frame); }
-  function kick() { if (!raf && ready) raf = requestAnimationFrame(frame); }
-  function init() {
-    canvas = $('#apt-canvas'); if (!canvas || !canvas.getContext) return;
-    ctx = canvas.getContext('2d'); lonlat = decode(); readColors(); ready = true;
-    if ('ResizeObserver' in window) new ResizeObserver(resize).observe(canvas); else window.addEventListener('resize', resize);
-    if ('IntersectionObserver' in window) new IntersectionObserver((es) => { inView = es[0].isIntersecting; if (inView) kick(); }).observe(canvas);
-    else { inView = true; }
-    new MutationObserver(() => { readColors(); draw(performance.now()); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-    document.addEventListener('visibilitychange', kick);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => draw(performance.now()));
-    resize(); kick();
-  }
-  function select(a) { sel = a; if (ready) draw(performance.now()); }
-  return { init, select };
-})();
-
 /* ---------------- ticker and spotlight ---------------- */
 function renderTicker() {
   const items = TICKER.concat(TICKER);
@@ -2056,8 +1767,17 @@ function renderCerts() {
 }
 
 /* ---------------- contact ticket ---------------- */
-let priority = 'P1';
-const ticketId = (() => { const d = new Date(); const p = (n) => String(n).padStart(2, '0'); return 'RS-' + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + '-' + p(d.getHours()) + p(d.getMinutes()); })();
+let priority = 'P1', sending = false;
+let idBase = '', idSeq = 0;
+function newTicketId() {
+  const d = new Date(); const p = (n) => String(n).padStart(2, '0');
+  const base = 'RS-' + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + '-' + p(d.getHours()) + p(d.getMinutes());
+  idSeq = base === idBase ? idSeq + 1 : 1; idBase = base;
+  return idSeq > 1 ? base + '-' + idSeq : base;
+}
+let ticketId = newTicketId();
+const EMAIL_RE = /^[^\s@<>()",;:]+@[^\s@<>()",;:]+\.[^\s@<>()",;:.]{2,}$/;
+const formTicket = () => ({ p: priority, name: $('#t-name').value.trim(), email: $('#t-email').value.trim(), org: $('#t-org').value.trim(), msg: $('#t-msg').value.trim(), hp: $('#t-hp').value });
 function renderContact() {
   $('#email-text').replaceChildren(PROFILE.emailUser + '@', h('wbr'), PROFILE.emailHost);
   $('#ticket-id').textContent = ticketId;
@@ -2071,35 +1791,108 @@ function renderContact() {
   });
   const pr = PRIORITIES.find((p) => p.id === priority);
   $('#t-msg').placeholder = L(pr.ph);
+  if (!sending) $('#t-send-label').textContent = t('contact.send');
+  $$('.field-err:not([hidden])').forEach((el) => { el.textContent = t(el.dataset.key); });
   updateTicket();
 }
-function composeTicket() {
-  const pr = PRIORITIES.find((p) => p.id === priority);
-  const name = $('#t-name').value.trim();
-  const org = $('#t-org').value.trim();
-  const msg = $('#t-msg').value.trim();
-  const who = name ? (org ? name + ' (' + org + ')' : name) : (org || '');
+/* The same ticket feeds the preview, the email relay and the mailto fallback. */
+function composeTicket(d) {
+  d = d || formTicket();
+  const pr = PRIORITIES.find((p) => p.id === d.p) || PRIORITIES[0];
+  const who = d.name ? (d.org ? d.name + ' (' + d.org + ')' : d.name) : (d.org || '');
   const subject = '[' + pr.id + '] ' + L(pr.label) + (who ? ': ' + who : '');
-  const body = [t('ticket.hi'), '', msg || t('ticket.msgEmpty'), '', name || '', org || '', '', t('ticket.foot', { id: ticketId, p: pr.id })]
-    .join('\n').replace(/\n{3,}/g, '\n\n');
-  return { subject, body };
+  const sig = [d.name, d.org, d.email].filter(Boolean).join('\n');
+  const body = [t('ticket.hi'), d.msg || t('ticket.msgEmpty'), sig, t('ticket.foot', { id: ticketId, p: pr.id })].filter(Boolean).join('\n\n');
+  const from = d.email ? t('ticket.from') + ': ' + (d.name ? d.name + ' <' + d.email + '>' : d.email) + '\n' : '';
+  const text = t('ticket.to') + ': ' + EMAIL + '\n' + from + t('ticket.subject') + ': ' + subject + '\n\n' + body;
+  const mailto = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+  return { pr, subject, body, text, mailto };
 }
 function updateTicket() {
-  const { subject, body } = composeTicket();
-  $('#t-preview').textContent = t('ticket.to') + ': ' + EMAIL + '\n' + t('ticket.subject') + ': ' + subject + '\n\n' + body;
-  $('#t-mail').href = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+  const tk = composeTicket();
+  $('#t-preview').textContent = tk.text;
+  $('#t-mail').href = tk.mailto;
+}
+function ticketProblems(d) {
+  const bad = [];
+  if (!d.name) bad.push('name');
+  if (!EMAIL_RE.test(d.email)) bad.push('email');
+  if (!d.msg) bad.push('msg');
+  return bad;
+}
+/* Delivers a ticket by email through the relay. Resolves to { ok, status }, never throws. */
+async function deliverTicket(d) {
+  const tk = composeTicket(d);
+  if (d.hp) return { ok: true, status: 200 };   // the hidden field is only ever filled by bots: drop it quietly
+  const payload = {
+    _subject: tk.subject, _replyto: d.email, _template: 'table',
+    Ticket: ticketId, Priority: tk.pr.id + ', ' + L(tk.pr.label), Name: d.name, Email: d.email, Company: d.org || '-',
+    Message: d.msg, Language: lang === 'fr' ? 'Français' : 'English',
+  };
+  const ctl = typeof AbortController === 'function' ? new AbortController() : null;
+  const timer = ctl ? setTimeout(() => ctl.abort(), 20000) : 0;
+  try {
+    const res = await fetch(PROFILE.relay + (PROFILE.relayId || EMAIL), {
+      method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(payload), signal: ctl ? ctl.signal : undefined,
+    });
+    let data = {};
+    try { data = await res.json(); } catch (e) { /* not JSON */ }
+    return { ok: res.ok && String(data.success) === 'true', status: res.status, message: data.message || '' };
+  } catch (e) {
+    return { ok: false, status: 0 };
+  } finally { clearTimeout(timer); }
+}
+/* After a successful send: keep who it was from, clear the message, start a fresh ticket number. */
+function ticketSent(d, id) {
+  $('#t-name').value = d.name; $('#t-email').value = d.email; $('#t-org').value = d.org; $('#t-msg').value = '';
+  ticketId = newTicketId();
+  showFieldErrors([]);
+  $('#t-fallback').hidden = true;
+  renderContact();
+  setNote(t('contact.sent', { id, e: d.email }), 'ok');
+  Con.ticketDone();
+}
+function setNote(text, tone) { const n = $('#t-note'); n.textContent = text; n.className = 'note' + (tone ? ' ' + tone : ''); }
+function showFieldErrors(bad) {
+  ['name', 'email', 'msg'].forEach((k) => {
+    const input = $('#t-' + k), err = $('#t-' + k + '-err');
+    const key = 'contact.err' + k.charAt(0).toUpperCase() + k.slice(1);
+    const on = bad.includes(k);
+    if (on) input.setAttribute('aria-invalid', 'true'); else input.removeAttribute('aria-invalid');
+    err.hidden = !on; err.dataset.key = key; err.textContent = on ? t(key) : '';
+  });
 }
 function selectAll(el) { const r = document.createRange(); r.selectNodeContents(el); const s = window.getSelection(); s.removeAllRanges(); s.addRange(r); }
 function initContact() {
-  ['#t-name', '#t-org', '#t-msg'].forEach((s) => $(s).addEventListener('input', updateTicket));
+  ['#t-name', '#t-email', '#t-org', '#t-msg'].forEach((sel) => $(sel).addEventListener('input', () => {
+    updateTicket();
+    const k = sel.slice(3);
+    if ($(sel).getAttribute('aria-invalid') === 'true' && !ticketProblems(formTicket()).includes(k)) {
+      $(sel).removeAttribute('aria-invalid'); const err = $(sel + '-err'); if (err) { err.hidden = true; err.textContent = ''; }
+    }
+  }));
   $('#ticket').addEventListener('submit', async (ev) => {
     ev.preventDefault();
-    const note = $('#t-note');
-    const ok = await copyText($('#t-preview').textContent);
-    if (ok) { note.textContent = t('contact.copiedTicket', { e: EMAIL }); note.className = 'note ok'; }
-    else { selectAll($('#t-preview')); note.textContent = t('contact.copyFail'); note.className = 'note'; }
+    if (sending) return;
+    const d = formTicket();
+    const bad = ticketProblems(d);
+    showFieldErrors(bad);
+    if (bad.length) { setNote('', ''); $('#t-' + bad[0]).focus(); return; }
+    const btn = $('#t-send'), id = ticketId;
+    sending = true; btn.classList.add('sending'); btn.setAttribute('aria-busy', 'true'); $('#t-send-label').textContent = t('contact.sending');
+    setNote('', '');
+    const r = await deliverTicket(d);
+    sending = false; btn.classList.remove('sending'); btn.removeAttribute('aria-busy'); $('#t-send-label').textContent = t('contact.send');
+    if (r.ok) { ticketSent(d, id); return; }
+    $('#t-fallback').hidden = false;
+    setNote(t('contact.fail'), 'bad');
   });
-  $('#t-mail').addEventListener('click', () => { const note = $('#t-note'); note.textContent = t('contact.mailNote'); note.className = 'note'; });
+  $('#t-mail').addEventListener('click', () => setNote(t('contact.mailNote'), ''));
+  $('#t-copy').addEventListener('click', async () => {
+    const ok = await copyText($('#t-preview').textContent);
+    if (ok) setNote(t('contact.copiedTicket', { e: EMAIL }), 'ok');
+    else { selectAll($('#t-preview')); setNote(t('contact.copyFail'), ''); }
+  });
   $('#copy-email').addEventListener('click', async (ev) => {
     const btn = ev.currentTarget;
     const ok = await copyText(EMAIL);
@@ -2127,7 +1920,7 @@ const Con = (() => {
   const narrow = () => window.matchMedia('(max-width: 700px)').matches;
   const pad2 = (n) => String(n).padStart(2, '0');
   const cap = (x) => x.charAt(0).toUpperCase() + x.slice(1);
-  const counts = () => ({ np: CASES.length, na: APTS.length, nc: CERTS.filter((c) => !c.progress).length });
+  const counts = () => ({ np: CASES.length, nc: CERTS.filter((c) => !c.progress).length });
   const norm = (x) => String(x || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
     .replace(/[’'`"“”«»?!,;:()[\]{}]/g, ' ').replace(/\s+/g, ' ').trim();
   const words = (q) => q.split(' ').map((w) => w.replace(/^[.\-]+|[.\-]+$/g, '')).filter(Boolean);
@@ -2183,12 +1976,10 @@ const Con = (() => {
     const cmd = c.cmd || '';
     let m;
     if ((m = cmd.match(/^open (\d+)$/)) && CASES[m[1] - 1]) return L(CASES[m[1] - 1].title);
-    if ((m = cmd.match(/^apt (\d+)$/)) && APTS[m[1] - 1]) return APTS[m[1] - 1].name;
     if ((m = cmd.match(/^xp (\d+)$/)) && workList()[m[1] - 1]) return L(workList()[m[1] - 1].org);
     if ((m = cmd.match(/^lang (en|fr)$/))) return m[1] === 'fr' ? 'Français' : 'English';
     if (I18N.en['f.' + cmd] != null) return t('f.' + cmd);
     const ck = CERT_KEYS.find(([w]) => w === cmd); if (ck) return CERTS.find((x) => x.ex === ck[1]).code;
-    const ak = APT_KEYS.find(([w]) => w === cmd); if (ak) return APTS.find((g) => g.id === ak[1]).name;
     const tl = TOOL_IDX.find(([, terms]) => terms.includes(cmd)); if (tl) return tl[0];
     return cmd;
   }
@@ -2209,7 +2000,7 @@ const Con = (() => {
   }
   const startChips = () => (isChat()
     ? [C('xp'), C('skills'), C('certs'), C('projects'), C('hire'), C('contact')]
-    : [C('projects'), C('apt'), C('skills'), C('xp'), C('hire')]);
+    : [C('projects'), C('skills'), C('xp'), C('certs'), C('hire')]);
   function setVal(v) { input.value = v; form.classList.toggle('typed', !!v); }
   function refreshPrompt() {
     psEl.replaceChildren(...(mode ? ['ticket>'] : [h('span', { class: 'ps-host' }, 'rayen@soc:~'), '$']));
@@ -2251,7 +2042,6 @@ const Con = (() => {
     const q = norm(raw), tk = words(q);
     if (/^\d+$/.test(q) && ctx) {
       if (ctx.kind === 'project') return cOpen([q]);
-      if (ctx.kind === 'apt') return cApt([q]);
       if (ctx.kind === 'xp') return cXp([q]);
     }
     if (ctx && ctx.kind === 'offer' && /^(y|yes|yeah|yep|sure|ok|okay|oui|ouais|go|start|let s go|allons-y|vas-y|d accord)$/.test(q)) { ctx = null; return startTicket('P1'); }
@@ -2272,8 +2062,7 @@ const Con = (() => {
     ['contact', ['contact', 'email', 'e-mail', 'mail', 'reach', 'joindre', 'linkedin', 'ecrire', 'message', 'appeler', 'call']],
     ['flag', ['flag', 'easter', 'secret', 'hidden', 'cache']],
     ['method', ['method', 'methode', 'methodolog', 'process', 'approach', 'approche', 'lifecycle', 'phase', 'handle', 'gerer', 'gere', ['playbook', 0.5], ['incident', 0.5], ['how do', 0.5], ['how does', 0.5], ['comment', 0.5]]],
-    ['dfir', ['dfir', 'forensi', 'investigat', 'enquete', 'hunt', 'triage', ['incident', 0.6], ['response', 0.5], ['reponse', 0.5], ['soc', 0.5], ['alert', 0.5], ['alerte', 0.5]]],
-    ['apt', ['apt', 'threat actor', 'threat group', 'threat intel', 'acteur', 'groupe', 'group', 'mitre', 'att&ck', 'adversar', 'nation-state', 'espionage', 'espionnage', 'ransomware', 'rancongiciel', 'watchlist', 'menace', ['threat', 0.6]]],
+    ['dfir', ['dfir', 'forensi', 'investigat', 'enquete', 'hunt', 'triage', 'mitre', 'att&ck', 'adversar', 'ransomware', 'rancongiciel', 'malware', ['incident', 0.6], ['response', 0.5], ['reponse', 0.5], ['soc', 0.5], ['alert', 0.5], ['alerte', 0.5], ['threat', 0.6], ['menace', 0.6], ['apt', 0.6]]],
     ['projects', ['project', 'projet', 'lab', 'github', 'repo', 'build', 'realisation', 'portfolio', ['code', 0.5]]],
     ['certs', ['cert', 'certif', 'ine', 'ec-council', 'eccouncil', 'badge', 'exam', 'examen']],
     ['edu', ['degree', 'diplom', 'universit', 'study', 'studies', 'etude', 'school', 'ecole', 'education', 'formation', 'bachelor', 'licence', 'ingenieur', 'engineering', 'tek-up', 'tekup', 'graduat']],
@@ -2283,12 +2072,6 @@ const Con = (() => {
     ['skills', ['skill', 'competen', 'tool', 'outil', 'stack', 'technolog', 'siem', 'edr', 'ndr', 'soar', 'xdr', 'software', 'logiciel', ['use', 0.5], ['utilise', 0.5], ['know', 0.5], ['connai', 0.5]]],
     ['whoami', ['who', 'qui', 'yourself', 'presente', 'presentation', 'introduce', 'about', 'profile', 'profil', 'summary', 'he do', 'you do', 'fait-il', 'tu fais', 'vous faites']],
   ];
-  const APT_KEYS = [['apt29', 'apt29'], ['apt 29', 'apt29'], ['cozy bear', 'apt29'], ['midnight blizzard', 'apt29'], ['nobelium', 'apt29'], ['the dukes', 'apt29'], ['solarwinds', 'apt29'],
-    ['apt28', 'apt28'], ['apt 28', 'apt28'], ['fancy bear', 'apt28'], ['forest blizzard', 'apt28'], ['sofacy', 'apt28'], ['strontium', 'apt28'],
-    ['lazarus', 'lazarus'], ['hidden cobra', 'lazarus'], ['diamond sleet', 'lazarus'], ['zinc', 'lazarus'], ['sony', 'lazarus'],
-    ['volt typhoon', 'volt'], ['volt', 'volt'], ['vanguard panda', 'volt'], ['bronze silhouette', 'volt'], ['voltzite', 'volt'],
-    ['wizard spider', 'wizard'], ['trickbot', 'wizard'], ['ryuk', 'wizard'], ['conti', 'wizard'], ['grim spider', 'wizard'],
-    ['muddywater', 'muddy'], ['muddy water', 'muddy'], ['seedworm', 'muddy'], ['mango sandstorm', 'muddy'], ['static kitten', 'muddy']];
   const CERT_KEYS = [['pcap', 1], ['aws', 2], ['saa', 2], ['rhcsa', 3], ['rhce', 4], ['ejpt', 5], ['ejptv2', 5], ['csa', 6], ['ecthp', 7], ['ecthpv2', 7],
     ['ecdfp', 8], ['ecir', 10], ['ecirv3', 10], ['eeda', 11], ['iso 27001', 12], ['iso', 12], ['27001', 12], ['lead implementer', 12]];
   const PROJ_KEYS = [['soc automation', 'soc'], ['soc-automation', 'soc'], ['automatisation soc', 'soc'], ['automatisation du soc', 'soc'], ['mimikatz', 'soc'], ['soar pipeline', 'soc'],
@@ -2307,13 +2090,12 @@ const Con = (() => {
     ['Linux', ['linux', 'red hat', 'redhat', 'rhel']]];
   const TECH = {};
   TICKER.forEach(([id, name]) => { TECH[id] = name; });
-  APTS.forEach((g) => g.chain.forEach(([, id, name]) => { TECH[id] = name; }));
+  TECH_MORE.forEach(([id, name]) => { TECH[id] = name; });
   const TECH_ALIAS = [['kerberoast', ['T1558.003']], ['dcsync', ['T1003.006']], ['password spray', ['T1110.003']], ['spraying', ['T1110.003']], ['webshell', ['T1505.003']],
     ['web shell', ['T1505.003']], ['lsass', ['T1003.001']], ['ntdsutil', ['T1003.003']], ['ntds', ['T1003.003']], ['supply chain', ['T1195.002']],
     ['shadow copies', ['T1490']], ['shadow copy', ['T1490']], ['vssadmin', ['T1490']], ['rclone', ['T1567.002']], ['portproxy', ['T1090.001']],
     ['powershell', ['T1059.001']], ['spearphishing', ['T1566.001', 'T1566.002']], ['phishing', ['T1566.001', 'T1566.002']],
     ['lateral movement', ['T1021.002']], ['scheduled task', ['T1053.005']], ['obfuscat', ['T1027']], ['wiper', ['T1561.002']]];
-  function findApt(q, tk) { const k = APT_KEYS.find(([w]) => exact(q, tk, w)); return k ? APTS.find((g) => g.id === k[1]) : null; }
   function findCert(q, tk) { const k = CERT_KEYS.find(([w]) => exact(q, tk, w)); return k ? CERTS.find((c) => c.ex === k[1]) : null; }
   function findProject(q, tk) { const k = PROJ_KEYS.find(([w]) => exact(q, tk, w)); return k ? CASES.find((c) => c.id === k[1]) : null; }
   function findTool(q, tk) { const k = TOOL_IDX.find(([, terms]) => terms.some((w) => exact(q, tk, w))); return k ? { label: k[0], terms: k[1] } : null; }
@@ -2328,7 +2110,6 @@ const Con = (() => {
     if (tk.length <= 3 && tk.some((w) => GREET.includes(w))) return cGreet(false);
     if (tk.length <= 5 && tk.some((w) => THANKS.some((x) => w === x || (x.length > 4 && w.startsWith(x))))) return cThanks();
     if (tk.includes('flag')) return cFlag();
-    const g = findApt(q, tk); if (g) return aptDetail(APTS.indexOf(g));
     const tech = findTech(q, tk); if (tech) return cTech(tech);
     const c = findCert(q, tk); if (c) return certDetail(c);
     const p = findProject(q, tk); if (p) return projectDetail(CASES.indexOf(p));
@@ -2369,7 +2150,7 @@ const Con = (() => {
     return n;
   }
   async function cHelp() {
-    const rows = [['whoami', 'm.whoami'], ['xp [n]', 'm.xp'], ['skills', 'm.skills'], ['projects', 'm.projects'], ['open <n>', 'h.open'], ['apt [name]', 'h.apt'],
+    const rows = [['whoami', 'm.whoami'], ['xp [n]', 'm.xp'], ['skills', 'm.skills'], ['projects', 'm.projects'], ['open <n>', 'h.open'], ['T1558.003', 'h.tech'],
       ['certs', 'm.certs'], ['education', 'h.edu'], ['contact', 'h.contact'], ['hire', 'm.hire'], ['cv', 'h.cv'],
       ['theme console|report', 'h.view'], ['lang en|fr', 'h.lang'], ['clear', 'h.clear']];
     if (isChat()) {
@@ -2419,7 +2200,7 @@ const Con = (() => {
     if (args && args.length) return false;
     await emit([ln(T('b.projHead'), 'mut'), table(CASES.map((c, i) => [String(i + 1), L(c.title), h('span', { class: 'dim' }, L(c.kind))]), [2])]);
     ctx = { kind: 'project' };
-    chips(isChat() ? CASES.map((c, i) => C('open ' + (i + 1))) : [C('open 1'), C('open 3'), C('apt'), C('hire')]);
+    chips(isChat() ? CASES.map((c, i) => C('open ' + (i + 1))) : [C('open 1'), C('open 3'), C('skills'), C('hire')]);
   }
   async function cOpen(args) {
     const a = norm((args || []).join(' '));
@@ -2437,40 +2218,13 @@ const Con = (() => {
     ctx = { kind: 'project', i };
     chips([A(t('b.showDiagram'), () => showCase(c.id), true), C('open ' + (((i + 1) % CASES.length) + 1), t('b.next')), C('projects')]);
   }
-  async function cApt(args) {
-    const a = norm((args || []).join(' '));
-    if (a) {
-      const n = /^\d+$/.test(a) ? parseInt(a, 10) : 0;
-      const g = n >= 1 && n <= APTS.length ? APTS[n - 1] : findApt(a, words(a));
-      if (!g) return false;
-      return aptDetail(APTS.indexOf(g));
-    }
-    await emit([ln(T('b.aptHead'), 'mut'), table(APTS.map((g, i) => [String(i + 1), g.name, g.mitre, h('span', { class: 'mut' }, L(g.motive))]), [2])]);
-    ctx = { kind: 'apt' };
-    chips(isChat() ? APTS.map((g, i) => C('apt ' + (i + 1))).concat([A(t('b.showMap'), () => goTo('#apt'), true)]) : [C('apt29'), C('lazarus'), C('volt typhoon'), A(t('b.showMap'), () => goTo('#apt'), true)]);
-  }
-  async function aptDetail(i) {
-    const g = APTS[i];
-    await emit([
-      ln([h('b', null, g.name), '  ', link('https://attack.mitre.org/groups/' + g.mitre + '/', g.mitre)]),
-      ln(t('b.aka') + ': ' + g.aka, 'mut'),
-      ln(L(g.motive) + ', ' + t('b.since', { y: g.since }) + '. ' + cap(t('b.targets')) + ': ' + g.regions.map((r) => L(REGIONS[r].name)).join(', ') + '.', 'mut'),
-      ln(L(g.known)),
-      ln(t('b.playbook') + ':', 'acc'),
-      table(g.chain.map(([tac, id, name]) => [id, name, h('span', { class: 'dim' }, L(TACTICS[tac]))]), [2]),
-      ln(t('b.catch') + ': ' + L(g.dets[0].t), 'good'),
-    ]);
-    ctx = { kind: 'apt', i };
-    chips([A(t('b.showMap'), () => showApt(g.id), true), C('apt ' + (((i + 1) % APTS.length) + 1), t('b.next')), C('apt')]);
-  }
   async function cTech(ids) {
-    const users = APTS.filter((g) => g.chain.some((c) => ids.includes(c[1])));
     await emit([
       ...ids.map((id) => ln([h('b', null, id), TECH[id] ? '  ' + TECH[id] : ''])),
-      users.length ? ln(t('b.techUsed', { g: users.map((g) => g.name).join(', ') })) : ln(t('b.techNone'), 'mut'),
       ...ids.map((id) => { const path = id.replace('.', '/'); return ln(link('https://attack.mitre.org/techniques/' + path + '/', 'attack.mitre.org/techniques/' + path), 'dim'); }),
+      ln(t('b.techFoot'), 'mut'),
     ]);
-    chips([...users.slice(0, 2).map((g) => C('apt ' + (APTS.indexOf(g) + 1), g.name)), C('apt')]);
+    chips([C('dfir'), C('method'), C('skills')]);
   }
   async function cCerts(args) {
     const a = norm((args || []).join(' '));
@@ -2507,12 +2261,12 @@ const Con = (() => {
   async function cMethod(args) {
     if (args && args.length) return false;
     await emit([ln(t('b.methodHead'), 'mut'), table(PHASES.map((ph, i) => [pad2(i + 1), L(ph.name), h('span', { class: 'mut' }, L(ph.sum))]), [2])]);
-    chips([A(t('b.seeMethod'), () => goTo('#method'), true), C('dfir'), C('apt')]);
+    chips([A(t('b.seeMethod'), () => goTo('#method'), true), C('dfir'), C('certs')]);
   }
   async function cDfir(args) {
     if (args && args.length) return false;
     await emit([ln(t('b.dfir'))]);
-    chips([C('method'), C('apt'), C('certs')]);
+    chips([C('method'), C('certs'), C('projects')]);
   }
   async function cWhere() { await emit([ln(t('b.where', { time: tunisTime() })), ln(t('b.whereMore'), 'mut')]); chips([C('hire'), C('contact')]); }
   async function cLangs() { await emit([ln(t('b.langs'))]); chips([C(lang === 'fr' ? 'lang en' : 'lang fr'), C('help')]); }
@@ -2546,56 +2300,102 @@ const Con = (() => {
     if (!ctx) return cFallback('next');
     const i = ctx.i == null ? -1 : ctx.i;
     if (ctx.kind === 'project') return projectDetail((i + 1) % CASES.length);
-    if (ctx.kind === 'apt') return aptDetail((i + 1) % APTS.length);
     if (ctx.kind === 'xp') return xpDetail((i + 1) % workList().length);
     return cFallback('next');
   }
 
   /* ----- ticket flow ----- */
-  const priChips = () => PRIORITIES.map((x) => C(x.id, x.id + ' ' + L(x.label))).concat([C('cancel', t('tk.cancelBtn'))]);
+  const cancelChip = () => C('cancel', t('tk.cancelBtn'));
+  const priChips = () => PRIORITIES.map((x) => C(x.id, x.id + ' ' + L(x.label))).concat([cancelChip()]);
+  const confirmChips = () => [C('send', t('tk.send')), C('edit', t('tk.form')), cancelChip()];
+  const SAY_NO = ['no', 'non', 'nope', 'not', 'don', 'dont', 'pas'];
+  const SAY_SEND = ['send', 'yes', 'y', 'yep', 'yeah', 'ok', 'okay', 'sure', 'go', 'retry', 'oui', 'ouais', 'accord', 'envoyer', 'envoie', 'envoi', 'reessayer'];
+  const SAY_EDIT = ['edit', 'modify', 'change', 'form', 'modifier', 'changer', 'formulaire'];
+  const EMAIL_IN = /[^\s@<>()",;:]+@[^\s@<>()",;:]+\.[^\s@<>()",;:.]{2,}/;
+  function syncForm(m) {
+    priority = m.p;
+    $('#t-name').value = m.name; $('#t-email').value = m.email; $('#t-org').value = m.org; $('#t-msg').value = m.msg;
+    showFieldErrors([]); setNote('', '');
+    renderContact();
+  }
   async function startTicket(p) {
-    mode = { kind: 'ticket', step: p ? 'name' : 'pri', p: p || null, name: '', org: '', msg: '' };
+    mode = { kind: 'ticket', step: p ? 'name' : 'pri', p: p || null, name: '', email: '', org: '', msg: '' };
     if (!p) { say(t('tk.pri')); chips(priChips()); }
-    else { const pr = PRIORITIES.find((x) => x.id === p); say(t('tk.start', { p, label: L(pr.label) })); await wait(160); say(t('tk.name')); chips([C('cancel', t('tk.cancelBtn'))]); }
+    else { const pr = PRIORITIES.find((x) => x.id === p); say(t('tk.start', { p, label: L(pr.label) })); await wait(160); say(t('tk.name')); chips([cancelChip()]); }
     refreshPrompt();
     if (!narrow()) input.focus({ preventScroll: true });
   }
+  function showReady(m) {
+    syncForm(m);
+    say(t('tk.ready', { id: ticketId }));
+    m.pre = put(h('pre', { class: 'tk-pre' }, composeTicket(m).text));
+    chips(confirmChips());
+  }
+  async function sendTicket(m) {
+    const id = ticketId;
+    const host = PROFILE.relay.replace(/^https?:\/\//, '').replace(/\/+$/, '');
+    const req = put(ln('POST ' + host + '  ' + id, 'dim term-only'));
+    const st = put(ln(t('tk.sending', { id }), 'dim chat-only'));
+    const dots = put(h('div', { class: 'typing chat-only', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')));
+    const r = await deliverTicket(m);
+    st.remove(); dots.remove();
+    req.textContent += r.ok ? '  ok' : '  failed' + (r.status ? ' (' + r.status + ')' : '');
+    if (r.ok) {
+      mode = null;
+      ticketSent(m, id);
+      say(t('tk.sent', { id, e: m.email }), 'good');
+      chips(startChips());
+      return;
+    }
+    const tk = composeTicket(m);
+    say(t('tk.fail'));
+    chips([C('send', t('tk.retry')),
+      { label: t('tk.mail'), href: tk.mailto, onclick: () => setTimeout(() => runAct(() => say(t('contact.mailNote'))), 400) },
+      A(t('tk.copy'), async () => { const ok = await copyText(tk.text); if (ok) say(t('tk.copied', { e: EMAIL }), 'good'); else { if (m.pre && m.pre.isConnected) selectAll(m.pre); say(t('tk.copyFail')); } }),
+      cancelChip()]);
+  }
   async function ticketStep(v) {
     const m = mode;
-    if (/^(cancel|annuler|stop|quit|exit)$/i.test(v)) { mode = null; say(t('tk.cancel')); chips(startChips()); return; }
+    const q = norm(v);
+    if (/^(cancel|annuler|stop|quit|exit)$/.test(q)) { mode = null; say(t('tk.cancel')); chips(startChips()); return; }
     if (m.step === 'pri') {
       const p = (v.toUpperCase().match(/P[1-4]/) || [])[0] || ({ 1: 'P1', 2: 'P2', 3: 'P3', 4: 'P4' })[v];
       if (!p) { say(t('tk.pri')); chips(priChips()); return; }
       m.p = p; m.step = 'name';
       const pr = PRIORITIES.find((x) => x.id === p);
-      say(t('tk.start', { p, label: L(pr.label) })); await wait(160); say(t('tk.name')); chips([C('cancel', t('tk.cancelBtn'))]);
+      say(t('tk.start', { p, label: L(pr.label) })); await wait(160); say(t('tk.name')); chips([cancelChip()]);
       return;
     }
-    if (m.step === 'name') { m.name = v; m.step = 'org'; say(t('tk.org')); chips([C('', t('tk.skip')), C('cancel', t('tk.cancelBtn'))]); return; }
-    if (m.step === 'org') { m.org = v; m.step = 'msg'; say(t('tk.msg.' + m.p)); chips([C('cancel', t('tk.cancelBtn'))]); return; }
-    m.msg = v; mode = null;
-    priority = m.p;
-    $('#t-name').value = m.name; $('#t-org').value = m.org; $('#t-msg').value = m.msg;
-    renderContact();
-    const { subject, body } = composeTicket();
-    const text = t('ticket.to') + ': ' + EMAIL + '\n' + t('ticket.subject') + ': ' + subject + '\n\n' + body;
-    say(t('tk.ready', { id: ticketId }));
-    const pre = put(h('pre', { class: 'tk-pre' }, text));
-    const mail = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-    chips([A(t('tk.copy'), async () => { const ok = await copyText(text); if (ok) say(t('tk.copied', { e: EMAIL }), 'good'); else { selectAll(pre); say(t('tk.copyFail')); } }),
-      { label: t('tk.mail'), href: mail, onclick: () => setTimeout(() => runAct(() => say(t('contact.mailNote'))), 400) },
-      A(t('tk.form'), () => goTo('#contact'), true)]);
+    if (m.step === 'name') {
+      if (!v) { say(t('tk.needName')); chips([cancelChip()]); return; }
+      m.name = v.slice(0, 120); m.step = 'email'; say(t('tk.email')); chips([cancelChip()]); return;
+    }
+    if (m.step === 'email') {
+      const e = (v.match(EMAIL_IN) || [])[0];
+      if (!e) { say(t('tk.badEmail')); chips([cancelChip()]); return; }
+      m.email = e; m.step = 'org'; say(t('tk.org')); chips([C('', t('tk.skip')), cancelChip()]); return;
+    }
+    if (m.step === 'org') { m.org = v.slice(0, 120); m.step = 'msg'; say(t('tk.msg.' + m.p)); chips([cancelChip()]); return; }
+    if (m.step === 'msg') {
+      if (!v) { say(t('tk.needMsg')); chips([cancelChip()]); return; }
+      m.msg = v; m.step = 'confirm';
+      return showReady(m);
+    }
+    const said = q.split(/[\s-]+/);
+    const has = (list) => list.some((w) => said.includes(w));
+    if (!has(SAY_NO) && has(SAY_SEND)) return sendTicket(m);
+    if (has(SAY_EDIT)) { mode = null; syncForm(m); say(t('tk.toForm')); chips(startChips()); goTo('#contact'); return; }
+    say(t('tk.confirmHelp')); chips(confirmChips());
   }
 
   /* ----- shell-flavoured extras ----- */
-  const files = () => ['projects/', 'intel/', 'certs/', 'timeline.log', 'contact.txt'].concat(PROFILE.cv ? ['cv.pdf'] : []);
+  const files = () => ['projects/', 'certs/', 'timeline.log', 'contact.txt'].concat(PROFILE.cv ? ['cv.pdf'] : []);
   function cLs(args) {
     const all = args.some((a) => /^-[a-z]*a/i.test(a));
     const dir = args.find((a) => !a.startsWith('-'));
     if (dir) {
       const d = dir.replace(/\/$/, '');
       if (d === 'projects') return cProjects([]);
-      if (d === 'intel') return cApt([]);
       if (d === 'certs') return cCerts([]);
       put(ln('ls: cannot access \'' + dir + '\': no such file or directory', 'err')); return;
     }
@@ -2609,7 +2409,7 @@ const Con = (() => {
     if (f === 'timeline.log') return cXp([]);
     if (f === '.investigator_notes') { put(ln('Base64 is encoding, not encryption.\nGood investigators read the page source. Start near the timeline.', 'acc')); return; }
     if (f === 'cv.pdf' && PROFILE.cv) { put(ln('cat: cv.pdf: binary file. Try cv instead.', 'err')); return; }
-    if (/^(projects|intel|certs)\/?$/.test(f)) { const d = f.replace('/', ''); put(ln('cat: ' + f + ': is a directory. Try ' + (d === 'intel' ? 'apt' : d) + '.', 'err')); return; }
+    if (/^(projects|certs)\/?$/.test(f)) { put(ln('cat: ' + f + ': is a directory. Try ' + f.replace('/', '') + '.', 'err')); return; }
     put(ln('cat: ' + f + ': no such file or directory', 'err'));
   }
   async function sha256(x) {
@@ -2664,7 +2464,7 @@ const Con = (() => {
     return startTicket(p || null);
   }
   const CMDS = {
-    help: cHelp, whoami: cWhoami, xp: cXp, skills: cSkills, projects: cProjects, open: cOpen, apt: cApt, certs: cCerts,
+    help: cHelp, whoami: cWhoami, xp: cXp, skills: cSkills, projects: cProjects, open: cOpen, certs: cCerts,
     education: cEdu, contact: (a) => cContact(a, false), hire: cHire, ticket: cTicket, cv: cCv, method: cMethod, dfir: cDfir, next: cNext,
     ls: cLs, cat: cCat, submit: cSubmit, sudo: cSudo, rm: cRm, nmap: cNmap, theme: cTheme, lang: cLang, clear: cClear, history: cHistory,
     date: cDate, echo: cEcho, pwd: cPwd, id: cId, exit: cExit, where: (a) => (a && a.length ? false : cWhere()), languages: (a) => (a && a.length ? false : cLangs()),
@@ -2673,7 +2473,7 @@ const Con = (() => {
   const ALIAS = {
     aide: 'help', commands: 'help', commandes: 'help', man: 'help', about: 'whoami', profile: 'whoami', profil: 'whoami', neofetch: 'whoami', whois: 'whoami',
     experience: 'xp', exp: 'xp', parcours: 'xp', jobs: 'xp', career: 'xp', carriere: 'xp', stack: 'skills', tools: 'skills', outils: 'skills', competences: 'skills',
-    projets: 'projects', projet: 'projects', project: 'projects', labs: 'projects', ouvrir: 'open', case: 'open', intel: 'apt', threats: 'apt', menaces: 'apt',
+    projets: 'projects', projet: 'projects', project: 'projects', labs: 'projects', ouvrir: 'open', case: 'open',
     certifs: 'certs', certifications: 'certs', cert: 'certs', edu: 'education', formation: 'education', diplomes: 'education', degrees: 'education',
     email: 'contact', mail: 'contact', links: 'contact', liens: 'contact', embaucher: 'hire', recruter: 'hire', recruit: 'hire', resume: 'cv',
     methode: 'method', process: 'method', forensics: 'dfir', suivant: 'next',
@@ -2681,7 +2481,7 @@ const Con = (() => {
   };
   const INTENT_RUN = {
     hack: cHack, hire: cHireNL, cv: cCv, contact: () => cContact([], false), flag: cFlag, method: () => cMethod([]), dfir: () => cDfir([]),
-    apt: () => cApt([]), projects: () => cProjects([]), certs: () => cCerts([]), edu: () => cEdu([]), where: cWhere, langs: cLangs,
+    projects: () => cProjects([]), certs: () => cCerts([]), edu: () => cEdu([]), where: cWhere, langs: cLangs,
     xp: () => cXp([]), skills: () => cSkills([]), whoami: () => cWhoami([]),
   };
 
@@ -2691,7 +2491,6 @@ const Con = (() => {
     const el = $(sel); if (el) el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
   }
   function showCase(id) { if (docked && narrow()) closeDock(false); selectCase(id, true); }
-  function showApt(id) { if (docked && narrow()) closeDock(false); selectApt(id, true); }
   function updateLauncher() { if (launcher) launcher.hidden = docked || heroVisible; }
   function openDock() {
     endBoot();
@@ -2797,7 +2596,7 @@ const Con = (() => {
   /* ----- setup ----- */
   function renderMenu() {
     const ul = $('#menu'); if (!ul) return;
-    const MENU = [['whoami', 'm.whoami'], ['xp', 'm.xp'], ['skills', 'm.skills'], ['projects', 'm.projects'], ['apt', 'm.apt'], ['certs', 'm.certs'], ['hire', 'm.hire']];
+    const MENU = [['whoami', 'm.whoami'], ['xp', 'm.xp'], ['skills', 'm.skills'], ['projects', 'm.projects'], ['certs', 'm.certs'], ['hire', 'm.hire']];
     ul.replaceChildren(...MENU.map(([c, k]) => h('li', null, h('button', { type: 'button', onclick: () => submit(c, true) }, h('b', null, c), h('span', null, t(k, counts()))))));
   }
   function renderQuestions() {
@@ -2873,7 +2672,8 @@ const Con = (() => {
     syncModeButtons(); renderMenu(); renderQuestions(); refreshPrompt(); tick(); updateLauncher();
     bootSeq();
   }
-  return { init, relabel, tick, summon, setMode, run: (x) => submit(x, false) };
+  function ticketDone() { if (mode) { mode = null; refreshPrompt(); chips(startChips()); } }
+  return { init, relabel, tick, summon, setMode, ticketDone, run: (x) => submit(x, false) };
 })();
 
 /* ---------------- CV link: hidden when the PDF is not published next to the page ---------------- */
@@ -2899,7 +2699,7 @@ function setLang(l) {
   renderAll();
 }
 function renderAll() {
-  applyStatic(); renderMethod(); renderTimeline(); renderCases(); renderApt(); renderCerts(); renderContact(); Con.relabel(); renderClock();
+  applyStatic(); renderMethod(); renderTimeline(); renderCases(); renderCerts(); renderContact(); Con.relabel(); renderClock();
 }
 
 (function boot() {
@@ -2910,7 +2710,6 @@ function renderAll() {
   $$('[data-theme-set]').forEach((b) => b.addEventListener('click', () => applyTheme(b.dataset.themeSet, true)));
   $$('[data-lang]').forEach((b) => b.addEventListener('click', () => setLang(b.dataset.lang)));
   initContact();
-  AptMap.init();
   renderTicker();
   renderAll();
   Con.init();
