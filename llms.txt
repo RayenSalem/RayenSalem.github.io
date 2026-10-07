@@ -1,0 +1,48 @@
+# Rayen Salem
+
+> SOC analyst and incident responder at Global IT Vision, a managed security service provider (MSSP). Focus: DFIR, threat hunting and detection. Open to opportunities, with relocation or remote work. Currently based in Tunisia.
+
+Rayen investigates and triages security alerts every day across EDR, NDR and SIEM, with CrowdStrike Falcon, Darktrace, LogRhythm, Wazuh and Splunk. He holds 11 certifications, including eCIRv3 for incident response, eCDFP for digital forensics and eCTHPv2 for threat hunting, and is working toward ISO/IEC 27001 Lead Implementer. He speaks Arabic, French and English.
+
+## Experience
+
+- SOC Analyst, Global IT Vision, June 2025 to present: helped build the SOC from the ground up, investigates and triages alerts, writes monthly reports with SLA, MTTA and MTTR tracking plus client investigation reports, wrote L1 to L3 SOC playbooks, takes part in containment, remediation and post-incident analysis, and contributed to the company's ISO 27001 certification.
+- Final-year engineering internship, OneTech Business Solutions, February to June 2025: SD-WAN architecture on FortiGate, delivered as code with Ansible and Terraform.
+- Penetration testing intern, Teligencia Labs, June to August 2024: web application security audits, exploitation and remediation reports.
+- Summer intern, Pwn and Patch, June to August 2023: built an environment with realistic attack scenarios to assess candidates' technical skills.
+- Technical team member, Securinets TEK-UP, 2023 to 2025: wrote web and crypto challenges for the club's mini CTF.
+
+## Education
+
+- Engineering degree in Cybersecurity, TEK-UP University, 2022 to 2025
+- Bachelor's degree in Computer Science, Higher Institute of Computer Science and Mathematics, 2019 to 2022
+
+## Certifications
+
+- Enterprise Defense Administrator (eEDA), INE Security, 2026
+- Certified Incident Responder (eCIRv3), INE Security, 2026
+- Darktrace Cyber Analyst Professional, 2026
+- Certified Digital Forensics Professional (eCDFP), INE Security, 2026
+- Certified Threat Hunting Professional (eCTHPv2), INE Security, 2025
+- Certified SOC Analyst (CSA), EC-Council, 2024
+- Junior Penetration Tester (eJPTv2), INE Security, 2024
+- Red Hat Certified Engineer (RHCE), Red Hat, 2023
+- Red Hat Certified System Administrator (RHCSA), Red Hat, 2023
+- AWS Certified Solutions Architect, Associate (AWS SAA), Amazon Web Services, 2023
+- Certified Associate Python Programmer (PCAP), Python Institute, 2023
+- In progress: ISO/IEC 27001 Lead Implementer
+
+## Projects
+
+- [SOC automation pipeline](https://github.com/RayenSalem/SOC-automation): Wazuh, Shuffle, VirusTotal and TheHive, from detection to response without manual hand-offs.
+- [Active Directory detection lab](https://github.com/RayenSalem/Active-Directory-Monitoring): Sysmon, Splunk and Suricata on a Windows domain, tested with Atomic Red Team.
+- [SD-WAN as code](https://github.com/RayenSalem/PFE-SD-WAN): a FortiGate hub and spoke network provisioned with Ansible through FortiManager.
+- [Securify](https://github.com/RayenSalem/Securify-Tool): an automated web vulnerability scanner that writes reports and a dashboard.
+- Machine learning IDS: behavior-based intrusion detection that classifies network traffic with XGBoost.
+- [CTF challenges](https://github.com/RayenSalem/TEKUP-MINI-CTF): web and crypto challenges written for Securinets TEK-UP.
+
+## Links
+
+- [Portfolio](https://rayensalem.github.io/): profile, projects, certifications, a chat about his work and a contact form
+- [LinkedIn](https://www.linkedin.com/in/rayensalem)
+- [GitHub](https://github.com/RayenSalem)
