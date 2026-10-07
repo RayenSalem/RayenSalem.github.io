@@ -170,7 +170,7 @@ button{font-family:inherit}
 
 .shell{display:flex;flex-direction:column;min-height:0;font:14px/1.6 var(--font-data);color:var(--fg)}
 .shell-scroll{flex:0 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:16px 20px 0;scrollbar-width:thin;scrollbar-color:var(--line-strong) transparent}
-@media (min-width:901px){.tw-main .shell{min-height:min(500px,calc(100vh - 176px));max-height:max(340px,calc(100vh - 176px))}.tw-side{max-height:max(340px,calc(100vh - 176px));overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--line-strong) transparent}}
+@media (min-width:901px){.tw-main .shell{min-height:min(500px,calc(100vh - 226px));max-height:max(320px,calc(100vh - 226px))}.tw-side{max-height:max(320px,calc(100vh - 226px));overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--line-strong) transparent}}
 @media (max-width:700px){.shell{font-size:13.5px}.shell-scroll{padding:14px 14px 0}}
 .shell-log{display:grid;align-content:start;gap:1px;min-width:0}
 .ln{min-width:0;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
@@ -248,6 +248,10 @@ button{font-family:inherit}
 .ws-stats{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:4px 14px;margin:0;padding-top:12px;border-top:1px dashed var(--line-strong);font:12.5px/1.45 var(--font-data)}
 .ws-stats dt{color:var(--fg-faint)}
 .ws-stats dd{margin:0;color:var(--fg);font-variant-numeric:tabular-nums}
+.avail{display:flex;align-items:center;gap:10px;width:max-content;max-width:100%;margin:0 0 14px;padding:8px 17px 8px 15px;border:1px solid var(--line-strong);border-radius:999px;background:var(--bg-raise);font:500 14.5px/1.25 var(--font-body);color:var(--fg-muted);color:color-mix(in srgb,var(--fg) 82%,var(--bg))}
+.avail-dot{position:relative;flex:none;width:8px;height:8px;border-radius:50%;background:var(--green)}
+@media (prefers-reduced-motion:no-preference){.avail-dot::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--green);animation:availPing 2.6s cubic-bezier(0,0,.2,1) infinite}}
+@keyframes availPing{70%,100%{transform:scale(2.7);opacity:0}}
 .hero-alt{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;margin:16px 4px 0;font-size:14.5px;color:var(--fg-muted)}
 .hero-alt a{color:var(--fg);font-weight:600;text-underline-offset:4px;text-decoration-color:var(--line-strong)}
 .hero-alt a:hover{text-decoration-color:var(--accent-line)}
@@ -607,6 +611,7 @@ button.tl-sum:hover{background:var(--bg-raise)}
 
 <main id="main">
   <section class="hero" id="top" aria-labelledby="nf-name">
+    <p class="avail"><span class="avail-dot" aria-hidden="true"></span><span data-i18n="hero.avail">Open to opportunities - relocation or remote</span></p>
     <div class="term-win" id="term-win">
       <div class="tw-bar">
         <div class="tw-modes" role="group" data-i18n-aria="con.modeAria" aria-label="Console mode">
@@ -653,7 +658,6 @@ button.tl-sum:hover{background:var(--bg-raise)}
                   <span class="nf-rule term-only" aria-hidden="true"></span>
                   <dl class="nf-kv">
                     <dt><span class="term-only" data-i18n="nf.k.org">org</span><span class="chat-only" data-i18n="nf.c.org">Company</span></dt><dd data-i18n="nf.v.org">Global IT Vision, managed SOC (MSSP)</dd>
-                    <dt><span class="term-only" data-i18n="nf.k.base">base</span><span class="chat-only" data-i18n="nf.c.base">Location</span></dt><dd data-nf="base">Tunisia (UTC+1)</dd>
                     <dt><span class="term-only" data-i18n="nf.k.uptime">uptime</span><span class="chat-only" data-i18n="nf.c.uptime">Experience</span></dt><dd data-nf="uptime">SOC analyst since June 2025</dd>
                     <dt><span class="term-only" data-i18n="nf.k.focus">focus</span><span class="chat-only" data-i18n="nf.c.focus">Focus</span></dt><dd data-i18n="nf.v.focus">DFIR, threat hunting, detection</dd>
                     <dt><span class="term-only" data-i18n="nf.k.stack">stack</span><span class="chat-only" data-i18n="nf.c.stack">Tools</span></dt><dd>CrowdStrike, Darktrace, LogRhythm, Wazuh, Splunk</dd>
@@ -866,10 +870,11 @@ const I18N = {
     'con.greet': 'Hi, welcome to Rayen’s console. Ask about his work in plain words, like “which tools does he use?”, or pick a command.',
     'con.docked': 'The console is docked at the bottom right.', 'con.undock': 'Bring it back here', 'con.menuAria': 'Quick commands',
     'ws.time': 'tunisia', 'ws.next': 'next cert',
+    'hero.avail': 'Open to opportunities - relocation or remote',
     'hero.alt': 'Not a terminal person?', 'hero.altProjects': 'Projects', 'hero.altTicket': 'Open a ticket',
     'nf.role': 'SOC analyst and incident responder',
-    'nf.k.org': 'org', 'nf.k.base': 'base', 'nf.k.uptime': 'uptime', 'nf.k.focus': 'focus', 'nf.k.stack': 'stack', 'nf.k.certs': 'certs', 'nf.k.speaks': 'speaks',
-    'nf.v.org': 'Global IT Vision, managed SOC (MSSP)', 'nf.v.base': 'Tunisia, {time} local (UTC+1)', 'nf.v.uptime': '{d} as a SOC analyst',
+    'nf.k.org': 'org', 'nf.k.uptime': 'uptime', 'nf.k.focus': 'focus', 'nf.k.stack': 'stack', 'nf.k.certs': 'certs', 'nf.k.speaks': 'speaks',
+    'nf.v.org': 'Global IT Vision, managed SOC (MSSP)', 'nf.v.uptime': '{d} as a SOC analyst',
     'nf.v.focus': 'DFIR, threat hunting, detection', 'nf.v.certs': '{n} earned, ISO 27001 LI in progress', 'nf.v.speaks': 'Arabic, French, English',
     'm.whoami': 'profile card', 'm.xp': 'experience', 'm.skills': 'tools by domain', 'm.projects': '{np} labs and builds',
     'm.certs': '{nc} + 1 in progress', 'm.hire': 'open a P1 ticket',
@@ -890,7 +895,7 @@ const I18N = {
     'b.phone': 'The phone number isn’t public. Email or LinkedIn reach Rayen fastest.',
     'b.hireAns': 'For roles and opportunities, open a P1 ticket. Four quick questions here and it lands straight in Rayen’s inbox. Want to start?',
     'b.cvYes': 'CV in PDF (French):', 'b.cvNo': 'The CV is shared on request. Ask for it with a ticket.',
-    'b.where': 'Based in Tunisia, UTC+1. It’s {time} there right now.',
+    'b.where': 'Rayen is open to relocation or remote work. He is currently based in Tunisia (UTC+1).',
     'b.whereMore': 'For anything about where a role is based, open a ticket and Rayen will answer directly.',
     'b.langs': 'Arabic, French and English. This site speaks English and French: type lang fr or lang en.',
     'b.dfir': 'DFIR is where Rayen is going deeper. He investigates incidents across EDR, NDR and SIEM every day, and holds eCDFP for digital forensics, eCIRv3 for incident response and eCTHPv2 for threat hunting.',
@@ -909,7 +914,7 @@ const I18N = {
     'con.footChat': 'Answers come from Rayen’s CV and this page.', 'con.local': 'Tunisia, {time}',
     'sc.head': 'Popular questions', 'sc.termTitle': 'Technical visitor?', 'sc.termText': 'Switch to the terminal for commands, MITRE ATT&CK lookups and a hidden flag.', 'sc.termBtn': 'Open terminal mode',
     'hero.altChat': 'Prefer to browse?', 'hero.toChat': 'Switch to chat', 'hero.altXp': 'Experience',
-    'nf.c.org': 'Company', 'nf.c.base': 'Location', 'nf.c.uptime': 'Experience', 'nf.c.focus': 'Focus', 'nf.c.stack': 'Tools', 'nf.c.certs': 'Certifications', 'nf.c.speaks': 'Languages',
+    'nf.c.org': 'Company', 'nf.c.uptime': 'Experience', 'nf.c.focus': 'Focus', 'nf.c.stack': 'Tools', 'nf.c.certs': 'Certifications', 'nf.c.speaks': 'Languages',
     'f.xp': 'Experience', 'f.skills': 'Skills', 'f.certs': 'Certifications', 'f.projects': 'Projects', 'f.hire': 'Discuss a role', 'f.contact': 'Contact details',
     'f.ticket': 'Write to Rayen', 'f.dfir': 'Forensics focus', 'f.method': 'How he works', 'f.help': 'What can I ask?',
     'f.education': 'Education', 'f.whoami': 'About Rayen', 'f.cv': 'CV', 'f.where': 'Location', 'f.languages': 'Languages',
@@ -980,10 +985,11 @@ const I18N = {
     'con.greet': 'Bonjour, bienvenue sur la console de Rayen. Posez vos questions sur son travail, par exemple « quels outils utilise-t-il ? », ou choisissez une commande.',
     'con.docked': 'La console est détachée en bas à droite.', 'con.undock': 'La remettre ici', 'con.menuAria': 'Commandes rapides',
     'ws.time': 'tunisie', 'ws.next': 'prochaine certif',
+    'hero.avail': 'Ouvert aux opportunités - mobilité ou télétravail',
     'hero.alt': 'Pas fan du terminal ?', 'hero.altProjects': 'Projets', 'hero.altTicket': 'Ouvrir un ticket',
     'nf.role': 'Analyste SOC, réponse à incident',
-    'nf.k.org': 'org', 'nf.k.base': 'base', 'nf.k.uptime': 'uptime', 'nf.k.focus': 'focus', 'nf.k.stack': 'stack', 'nf.k.certs': 'certifs', 'nf.k.speaks': 'langues',
-    'nf.v.org': 'Global IT Vision, SOC managé (MSSP)', 'nf.v.base': 'Tunisie, {time} heure locale (UTC+1)', 'nf.v.uptime': '{d} comme analyste SOC',
+    'nf.k.org': 'org', 'nf.k.uptime': 'uptime', 'nf.k.focus': 'focus', 'nf.k.stack': 'stack', 'nf.k.certs': 'certifs', 'nf.k.speaks': 'langues',
+    'nf.v.org': 'Global IT Vision, SOC managé (MSSP)', 'nf.v.uptime': '{d} comme analyste SOC',
     'nf.v.focus': 'DFIR, threat hunting, détection', 'nf.v.certs': '{n} obtenues, ISO 27001 LI en cours', 'nf.v.speaks': 'Arabe, français, anglais',
     'm.whoami': 'fiche profil', 'm.xp': 'expérience', 'm.skills': 'outils par domaine', 'm.projects': '{np} labs et projets',
     'm.certs': '{nc} + 1 en cours', 'm.hire': 'ouvrir un ticket P1',
@@ -1004,7 +1010,7 @@ const I18N = {
     'b.phone': 'Le numéro n’est pas public. L’e-mail ou LinkedIn restent le plus rapide.',
     'b.hireAns': 'Pour un poste ou une opportunité, ouvrez un ticket P1. Quatre questions rapides ici, et il arrive directement dans la boîte mail de Rayen. On commence ?',
     'b.cvYes': 'CV en PDF :', 'b.cvNo': 'Le CV est envoyé sur demande. Demandez-le avec un ticket.',
-    'b.where': 'Basé en Tunisie, UTC+1. Il est actuellement {time} là-bas.',
+    'b.where': 'Rayen est ouvert à la mobilité ou au télétravail. Il est actuellement basé en Tunisie (UTC+1).',
     'b.whereMore': 'Pour toute question sur le lieu d’un poste, ouvrez un ticket et Rayen répondra directement.',
     'b.langs': 'Arabe, français et anglais. Ce site existe en français et en anglais : tapez lang en ou lang fr.',
     'b.dfir': 'La DFIR est le domaine où Rayen se spécialise. Il investigue chaque jour des incidents sur l’EDR, le NDR et le SIEM, et il est certifié eCDFP en investigation numérique, eCIRv3 en réponse à incident et eCTHPv2 en threat hunting.',
@@ -1023,7 +1029,7 @@ const I18N = {
     'con.footChat': 'Les réponses viennent du CV de Rayen et de cette page.', 'con.local': 'Tunisie, {time}',
     'sc.head': 'Questions fréquentes', 'sc.termTitle': 'Profil technique ?', 'sc.termText': 'Passez au terminal pour les commandes, les recherches MITRE ATT&CK et un flag caché.', 'sc.termBtn': 'Passer en mode terminal',
     'hero.altChat': 'Vous préférez parcourir ?', 'hero.toChat': 'Passer au chat', 'hero.altXp': 'Parcours',
-    'nf.c.org': 'Entreprise', 'nf.c.base': 'Localisation', 'nf.c.uptime': 'Expérience', 'nf.c.focus': 'Spécialités', 'nf.c.stack': 'Outils', 'nf.c.certs': 'Certifications', 'nf.c.speaks': 'Langues',
+    'nf.c.org': 'Entreprise', 'nf.c.uptime': 'Expérience', 'nf.c.focus': 'Spécialités', 'nf.c.stack': 'Outils', 'nf.c.certs': 'Certifications', 'nf.c.speaks': 'Langues',
     'f.xp': 'Parcours', 'f.skills': 'Compétences', 'f.certs': 'Certifications', 'f.projects': 'Projets', 'f.hire': 'Proposer un poste', 'f.contact': 'Coordonnées',
     'f.ticket': 'Écrire à Rayen', 'f.dfir': 'Spécialité forensique', 'f.method': 'Sa méthode', 'f.help': 'Que puis-je demander ?',
     'f.education': 'Formation', 'f.whoami': 'À propos de Rayen', 'f.cv': 'CV', 'f.where': 'Localisation', 'f.languages': 'Langues',
@@ -1528,9 +1534,8 @@ function S(tag, attrs, ...kids) {
 }
 
 let lang = (() => {
-  const saved = store.get('rs-lang');
-  if (saved === 'en' || saved === 'fr') return saved;
-  return String(navigator.language || 'en').toLowerCase().startsWith('fr') ? 'fr' : 'en';
+  // English unless the visitor picked French with the EN/FR switch
+  return store.get('rs-locale') === 'fr' ? 'fr' : 'en';
 })();
 function t(key, vars) {
   let s = (I18N[lang] && I18N[lang][key]) != null ? I18N[lang][key] : (I18N.en[key] != null ? I18N.en[key] : key);
@@ -2069,7 +2074,7 @@ const Con = (() => {
     ['projects', ['project', 'projet', 'lab', 'github', 'repo', 'build', 'realisation', 'portfolio', ['code', 0.5]]],
     ['certs', ['cert', 'certif', 'ine', 'ec-council', 'eccouncil', 'badge', 'exam', 'examen']],
     ['edu', ['degree', 'diplom', 'universit', 'study', 'studies', 'etude', 'school', 'ecole', 'education', 'formation', 'bachelor', 'licence', 'ingenieur', 'engineering', 'tek-up', 'tekup', 'graduat']],
-    ['where', ['where', 'based', 'base', 'location', 'located', 'country', 'pays', 'timezone', 'fuseau', 'tunis', 'tunisia', 'tunisie', 'habite', 'relocat', 'remote', 'teletravail', 'heure', ['live', 0.6]]],
+    ['where', ['where', 'based', 'base', 'location', 'located', 'country', 'pays', 'timezone', 'fuseau', 'tunis', 'tunisia', 'tunisie', 'habite', 'relocat', 'mobilite', 'demenag', 'remote', 'teletravail', 'heure', ['live', 0.6]]],
     ['langs', ['language', 'langue', 'speak', 'parle', 'arabic', 'french', 'english', 'arabe', 'francais', 'anglais']],
     ['xp', ['experience', 'job', 'career', 'carriere', 'parcours', 'emploi', 'company', 'entreprise', 'employ', 'intern', 'stage', 'gitv', 'global it vision', 'onetech', 'teligencia', 'pwn and patch', ['work', 0.6], ['worked', 1.5], ['does he work', 1.5], ['do you work', 1.5], ['travaill', 1.5], ['poste', 0.6], ['role', 0.5]]],
     ['skills', ['skill', 'competen', 'tool', 'outil', 'stack', 'technolog', 'siem', 'edr', 'ndr', 'soar', 'xdr', 'software', 'logiciel', ['use', 0.5], ['utilise', 0.5], ['know', 0.5], ['connai', 0.5]]],
@@ -2138,7 +2143,6 @@ const Con = (() => {
   }
   function fillNf(root) {
     const set = (k, v) => { const el = root.querySelector('[data-nf="' + k + '"]'); if (el && el.textContent !== v) el.textContent = v; };
-    set('base', t('nf.v.base', { time: tunisTime() }));
     set('uptime', t('nf.v.uptime', { d: uptime() }));
     set('certs', t('nf.v.certs', { n: counts().nc }));
   }
@@ -2698,7 +2702,7 @@ function checkCv() {
 
 /* ---------------- wiring ---------------- */
 function setLang(l) {
-  lang = l; store.set('rs-lang', l);
+  lang = l; store.set('rs-locale', l);
   renderAll();
 }
 function renderAll() {
