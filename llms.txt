@@ -2,24 +2,24 @@
 
 > Security engineer and incident responder at Global IT Vision, a managed security service provider (MSSP). Focus: DFIR, threat hunting and detection. Open to opportunities, with relocation or remote work. Currently based in Tunisia.
 
-Rayen investigates and triages security alerts every day across EDR, NDR and SIEM, with CrowdStrike Falcon, Darktrace, LogRhythm, Wazuh and Splunk. He holds 11 certifications, including eCIRv3 for incident response, eCDFP for digital forensics and eCTHPv2 for threat hunting, and is working toward ISO/IEC 27001 Lead Implementer. He speaks Arabic, French and English.
+Rayen implements and fine-tunes security solutions and investigates and triages security alerts every day across SIEM, XDR, EDR, NDR and SOAR platforms, with CrowdStrike Falcon, Darktrace, LogRhythm, SOCRadar, Wazuh and Splunk. He holds 11 certifications, including eCIRv3 for incident response, eCDFP for digital forensics and eCTHPv2 for threat hunting, and is working toward ISO/IEC 27001 Lead Implementer. He speaks Arabic, French and English.
 
 ## Experience
 
-- Security Engineer, Global IT Vision, June 2025 to present: helped build the SOC from the ground up, investigates and triages alerts for banking and insurance clients, writes monthly reports with SLA, MTTA and MTTR tracking plus client investigation reports, wrote L1 to L3 SOC playbooks, takes part in containment, remediation and post-incident analysis, and contributed to the company's ISO 27001 certification.
+- Security Engineer, Global IT Vision, October 2023 to present: helped build and structure security operations, investigates and triages alerts for banking and insurance clients, writes monthly reports with SLA, MTTA and MTTR tracking plus client investigation reports, wrote L1 to L3 SOC playbooks, handles incident containment, remediation and post-incident analysis, and took part in the company's ISO 27001 certification project. Tools: LogRhythm, CrowdStrike, Darktrace, SOCRadar, Jira.
 - Final-year engineering internship, OneTech Business Solutions, February to June 2025: SD-WAN architecture on FortiGate, delivered as code with Ansible and Terraform.
 - Penetration testing intern, Teligencia Labs, June to August 2024: web application security audits, exploitation and remediation reports.
 - Summer intern, Pwn and Patch, June to August 2023: built an environment with realistic attack scenarios to assess candidates' technical skills.
-- Technical team member, Securinets TEK-UP, 2023 to 2025: wrote web and crypto challenges for the club's mini CTF.
+- Technical team member, Securinets TEK-UP, January 2023 to February 2025: wrote web and crypto challenges for the club's mini CTF.
 
 ## Education
 
 - Engineering degree in Cybersecurity, TEK-UP University, 2022 to 2025
-- Bachelor's degree in Computer Science, Higher Institute of Computer Science and Mathematics, 2019 to 2022
+- Bachelor's degree in Computer Science, specialization in software engineering, Higher Institute of Computer Science and Mathematics, 2019 to 2022
 
 ## Certifications
 
-- Enterprise Defense Administrator (eEDA), INE Security, 2026
+- Enterprise Defense Administrator (eEDAv2), INE Security, 2026
 - Certified Incident Responder (eCIRv3), INE Security, 2026
 - Darktrace Cyber Analyst Professional, 2026
 - Certified Digital Forensics Professional (eCDFP), INE Security, 2026
@@ -32,13 +32,21 @@ Rayen investigates and triages security alerts every day across EDR, NDR and SIE
 - Certified Associate Python Programmer (PCAP), Python Institute, 2023
 - In progress: ISO/IEC 27001 Lead Implementer
 
+## Skills
+
+- Security monitoring: Wazuh, Splunk, ELK, LogRhythm, CrowdStrike, Darktrace, SOCRadar, TheHive, Cortex, MISP, Suricata
+- Offensive security: Metasploit, Burp Suite, Nuclei, SQLMap, Nikto, Dirb
+- Systems: Linux, Windows Server, Active Directory
+- Cloud and DevOps: AWS, Terraform, Ansible
+- Scripting: Python, Bash
+
 ## Projects
 
-- [SOC automation pipeline](https://github.com/RayenSalem/SOC-automation): Wazuh, Shuffle, VirusTotal and TheHive, from detection to response without manual hand-offs.
+- [SOC automation pipeline](https://github.com/RayenSalem/SOC-automation) (September 2025): Wazuh, Shuffle, VirusTotal and TheHive, from detection to response without manual hand-offs, extended with Cortex, MISP, Suricata and an Active Directory domain tested with Atomic Red Team.
 - [Active Directory detection lab](https://github.com/RayenSalem/Active-Directory-Monitoring): Sysmon, Splunk and Suricata on a Windows domain, tested with Atomic Red Team.
 - [SD-WAN as code](https://github.com/RayenSalem/PFE-SD-WAN): a FortiGate hub and spoke network provisioned with Ansible through FortiManager.
-- [Securify](https://github.com/RayenSalem/Securify-Tool): an automated web vulnerability scanner that writes reports and a dashboard.
-- Machine learning IDS: behavior-based intrusion detection that classifies network traffic with XGBoost.
+- [Securify](https://github.com/RayenSalem/Securify-Tool) (February 2024): an automated web vulnerability scanner that writes reports and a dashboard.
+- Machine learning IDS (November 2025): behavior-based intrusion detection that classifies network traffic with XGBoost and decision trees.
 - [CTF challenges](https://github.com/RayenSalem/TEKUP-MINI-CTF): web and crypto challenges written for Securinets TEK-UP.
 
 ## Links
